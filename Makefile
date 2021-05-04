@@ -22,7 +22,7 @@ RM		= rm -f
 
 all		:	$(NAME)
 
-$(OBJS)	:	$(SRCS)
+%.o		:	%.c
 			$(CC) $(CFLAGS) -c $< -o $@ -I $(INCDIR)
 
 $(NAME) :	$(OBJS)

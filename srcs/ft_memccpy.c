@@ -12,14 +12,20 @@
 
 void	*ft_memccpy(void *dst, const void *src, int c, unsigned int n)
 {
-	int i;
+	unsigned int i;
 
 	i = 0;
-	while (i < n)
+	while (i < n && *(unsigned char*)src != c)
 	{
-		if (*(unsigned char*)(src + i) == c)
-			return (dst + i + 1);
-		*(unsigned char*)(dst + i) = *(unsigned char*)(src + i++);
+		*(unsigned char*)dst = *(unsigned char*)src;
+		dst++;
+		src++;
+		i++;
+	}
+	if (i != n)
+	{
+		*(unsigned char*)dst = *(unsigned char*)src;
+		return (dst + 1);
 	}
 	return (0);
 }

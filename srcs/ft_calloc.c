@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 19:17:29 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:17:31 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/04 11:12:04 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/04 11:12:05 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	*ret;
+#include <stdlib.h>
 
-	ret = (char*)s;
+void	*ft_calloc(unsigned int count, unsigned int size)
+{
+	void			*ret;
+	unsigned int	i;
+
+	ret = (unsigned char*)malloc(count * size);
 	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (ret + i);
-		i++;
-	}
-	if (s[i] == (char)c)
-		return (ret + i);
-	return (0);
+	while (i < count * size)
+		*(unsigned char*)(ret + i++) = 0;
+	return (ret);
 }

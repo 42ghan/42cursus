@@ -22,7 +22,10 @@ unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int size)
 		return (src_l);
 	i = 0;
 	while (src[i] && i + 1 < size)
-		dst[i] = src[i++];
+	{
+		dst[i] = src[i];
+		i++;
+	}
 	dst[i] = 0;
 	return (src_l);
 }

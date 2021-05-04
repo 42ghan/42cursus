@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 19:17:29 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:17:31 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/04 11:00:02 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/04 11:00:03 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
+int		ft_isprint(int c)
 {
-	int		i;
-	char	*ret;
-
-	ret = (char*)s;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (ret + i);
-		i++;
-	}
-	if (s[i] == (char)c)
-		return (ret + i);
+	if (c > 31 && c < 127)
+		return (1);
 	return (0);
 }

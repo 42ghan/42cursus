@@ -12,21 +12,23 @@
 
 char	*ft_strnstr(const char *h, const char *n, unsigned int len)
 {
-	unsigned int i;
-	unsigned int j;
+	unsigned int	i;
+	unsigned int	j;
+	char			*h_ret;
 
+	h_ret = (char*)h;
 	if (*n == 0)
-		return (h);
+		return (h_ret);
 	i = 0;
-	while (*h && i < len)
+	while (*(h + i) && i < len)
 	{
 		if (*(h + i) == *n)
 		{
 			j = 1;
-			while (*(h + i + j) && *(n + j) && *(h + i + j) == *(n + j))
+			while (i + j < len && *(h + i + j) == *(n + j))
 				j++;
 			if (*(n + j) == 0)
-				return (h + i);
+				return (h_ret + i);
 			else if (*(h + i + j) == 0)
 				break ;
 		}
