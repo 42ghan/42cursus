@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 17:36:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 17:36:46 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/04 15:59:35 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/04 15:59:36 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	*ft_memmove(void *dst, const void *src, unsigned int len)
-{
-	unsigned int i;
+#include "libft.h"
 
-	if (len == 0)
-		return (dst);
-	if (dst < src)
+void	ft_putnbr_fd(int n, int fd)
+{
+	char digit;
+
+	if (n == 0)
+		write(fd, "0", 1);
+	else if (n < 0)
 	{
-		i = 0;
-		while (i < len)
-		{
-			*(unsigned char*)(dst + i) = *(unsigned char*)(src + i);
-			i++;
-		}
+		write(fd, "-", 1);
+		if (n == -2147483648)
+			write(fd, "2147483648", 10);
+		else
+			ft_putnbr_fd(-n, fd);
 	}
-	else if (dst > src)
+	else
 	{
-		len--;
-		while (len > 0)
+		if (n / 10 > 0)
 		{
-			*(unsigned char*)(dst + len) = *(unsigned char*)(src + len);
-			len--;
+			digit = n % 10 + '0';
+			n /= 10;
+			ft_putnbr_fd(n, fd);
 		}
-		*(unsigned char*)dst = *(unsigned char*)src;
+		else
+			digit = '0' + n;
+		write(fd, &digit, 1);
 	}
-	return (dst);
+	return ;
 }

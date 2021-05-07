@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memccpy.c                                       :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 17:26:27 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 17:27:02 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/05 16:11:44 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/05 16:11:45 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	*ft_memccpy(void *dst, const void *src, int c, unsigned int n)
-{
-	unsigned int i;
+#include "libft.h"
 
-	i = 0;
-	while (i < n && *(unsigned char*)src != c)
-	{
-		*(unsigned char*)dst = *(unsigned char*)src;
-		dst++;
-		src++;
-		i++;
-	}
-	if (i != n)
-	{
-		*(unsigned char*)dst = *(unsigned char*)src;
-		return (dst + 1);
-	}
-	return (0);
+void	ft_lstadd_front(t_list **lst, t_list *new)
+{
+	t_list	*tmp;
+
+	if (!lst || !new)
+		return ;
+	tmp = *lst;
+	*lst = new;
+	new->next = tmp;
 }

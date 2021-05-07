@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 20:26:29 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 20:26:31 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/05 16:12:45 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/05 16:12:46 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-unsigned int	ft_strlcpy(char *dst, const char *src, unsigned int size)
-{
-	unsigned int	i;
-	unsigned int	src_l;
+#include "libft.h"
 
-	src_l = 0;
-	while (src[src_l])
-		src_l++;
-	if (size == 0)
-		return (src_l);
-	i = 0;
-	while (src[i] && i + 1 < size)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
+{
+	t_list	*cur;
+
+	cur = *lst;
+	while (cur)
 	{
-		dst[i] = src[i];
-		i++;
+		del(cur->content);
+		cur = cur->next;
+		free(*lst);
+		*lst = cur;
 	}
-	dst[i] = 0;
-	return (src_l);
 }

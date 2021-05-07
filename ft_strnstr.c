@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 19:14:06 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:14:10 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/03 19:29:46 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/03 19:29:49 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-unsigned int	ft_strlcat(char *dst, const char *src, unsigned int size)
-{
-	unsigned int cnt;
-	unsigned int cnt2;
-	unsigned int i;
+#include "libft.h"
 
-	cnt = 0;
-	while (dst[cnt])
-		cnt++;
-	cnt2 = 0;
-	while (src[cnt2])
-		cnt2++;
-	if (size == 0)
-		return (cnt2);
+char	*ft_strnstr(const char *h, const char *n, size_t len)
+{
+	unsigned int	i;
+	unsigned int	j;
+	char			*h_ret;
+
+	h_ret = (char*)h;
+	if (*n == 0)
+		return (h_ret);
 	i = 0;
-	while (src[i] && (i + cnt + 1) < size)
+	while (*(h + i) && i < len)
 	{
-		dst[cnt + i] = src[i];
+		if (*(h + i) == *n)
+		{
+			j = 1;
+			while (i + j < len && *(h + i + j) == *(n + j) && *(n + j))
+				j++;
+			if (*(n + j) == 0)
+				return (h_ret + i);
+			else if (*(h + i + j) == 0)
+				break ;
+		}
 		i++;
 	}
-	dst[cnt + i] = 0;
-	if (size < cnt)
-		return (cnt2 + size);
-	else
-		return (cnt + cnt2);
+	return (0);
 }

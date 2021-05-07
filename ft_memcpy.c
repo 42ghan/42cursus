@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 19:47:17 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:47:19 by ghan             ###   ########.fr       */
+/*   Created: 2021/05/03 17:19:50 by ghan              #+#    #+#             */
+/*   Updated: 2021/05/03 17:19:54 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strncmp(const char *s1, const char *s2, unsigned int n)
-{
-	unsigned char	*s1_cpy;
-	unsigned char	*s2_cpy;
+#include "libft.h"
 
-	s1_cpy = (unsigned char*)s1;
-	s2_cpy = (unsigned char*)s2;
-	if (n == 0)
-		return (0);
-	while ((*s1_cpy == *s2_cpy) && n > 1)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned int i;
+
+	i = 0;
+	if (!dst && !src)
+		return (dst);
+	while (i < n)
 	{
-		s1_cpy++;
-		s2_cpy++;
-		n--;
+		*(unsigned char*)(dst + i) = *(unsigned char*)(src + i);
+		i++;
 	}
-	return (*s1_cpy - *s2_cpy);
+	return (dst);
 }
