@@ -31,6 +31,7 @@ static void			clear_arr(char **ret, unsigned int i)
 	while (j < i)
 	{
 		free(ret[j]);
+		free(ret);
 		j++;
 	}
 }
@@ -70,7 +71,7 @@ static void			assign_arr(char **ret, char *s, char c, unsigned int cnt)
 			if (!(ret[i] = (char*)malloc(k - j + 1)))
 			{
 				clear_arr(ret, i);
-				break ;
+				return ;
 			}
 			!i && *s != c ? fill(ret[i++], s, j, k) : fill(ret[i++], s, ++j, k);
 			j = k;
@@ -91,8 +92,7 @@ char				**ft_split(char const *s, char c)
 	cnt = 0;
 	if (s[0])
 	{
-		if (s[0] != c)
-			cnt = 1;
+		cnt = s[0] == c ? 0 : 1;
 		i = 0;
 		while (s[++i])
 		{
@@ -103,6 +103,7 @@ char				**ft_split(char const *s, char c)
 	if (!(ret = (char**)malloc(sizeof(char*) * (cnt + 1))))
 		return (0);
 	assign_arr(ret, s_cpy, c, cnt);
-	ret[cnt] = 0;
+	if (ret)
+		ret[cnt] = 0;
 	return (ret);
 }
