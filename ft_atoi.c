@@ -10,12 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
+#include <limits.h>
+
+static int	check_extremes(unsigned long long ret, int sign)
 {
-	int i;
-	int	ret;
-	int sign;
-	int	digit_cnt;
+	if (sign == 1 && ret > LLONG_MAX - 1)
+		ret = -1;
+	else if (sign == -1 && ret > LLONG_MAX)
+		ret = 0;
+	return (ret);
+}
+
+int			ft_atoi(const char *str)
+{
+	unsigned long long	ret;
+	int					i;
+	int					sign;
 
 	sign = 1;
 	ret = 0;
@@ -28,13 +38,7 @@ int		ft_atoi(const char *str)
 			sign = -1;
 		i++;
 	}
-	digit_cnt = 0;
 	while (str[i] >= '0' && str[i] <= '9')
-	{
 		ret = ret * 10 + str[i++] - '0';
-		digit_cnt++;
-	}
-	if (digit_cnt >= 20)
-		ret = sign == -1 ? 0 : -1;
-	return (ret * sign);
+	return (check_extremes(ret, sign) * sign);
 }

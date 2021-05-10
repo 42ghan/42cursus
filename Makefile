@@ -72,7 +72,7 @@ RM			= rm -f
 all			:	$(NAME)
 
 %.o			:	%.c
-				$(CC) $(CFLAGS) -c $< -o $@ -I libft.h
+				$(CC) $(CFLAGS) -c $< -o $@ -I .
 
 $(NAME)		:	$(OBJS_MAN)
 				ar $(ARFLAGS) $@ $^

@@ -21,7 +21,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n)
 	s2_cpy = (unsigned char*)s2;
 	if (n == 0)
 		return (0);
-	while ((*s1_cpy == *s2_cpy) && n > 1 && *s1_cpy && *s2_cpy)
+	while ((*s1_cpy == *s2_cpy) && n > 1 && *s1_cpy)
 	{
 		s1_cpy++;
 		s2_cpy++;

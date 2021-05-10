@@ -35,47 +35,45 @@ static void			clear_arr(char **ret, unsigned int i)
 	}
 }
 
-static void			fill_str(char *d, char *s, unsigned int i, unsigned int end)
+static void			fill(char *d, char *s, unsigned int start, unsigned int end)
 {
-	unsigned int	j;
+	unsigned int	i;
 
-	j = 0;
-	if (i == 1)
-		i = 0;
-	while (i < end)
+	i = 0;
+	while (start < end)
 	{
-		d[j] = s[i];
+		d[i] = s[start];
+		start++;
 		i++;
-		j++;
 	}
-	d[j] = 0;
+	d[i] = 0;
 }
 
 static void			assign_arr(char **ret, char *s, char c, unsigned int cnt)
 {
 	unsigned int	i;
-	unsigned int	start;
-	unsigned int	end;
+	unsigned int	j;
+	unsigned int	k;
 
 	i = 0;
-	start = 0;
+	j = 0;
 	while (i < cnt)
 	{
-		end = find_del_idx(s, c, start + 1);
-		if (s[start] == c && s[start + 1] == c)
+		k = find_del_idx(s, c, j + 1);
+		if (s[j] == c && s[j + 1] == c)
 		{
-			start = end;
-			end = find_del_idx(s, c, start + 1);
+			j = k;
+			k = find_del_idx(s, c, j + 1);
 		}
 		else
 		{
-			if (!(ret[i] = (char*)malloc(end - start + 1)))
+			if (!(ret[i] = (char*)malloc(k - j + 1)))
 			{
 				clear_arr(ret, i);
 				break ;
 			}
-			fill_str(ret[i++], s, start + 1, end);
-			start = end;
+			!i && *s != c ? fill(ret[i++], s, j, k) : fill(ret[i++], s, ++j, k);
+			j = k;
 		}
 	}
 }
