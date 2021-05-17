@@ -45,7 +45,27 @@ static int	split_by_newline(t_lst *cur_fd, char **line, char *buf, int r_bytes)
 	cur_fd->backup = ft_substr(cur_fd->backup, n_idx + 1,
 	ft_strlen(cur_fd->backup) - n_idx - 1);
 	free(tmp);
+	if (cur_fd->backup == NULL)
+		return (-1);
 	return (1);
+}
+
+static void	clear_lst(t_lst **fd_lst, t_lst *cur_fd)
+{
+	t_lst	*prev;
+
+	prev = *fd_lst;
+	while (prev->next->fd != cur_fd->fd)
+		prev = prev->next;
+	prev->next = cur_fd->next;
+	free(cur_fd->backup);
+	free(cur_fd);
+	cur_fd = NULL;
+	if ((*fd_lst)->next == NULL)
+	{
+		free(*fd_lst);
+		*fd_lst = NULL;
+	}
 }
 
 static int	init_fd_lst(t_lst **fd_lst, t_lst **cur_fd, int fd)
@@ -66,29 +86,12 @@ static int	init_fd_lst(t_lst **fd_lst, t_lst **cur_fd, int fd)
 	*cur_fd = ft_lstnew(ft_strndup("", 1), fd);
 	if (*cur_fd == NULL)
 	{
-		free(fd_lst);
+		if ((*fd_lst)->next == NULL)
+			free(fd_lst);
 		return (-1);
 	}
 	ft_lstadd_back(fd_lst, *cur_fd);
 	return (1);
-}
-
-static void	clear_lst(t_lst **fd_lst, t_lst *cur_fd)
-{
-	t_lst	*prev;
-
-	prev = *fd_lst;
-	while (prev->next->fd != cur_fd->fd)
-		prev = prev->next;
-	prev->next = cur_fd->next;
-	free(cur_fd->backup);
-	free(cur_fd);
-	cur_fd = NULL;
-	if ((*fd_lst)->next == NULL)
-	{
-		free(*fd_lst);
-		*fd_lst = NULL;
-	}
 }
 
 int			get_next_line(int fd, char **line)
