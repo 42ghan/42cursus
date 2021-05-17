@@ -6,11 +6,11 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 09:46:14 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/17 09:46:14 by ghan             ###   ########.fr       */
+/*   Updated: 2021/05/17 16:31:13 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void		ft_lstadd_back(t_lst **lst, t_lst *new)
 {

@@ -6,13 +6,13 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 09:46:01 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/17 09:46:02 by ghan             ###   ########.fr       */
+/*   Updated: 2021/05/17 16:31:47 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-size_t			ft_strlen(const char *s)
+size_t		ft_strlen(const char *s)
 {
 	unsigned int len;
 
@@ -59,7 +59,7 @@ static int	init_fd_lst(t_lst **fd_lst, t_lst **cur_fd, int fd)
 	{
 		if ((*cur_fd)->fd == fd)
 			break ;
-		*cur_fd = (*cur_fd)->next;	
+		*cur_fd = (*cur_fd)->next;
 	}
 	if (*cur_fd)
 		return (1);
