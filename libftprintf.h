@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef LIBFTPRINTF_H
-# define LIBFTPRITF_H
+# define LIBFTPRINTF_H
 
 # include <stdlib.h>
 # include <stdarg.h>
@@ -32,7 +32,7 @@ typedef struct	s_flist
 	struct s_flist *next;
 }				t_flist;
 
-static void	align_left_or_right(t_flist *cur, int pos, long long addr);
+void		prcss_addr(t_flist *cur, va_list *ap);
 void		prcss_c_or_str(t_flist *cur, va_list *ap, char f);
 void		flags_to_ints_hex(t_flist *cur, char *tmp, int len);
 void		prcss_ints(t_flist *cur, va_list *ap, char f);

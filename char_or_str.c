@@ -14,8 +14,8 @@
 
 static void	flags_to_str(t_flist *cur, char *tmp)
 {
-	unsigned int	len;
-	unsigned int	idx;
+	int	len;
+	int	idx;
 
 	len = ft_strlen(tmp);
 	if ((cur->width > len) || (cur->prec > len))
@@ -41,7 +41,7 @@ static void	flags_to_str(t_flist *cur, char *tmp)
 void		prcss_c_or_str(t_flist *cur, va_list *ap, char f)
 {
 	char			*tmp;
-	unsigned int	len;
+	int				len;
 
 	if (f == 'c')
 	{
@@ -53,9 +53,9 @@ void		prcss_c_or_str(t_flist *cur, va_list *ap, char f)
 			return ;
 		ft_memset(tmp, ' ', len);
 		if (len == 1)
-			tmp[0] = va_arg(*ap, char);
+			tmp[0] = va_arg(*ap, int);
 		else
-			tmp[len - 1] = va_arg(*ap, char);
+			tmp[len - 1] = va_arg(*ap, int);
 		cur->prnt = tmp;
 	}
 	else

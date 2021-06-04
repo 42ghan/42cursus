@@ -14,7 +14,7 @@
 
 static void	align_left_or_right(t_flist *cur, int pos, long long addr)
 {
-	unsigned int	to;
+	int	to;
 
 	to = pos - 11;
 	while (pos >= to)
@@ -27,10 +27,9 @@ static void	align_left_or_right(t_flist *cur, int pos, long long addr)
 	cur->prnt[pos] = '0';
 }
 
-void		prcss_address(t_flist *cur, va_list *ap)
+void		prcss_addr(t_flist *cur, va_list *ap)
 {
 	long long		addr;
-	unsigned int	idx;
 	int				len;
 
 	addr = (long long)va_arg(*ap, void*);

@@ -32,7 +32,7 @@ static void			check_prec(t_flist *cur, char *p, va_list ap_cpy)
 		if ((cur->prec == 0) && (*p != '0'))
 			cur->prec = -1;
 	}
-	else if (*p = '*')
+	else if (*p == '*')
 		cur->prec = va_arg(ap_cpy, int);
 	else if (*p)
 		cur->prec = -1;

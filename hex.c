@@ -14,7 +14,7 @@
 
 static int	hex_cnt(unsigned int n)
 {
-	unsigned int	cnt;
+	int	cnt;
 
 	cnt = 1;
 	while (n / 16)
@@ -27,7 +27,7 @@ static int	hex_cnt(unsigned int n)
 
 static void	flags_to_hex(t_flist *cur, char* tmp)
 {
-	unsigned int	len;
+	int	len;
 
 	len = ft_strlen(tmp);
 	if ((cur->width > len) || (cur->prec > len))
@@ -48,9 +48,9 @@ static void	flags_to_hex(t_flist *cur, char* tmp)
 
 void		prcss_hex(t_flist *cur, va_list *ap, char f)
 {
-	unsigned int	n;
-	int				cnt;
-	char			*tmp;
+	int		n;
+	int		cnt;
+	char	*tmp;
 
 	n = va_arg(*ap, unsigned int);
 	cnt = hex_cnt(n);

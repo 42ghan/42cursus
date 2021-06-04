@@ -90,7 +90,7 @@ void		flags_to_ints_hex(t_flist *cur, char *tmp, int len)
 	ft_memset(cur->prnt, ' ', len);
 	if (cur->zero)
 		ft_memset(cur->prnt, '0', len);
-	if (cur->prec > ft_strlen(tmp))
+	if (cur->prec > (int)ft_strlen(tmp))
 		zero_len = cur->prec - ft_strlen(tmp);
 	if (cur->align)
 		idx = 0;

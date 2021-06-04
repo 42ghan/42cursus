@@ -60,7 +60,7 @@ static int	fill_form(char *format, t_flist **forms, unsigned int start)
 
 	elem = flist_init();
 	if (!elem)
-		return (-1);
+		return (0);
 	elem->start = start;
 	elem->end = start + 1;
 	while (format[elem->end])
@@ -76,7 +76,7 @@ static int	fill_form(char *format, t_flist **forms, unsigned int start)
 	elem->flag = ft_substr(format, elem->start + 1,
 		elem->end - elem->start - 1);
 	if (!elem->flag)
-		return (-1);
+		return (0);
 	flist_add_back(forms, elem);
 	return (elem->end);
 }
@@ -91,9 +91,9 @@ static int	check_formats(char *format, t_flist **forms)
 		if (format[i] == '%') // Format specifier found
 		{
 			i = fill_form(format, forms, i); // Create element of forms list with details about the format specifier
-			if (i == -1)
+			if (i == 0)
 			{
-				clear_lst(forms);
+				clear_list(forms);
 				return (0);
 			}
 		}
@@ -110,6 +110,7 @@ int			ft_printf(const char *format, ...)
 	va_list ap;
 	size_t	cnt;
 
+	cnt = 0;
 	forms = flist_init(); // Initialize flist
 	if (!forms)
 		return (0);
