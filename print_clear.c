@@ -59,11 +59,12 @@ size_t				print_str(char *str, t_flist *forms)
 			if (!i)
 				return (0);
 		}
-		if (!str[i])
-			break ;
-		write(1, &str[i], 1);
-		cnt++;
-		i++;
+		else
+		{
+			write(1, &str[i], 1);
+			i++;
+			cnt++;
+		}
 	}
 	return (cnt);
 }

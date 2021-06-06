@@ -49,7 +49,7 @@ static char	*ft_itoa(int n)
 		return (NULL);
 	if (n < 0)
 		ret[0] = '-';
-	while (cnt)
+	while (cnt + sign > 0)
 	{
 		ret[cnt - 1] = "0123456789"[n % 10 * sign];
 		n /= 10;
@@ -83,27 +83,31 @@ static char	*ft_uitoa(unsigned int n)
 
 void		flags_to_ints_hex(t_flist *cur, char *tmp, int len)
 {
-	unsigned int	zero_len;
-	unsigned int	idx;
+	int	idx;
+	int zero_len;
 
+	idx = 0;
+	if (!cur->align && (len > (int)ft_strlen(tmp)))
+		idx = len - ft_strlen(tmp);
 	zero_len = 0;
-	ft_memset(cur->prnt, ' ', len);
-	if (cur->zero)
-		ft_memset(cur->prnt, '0', len);
-	if (cur->prec > (int)ft_strlen(tmp))
-		zero_len = cur->prec - ft_strlen(tmp);
-	if (cur->align)
-		idx = 0;
-	else
-		idx = len - ft_strlen(tmp) - zero_len;
-	while (zero_len > 0)
+	if (cur->zero || cur->prec > (int)ft_strlen(tmp))
 	{
-		cur->prnt[idx] = '0';
-		idx++;
-		zero_len--;
+		zero_len = len;
+		if (cur->prec && cur->prec < len)
+			zero_len = cur->prec;
+		ft_memset(cur->prnt + len - idx, '0', zero_len);
+		if (tmp[0] == '-')
+		{
+			if (cur->prec <= (int)ft_strlen(tmp))
+				zero_len--;
+			cur->prnt[len - zero_len - 1] = '-';
+			strncpy_no_null(cur->prnt + idx + 1, tmp + 1, len);
+		}
+		else
+			strncpy_no_null(cur->prnt + idx, tmp, len);
 	}
-	ft_memmove(cur->prnt + idx, tmp, ft_strlen(tmp));
-	free(tmp);
+	else
+		strncpy_no_null(cur->prnt + idx, tmp, len);
 }
 
 void		prcss_ints(t_flist *cur, va_list *ap, char f)
@@ -118,18 +122,19 @@ void		prcss_ints(t_flist *cur, va_list *ap, char f)
 	if (!tmp)
 		return ;
 	len = ft_strlen(tmp);
-	if ((cur->width > len) || (cur->prec > len))
-	{
-		if (cur->width > cur->prec)
-			len = cur->width;
-		else
-			len = cur->prec;
-	}
+	if (cur->prec > len)
+		len = cur->prec;
+	if (cur->width > len)
+		len = cur->width;
+	if ((cur->prec >= len) && tmp[0] == '-')
+		len++;
 	cur->prnt = (char*)ft_calloc(len + 1, 1);
 	if (cur->prnt == NULL)
 	{
 		free(tmp);
 		return ;
 	}
+	ft_memset(cur->prnt, ' ', len);
 	flags_to_ints_hex(cur, tmp, len);
+	free(tmp);
 }

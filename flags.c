@@ -97,7 +97,7 @@ void				check_flags(t_flist *cur, va_list *ap)
 	va_copy(ap_cpy, *ap);
 	cnt_ast(cur, ap);
 	dot_idx = 0;
-	while (cur->flag[dot_idx] || cur->flag[dot_idx] != '.')
+	while (cur->flag[dot_idx] && cur->flag[dot_idx] != '.')
 		dot_idx++;
 	w = ft_strndup(cur->flag, dot_idx);
 	check_width(cur, w, ap_cpy);

@@ -19,30 +19,15 @@ int			ft_isdigit(int c)
 	return (0);
 }
 
-void		*ft_memmove(void *dst, const void *src, size_t len)
+char		*strncpy_no_null(char *dst, const char *src, size_t size)
 {
-	unsigned int i;
+	unsigned int	i;
 
-	if (len == 0)
-		return (dst);
-	if (dst < src)
+	i = 0;
+	while (src[i] && i < size)
 	{
-		i = 0;
-		while (i < len)
-		{
-			*(unsigned char*)(dst + i) = *(unsigned char*)(src + i);
-			i++;
-		}
-	}
-	else if (dst > src)
-	{
-		len--;
-		while (len > 0)
-		{
-			*(unsigned char*)(dst + len) = *(unsigned char*)(src + len);
-			len--;
-		}
-		*(unsigned char*)dst = *(unsigned char*)src;
+		dst[i] = src[i];
+		i++;
 	}
 	return (dst);
 }

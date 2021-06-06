@@ -12,19 +12,37 @@
 
 #include "libftprintf.h"
 
+static int	is_dot(char *flag)
+{
+	int	i;
+
+	i = 0;
+	while (flag[i])
+	{
+		if (flag[i] == '.')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+#include <stdio.h>
+
 static void	flags_to_str(t_flist *cur, char *tmp)
 {
 	int	len;
 	int	idx;
+	int str_len;
 
 	len = ft_strlen(tmp);
-	if ((cur->width > len) || (cur->prec > len))
+	str_len = (int)ft_strlen(tmp);
+	if (is_dot(cur->flag) && cur->prec < len)
 	{
-		if (cur->width > cur->prec)
-			len = cur->width;
-		else
-			len = cur->prec;
+		len = cur->prec;
+		str_len = cur->prec;
 	}
+	if (cur->width > len)
+		len = cur->width;
 	cur->prnt = (char*)ft_calloc(len + 1, 1);
 	if (!cur->prnt)
 	{
@@ -33,9 +51,9 @@ static void	flags_to_str(t_flist *cur, char *tmp)
 	}
 	ft_memset(cur->prnt, ' ', len);
 	idx = 0;
-	if (!cur->align)
-		idx = len - ft_strlen(tmp);
-	ft_memmove(cur->prnt + idx, tmp, ft_strlen(tmp));
+	if (!cur->align && len > str_len)
+		idx = len - str_len;
+	strncpy_no_null(cur->prnt + idx, tmp, str_len);
 }
 
 void		prcss_c_or_str(t_flist *cur, va_list *ap, char f)
