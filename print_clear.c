@@ -34,9 +34,23 @@ void				clear_list(t_flist **forms)
 static unsigned int	print_elem(t_flist **cur, size_t *cnt)
 {
 	unsigned int	next_idx;
+	int				i;
 
-	write(1, (*cur)->prnt, ft_strlen((*cur)->prnt));
-	*cnt += ft_strlen((*cur)->prnt);
+	if ((*cur)->len < 0)
+	{
+		write(1, (*cur)->prnt, ft_strlen((*cur)->prnt));
+		*cnt += ft_strlen((*cur)->prnt);
+	}
+	else
+	{
+		i = 0;
+		while (i < (*cur)->len)
+		{
+			write(1, &((*cur)->prnt[i]), 1);
+			(*cnt)++;
+			i++;
+		}
+	}
 	next_idx = (*cur)->end + 1;
 	*cur = (*cur)->next;
 	return (next_idx);

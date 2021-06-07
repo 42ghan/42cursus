@@ -26,6 +26,7 @@ typedef struct	s_flist
 	int				zero;
 	int				width;
 	int				prec;
+	int				len;
 	char			form;
 	char			*flag;
 	char			*prnt;

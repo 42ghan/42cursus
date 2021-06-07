@@ -102,6 +102,7 @@ t_flist		*flist_init(void)
 	ret->form = 0;
 	ret->width = 0;
 	ret->prec = 0;
+	ret->len = -1;
 	ret->flag = NULL;
 	ret->prnt = NULL;
 	ret->next = NULL;
