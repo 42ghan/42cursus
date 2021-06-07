@@ -16,6 +16,8 @@ static int		by_format(t_flist *spec, va_list *ap, char f, size_t *cnt)
 {
 	if (spec->flag[0] != 0)
 		check_flags(spec, ap);
+	if (spec->zero && spec->align)
+		spec->zero = 0;
 	if ((spec->width >= 0) && (spec->prec >= 0))
 	{
 		if (f == '%')
@@ -28,11 +30,6 @@ static int		by_format(t_flist *spec, va_list *ap, char f, size_t *cnt)
 			prcss_ints(spec, ap, f);
 		else if (f == 'x' || f == 'X')
 			prcss_hex(spec, ap, f);
-		while (spec->ast_cnt)
-		{
-			va_arg(*ap, int);
-			spec->ast_cnt--;
-		}
 	}
 	if ((spec->prnt) == NULL)
 		return (-1);

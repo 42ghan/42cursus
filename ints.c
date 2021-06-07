@@ -68,7 +68,7 @@ static void	fill_zero_prec(t_flist *spec, char **tmp)
 static void	fill_zero(t_flist *spec, char **tmp)
 {
 	char	*z;
-	int		z_len;
+	int 	z_len;
 	int		o_len;
 	int		neg;
 
@@ -79,7 +79,7 @@ static void	fill_zero(t_flist *spec, char **tmp)
 	z_len = o_len;
 	if (spec->width > z_len)
 		z_len = spec->width;
-	z = (char*)ft_calloc((unsigned int)(z_len + 1), 1);
+	z = (char*)ft_calloc(z_len + 1, 1);
 	if (z)
 	{
 		ft_memset(z, '0', z_len);
@@ -97,12 +97,12 @@ static void	fill_zero(t_flist *spec, char **tmp)
 void		prcss_ints(t_flist *spec, va_list *ap, char f)
 {
 	char	*tmp;
-	int		len;
+	int	len;
 
 	if (f == 'd' || f == 'i')
 		tmp = ft_itoa(va_arg(*ap, int));
 	else
-		tmp = ft_uitoa(va_arg(*ap, unsigned int));
+		tmp = ft_uitoa(va_arg(*ap, int));
 	if (spec->zero && !spec->prec)
 		fill_zero(spec, &tmp);
 	else if (spec->prec > (int)ft_strlen(tmp))
@@ -114,7 +114,7 @@ void		prcss_ints(t_flist *spec, va_list *ap, char f)
 		len = spec->width;
 	if (tmp[0] == '-' && spec->prec == len)
 		len++;
-	spec->prnt = (char*)ft_calloc((unsigned int)(len + 1), 1);
+	spec->prnt = (char*)ft_calloc(len + 1, 1);
 	if (!spec->prnt)
 	{
 		free(tmp);

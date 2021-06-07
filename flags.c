@@ -26,6 +26,11 @@ static unsigned int	unsigned_atoi(const char *str)
 
 static void			check_prec(t_flist *spec, char *p, va_list ap_cpy)
 {
+	if (!p)
+	{
+		spec->prec = -1;
+		return ;
+	}
 	if (ft_isdigit(*p))
 	{
 		spec->prec = unsigned_atoi(p);
@@ -33,9 +38,13 @@ static void			check_prec(t_flist *spec, char *p, va_list ap_cpy)
 			spec->prec = -1;
 	}
 	else if (*p == '*')
+	{
 		spec->prec = va_arg(ap_cpy, int);
-	else if (*p)
-		spec->prec = -1;
+		if (spec->prec < 0)
+			spec->prec = 0;
+	}
+	// else if (*p)
+	// 	spec->prec = -1;
 }
 
 static void			check_width(t_flist *spec, char *w, va_list ap_cpy)
@@ -63,8 +72,8 @@ static void			check_width(t_flist *spec, char *w, va_list ap_cpy)
 			spec->width *= -1;
 		}
 	}
-	else if (*w)
-		spec->width = -1;
+	// else if (*w)
+	// 	spec->width = -1;
 }
 
 static void			cnt_ast(t_flist *spec, va_list *ap)
@@ -72,14 +81,14 @@ static void			cnt_ast(t_flist *spec, va_list *ap)
 	unsigned int	i;
 	int				n_ast;
 
+	n_ast = 0;
 	i = 0;
 	while (spec->flag[i])
 	{
 		if (spec->flag[i] == '*')
-			spec->ast_cnt++;
+			n_ast++;
 		i++;
 	}
-	n_ast = spec->ast_cnt;
 	while (n_ast)
 	{
 		va_arg(*ap, int);
@@ -100,11 +109,14 @@ void				check_flags(t_flist *spec, va_list *ap)
 	while (spec->flag[dot_idx] && spec->flag[dot_idx] != '.')
 		dot_idx++;
 	w = ft_strndup(spec->flag, dot_idx);
+	if (!w)
+	{
+		spec->width = -1;
+		return ;
+	}
 	check_width(spec, w, ap_cpy);
 	free(w);
-	if (dot_idx == ft_strlen(spec->flag))
-		p = NULL;
-	else
+	if (dot_idx != ft_strlen(spec->flag))
 	{
 		p = ft_substr(spec->flag, dot_idx + 1, ft_strlen(spec->flag) - dot_idx);
 		check_prec(spec, p, ap_cpy);

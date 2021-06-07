@@ -60,13 +60,15 @@ char	*ft_itoa(int n)
 
 char	*ft_uitoa(unsigned int n)
 {
-	int		cnt;
-	char	*ret;
+	int				cnt;
+	char			*ret;
+	unsigned int	n_cpy;
 
 	cnt = 1;
-	while (n / 10)
+	n_cpy = n;
+	while (n_cpy / 10)
 	{
-		n /= 10;
+		n_cpy /= 10;
 		cnt++;
 	}
 	ret = (char*)ft_calloc(cnt + 1, 1);
