@@ -19,6 +19,24 @@ int			ft_isdigit(int c)
 	return (0);
 }
 
+char		*ft_strchr(const char *s, int c)
+{
+	int		i;
+	char	*ret;
+
+	ret = (char*)s;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (ret + i);
+		i++;
+	}
+	if (s[i] == (char)c)
+		return (ret + i);
+	return (0);
+}
+
 char		*strncpy_no_null(char *dst, const char *src, size_t size)
 {
 	unsigned int	i;

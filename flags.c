@@ -51,8 +51,8 @@ static void			check_width(t_flist *cur, char *w, va_list ap_cpy)
 	if (ft_isdigit(*w))
 	{
 		cur->width = unsigned_atoi(w);
-		if ((cur->width == 0) && (*w != '0'))\
-		cur->width = -1;
+		if ((cur->width == 0) && (*w != '0'))
+			cur->width = -1;
 	}
 	else if (*w == '*')
 	{
@@ -106,7 +106,7 @@ void				check_flags(t_flist *cur, va_list *ap)
 		p = NULL;
 	else
 	{
-		p = ft_substr(cur->flag, dot_idx + 1, ft_strlen(cur->flag)-dot_idx);
+		p = ft_substr(cur->flag, dot_idx + 1, ft_strlen(cur->flag) - dot_idx);
 		check_prec(cur, p, ap_cpy);
 		free(p);
 	}

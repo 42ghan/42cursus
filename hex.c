@@ -12,6 +12,46 @@
 
 #include "libftprintf.h"
 
+static void	fill_zero_hex(t_flist *cur, char **tmp)
+{
+	char	*z;
+	int		z_len;
+
+	z_len = ft_strlen(*tmp);
+	if (!cur->prec && cur->width > z_len)
+		z_len = cur->width;
+	if (cur->prec > z_len)
+		z_len = cur->prec;
+	z = (char*)ft_calloc(z_len + 1, 1);
+	if (z)
+	{
+		ft_memset(z, '0', z_len);
+		strncpy_no_null(z + z_len - ft_strlen(*tmp), *tmp, ft_strlen(*tmp));
+	}
+	free(*tmp);
+	*tmp = z;
+}
+
+static void	flags_to_hex(t_flist *cur, char *tmp)
+{
+	int	len;
+
+	if (cur->zero || cur->prec > (int)ft_strlen(tmp))
+		fill_zero_hex(cur, &tmp);
+	len = ft_strlen(tmp);
+	if (cur->prec > len)
+		len = cur->prec;
+	if (cur->width > len)
+		len = cur->width;
+	cur->prnt = (char*)ft_calloc(len + 1, 1);
+	if (cur->prnt == NULL)
+	{
+		free(tmp);
+		return ;
+	}
+	flags_to_ints_hex(cur, tmp, len);
+}
+
 static int	hex_cnt(unsigned int n)
 {
 	int	cnt;
@@ -25,32 +65,11 @@ static int	hex_cnt(unsigned int n)
 	return (cnt);
 }
 
-static void	flags_to_hex(t_flist *cur, char* tmp)
-{
-	int	len;
-
-	len = ft_strlen(tmp);
-	if ((cur->width > len) || (cur->prec > len))
-	{
-		if (cur->width > cur->prec)
-			len = cur->width;
-		else
-			len = cur->prec;
-	}
-	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (cur->prnt == NULL)
-	{
-		free(tmp);
-		return;
-	}
-	flags_to_ints_hex(cur, tmp, len);
-}
-
 void		prcss_hex(t_flist *cur, va_list *ap, char f)
 {
-	int		n;
-	int		cnt;
-	char	*tmp;
+	unsigned int	n;
+	int				cnt;
+	char			*tmp;
 
 	n = va_arg(*ap, unsigned int);
 	cnt = hex_cnt(n);

@@ -26,8 +26,6 @@ static int	is_dot(char *flag)
 	return (0);
 }
 
-#include <stdio.h>
-
 static void	flags_to_str(t_flist *cur, char *tmp)
 {
 	int	len;

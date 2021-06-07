@@ -12,102 +12,86 @@
 
 #include "libftprintf.h"
 
-static int	digit_cnt(int n)
-{
-	int	cnt;
-	int pos_n;
-
-	cnt = 1;
-	if (n == -2147483648)
-		pos_n = 2147483647;
-	pos_n = n;
-	if (n < 0)
-		pos_n = -n;
-	while (pos_n / 10)
-	{
-		pos_n /= 10;
-		cnt++;
-	}
-	return (cnt);
-}
-
-static char	*ft_itoa(int n)
-{
-	int		cnt;
-	int		sign;
-	char	*ret;
-
-	sign = 1;
-	cnt = digit_cnt(n);
-	if (n < 0)
-	{
-		cnt++;
-		sign = -1;
-	}
-	ret = (char*)ft_calloc(cnt + 1, 1);
-	if (!ret)
-		return (NULL);
-	if (n < 0)
-		ret[0] = '-';
-	while (cnt + sign > 0)
-	{
-		ret[cnt - 1] = "0123456789"[n % 10 * sign];
-		n /= 10;
-		cnt--;
-	}
-	return (ret);
-}
-
-static char	*ft_uitoa(unsigned int n)
-{
-	int		cnt;
-	char	*ret;
-
-	cnt = 1;
-	while (n / 10)
-	{
-		n /= 10;
-		cnt++;
-	}
-	ret = (char*)ft_calloc(cnt + 1, 1);
-	if (!ret)
-		return (NULL);
-	while (cnt)
-	{
-		ret[cnt - 1] = "0123456789"[n % 10];
-		n /= 10;
-		cnt--;
-	}
-	return (ret);
-}
-
 void		flags_to_ints_hex(t_flist *cur, char *tmp, int len)
 {
-	int	idx;
-	int zero_len;
+	int	tmp_len;
 
-	idx = 0;
-	if (!cur->align && (len > (int)ft_strlen(tmp)))
-		idx = len - ft_strlen(tmp);
-	zero_len = 0;
-	if (cur->zero || cur->prec > (int)ft_strlen(tmp))
+	tmp_len = ft_strlen(tmp);
+	ft_memset(cur->prnt, ' ', len);
+	if (ft_strchr(cur->flag, '.') && cur->prec == 0
+	&& tmp[0] == '0' && tmp[1] == 0)
 	{
-		zero_len = len;
-		if (cur->prec && cur->prec < len)
-			zero_len = cur->prec;
-		ft_memset(cur->prnt + len - idx, '0', zero_len);
-		if (tmp[0] == '-')
+		if (cur->width == 0)
 		{
-			if (cur->prec <= (int)ft_strlen(tmp))
-				zero_len--;
-			cur->prnt[len - zero_len - 1] = '-';
-			strncpy_no_null(cur->prnt + idx + 1, tmp + 1, len);
+			cur->prnt[0] = 0;
+			free(tmp);
+			return ;
 		}
-		else
-			strncpy_no_null(cur->prnt + idx, tmp, len);
+		tmp[0] = 0;
 	}
+	if (cur->align)
+		strncpy_no_null(cur->prnt, tmp, tmp_len);
 	else
-		strncpy_no_null(cur->prnt + idx, tmp, len);
+		strncpy_no_null(cur->prnt + len - tmp_len, tmp, tmp_len);
+	free(tmp);
+}
+
+static void	fill_zero_prec(t_flist *cur, char **tmp)
+{
+	char	*z;
+	int		z_len;
+	int		neg;
+	int		o_len;
+
+	if (!(*tmp))
+		return ;
+	o_len = ft_strlen(*tmp);
+	neg = 0;
+	z_len = cur->prec;
+	if (*tmp[0] == '-')
+		z_len++;
+	z = (char*)ft_calloc(z_len + 1, 1);
+	if (z)
+	{
+		ft_memset(z, '0', z_len);
+		if (*tmp[0] == '-')
+		{
+			neg = 1;
+			z[0] = '-';
+		}
+		strncpy_no_null(z + z_len + neg - o_len, *tmp + neg, o_len - neg);
+	}
+	free(*tmp);
+	*tmp = z;
+}
+
+static void	fill_zero(t_flist *cur, char **tmp)
+{
+	char	*z;
+	int		z_len;
+	int		o_len;
+	int		neg;
+
+	if (!(*tmp))
+		return ;
+	o_len = ft_strlen(*tmp);
+	neg = 0;
+	z_len = o_len;
+	if (cur->width > z_len)
+		z_len = cur->width;
+	z = (char*)ft_calloc(z_len + 1, 1);
+	if (z)
+	{
+		ft_memset(z, '0', z_len);
+		if (*tmp[0] == '-')
+		{
+			neg = 1;
+			z[0] = '-';
+		}
+		strncpy_no_null(z + z_len + neg - o_len, *tmp + neg, o_len - neg);
+	}
+	free(*tmp);
+	*tmp = z;
 }
 
 void		prcss_ints(t_flist *cur, va_list *ap, char f)
@@ -119,22 +103,22 @@ void		prcss_ints(t_flist *cur, va_list *ap, char f)
 		tmp = ft_itoa(va_arg(*ap, int));
 	else
 		tmp = ft_uitoa(va_arg(*ap, unsigned int));
+	if (cur->zero && !cur->prec)
+		fill_zero(cur, &tmp);
+	else if (cur->prec > (int)ft_strlen(tmp))
+		fill_zero_prec(cur, &tmp);
 	if (!tmp)
 		return ;
 	len = ft_strlen(tmp);
-	if (cur->prec > len)
-		len = cur->prec;
 	if (cur->width > len)
 		len = cur->width;
-	if ((cur->prec >= len) && tmp[0] == '-')
+	if (tmp[0] == '-' && cur->prec == len)
 		len++;
 	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (cur->prnt == NULL)
+	if (!cur->prnt)
 	{
 		free(tmp);
 		return ;
 	}
-	ft_memset(cur->prnt, ' ', len);
 	flags_to_ints_hex(cur, tmp, len);
-	free(tmp);
 }

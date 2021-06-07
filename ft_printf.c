@@ -19,8 +19,8 @@ static int	by_format(t_flist *cur, va_list *ap, char f)
 	if ((cur->width >= 0) && (cur->prec >= 0))
 	{
 		if (f == '%')
-			cur->prnt = ft_strndup("%", 1);
-		else if  (f == 'p')
+			prcss_perc(cur);
+		else if (f == 'p')
 			prcss_addr(cur, ap);
 		else if ((f == 'c') || (f == 's'))
 			prcss_c_or_str(cur, ap, f);
@@ -88,9 +88,9 @@ static int	check_formats(char *format, t_flist **forms)
 	i = 0;
 	while (format[i])
 	{
-		if (format[i] == '%') // Format specifier found
+		if (format[i] == '%')
 		{
-			i = fill_form(format, forms, i); // Create element of forms list with details about the format specifier
+			i = fill_form(format, forms, i);
 			if (i == 0)
 			{
 				clear_list(forms);
@@ -102,7 +102,6 @@ static int	check_formats(char *format, t_flist **forms)
 	return (1);
 }
 
-// Where everything starts
 int			ft_printf(const char *format, ...)
 {
 	t_flist	*forms;
@@ -111,10 +110,10 @@ int			ft_printf(const char *format, ...)
 	size_t	cnt;
 
 	cnt = 0;
-	forms = flist_init(); // Initialize flist
+	forms = flist_init();
 	if (!forms)
 		return (0);
-	if (check_formats((char*)format, &forms) == 0) // Check provided formats and fill flist
+	if (check_formats((char*)format, &forms) == 0)
 		return (0);
 	va_start(ap, format);
 	cur = forms->next;

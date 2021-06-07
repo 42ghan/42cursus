@@ -15,6 +15,7 @@ NAME	= 	libftprintf.a
 SRCS	= 	ft_printf.c\
 			utils.c\
 			utils_two.c\
+			utils_three.c\
 			print_clear.c\
 			flags.c\
 			address.c\
