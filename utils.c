@@ -70,41 +70,17 @@ char		*ft_substr(char const *s, unsigned int start, size_t len)
 	return (ret);
 }
 
-void		flist_add_back(t_flist **lst, t_flist *new)
+ void		spec_initialize(t_flist *spec)
 {
-	t_flist	*last;
-
-	if (!lst)
-		return ;
-	if (!(*lst))
-	{
-		*lst = new;
-		return ;
-	}
-	last = *lst;
-	while (last->next)
-		last = last->next;
-	last->next = new;
-}
-
-t_flist		*flist_init(void)
-{
-	t_flist	*ret;
-
-	ret = (t_flist*)malloc(sizeof(t_flist));
-	if (!ret)
-		return (NULL);
-	ret->start = 0;
-	ret->end = 0;
-	ret->ast_cnt = 0;
-	ret->align = 0;
-	ret->zero = 0;
-	ret->form = 0;
-	ret->width = 0;
-	ret->prec = 0;
-	ret->len = -1;
-	ret->flag = NULL;
-	ret->prnt = NULL;
-	ret->next = NULL;
-	return (ret);
+	spec->start = 0;
+	spec->end = 0;
+	spec->ast_cnt = 0;
+	spec->align = 0;
+	spec->zero = 0;
+	spec->width = 0;
+	spec->prec = 0;
+	spec->len = -1;
+	spec->form = 0;
+	spec->flag = NULL;
+	spec->prnt = NULL;
 }

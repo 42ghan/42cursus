@@ -26,7 +26,7 @@ static int	is_dot(char *flag)
 	return (0);
 }
 
-static void	flags_to_str(t_flist *cur, char *tmp)
+static void	flags_to_str(t_flist *spec, char *tmp)
 {
 	int	len;
 	int	idx;
@@ -34,24 +34,24 @@ static void	flags_to_str(t_flist *cur, char *tmp)
 
 	len = ft_strlen(tmp);
 	str_len = ft_strlen(tmp);
-	if (is_dot(cur->flag) && cur->prec < len)
+	if (is_dot(spec->flag) && spec->prec < len)
 	{
-		len = cur->prec;
-		str_len = cur->prec;
+		len = spec->prec;
+		str_len = spec->prec;
 	}
-	if (cur->width > len)
-		len = cur->width;
-	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (!cur->prnt)
+	if (spec->width > len)
+		len = spec->width;
+	spec->prnt = (char*)ft_calloc(len + 1, 1);
+	if (!spec->prnt)
 		return ;
-	ft_memset(cur->prnt, ' ', len);
+	ft_memset(spec->prnt, ' ', len);
 	idx = 0;
-	if (!cur->align && len > str_len)
+	if (!spec->align && len > str_len)
 		idx = len - str_len;
-	strncpy_no_null(cur->prnt + idx, tmp, str_len);
+	strncpy_no_null(spec->prnt + idx, tmp, str_len);
 }
 
-void		prcss_c_or_str(t_flist *cur, va_list *ap, char f)
+void		prcss_c_or_str(t_flist *spec, va_list *ap, char f)
 {
 	char			*tmp;
 	int				len;
@@ -59,22 +59,22 @@ void		prcss_c_or_str(t_flist *cur, va_list *ap, char f)
 	if (f == 'c')
 	{
 		len = 1;
-		if (cur->width > len)
-			len = cur->width;
-		cur->len = len;
+		if (spec->width > len)
+			len = spec->width;
+		spec->len = len;
 		tmp = (char*)ft_calloc(len + 1, 1);
 		if (!tmp)
 			return ;
 		ft_memset(tmp, ' ', len);
-		if (len == 1 || cur->align)
+		if (len == 1 || spec->align)
 			tmp[0] = va_arg(*ap, int);
 		else
 			tmp[len - 1] = va_arg(*ap, int);
-		cur->prnt = tmp;
+		spec->prnt = tmp;
 	}
 	else
 	{
 		tmp = va_arg(*ap, char*);
-		flags_to_str(cur, tmp);
+		flags_to_str(spec, tmp);
 	}
 }

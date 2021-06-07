@@ -12,42 +12,42 @@
 
 #include "libftprintf.h"
 
-void		flags_to_ints_hex(t_flist *cur, char *tmp, int len)
+void		flags_to_ints_hex(t_flist *spec, char *tmp, int len)
 {
 	int	tmp_len;
 
 	tmp_len = ft_strlen(tmp);
-	ft_memset(cur->prnt, ' ', len);
-	if (ft_strchr(cur->flag, '.') && cur->prec == 0
+	ft_memset(spec->prnt, ' ', len);
+	if (ft_strchr(spec->flag, '.') && spec->prec == 0
 	&& tmp[0] == '0' && tmp[1] == 0)
 	{
-		if (cur->width == 0)
+		if (spec->width == 0)
 		{
-			cur->prnt[0] = 0;
+			spec->prnt[0] = 0;
 			free(tmp);
 			return ;
 		}
 		tmp[0] = 0;
 	}
-	if (cur->align)
-		strncpy_no_null(cur->prnt, tmp, tmp_len);
+	if (spec->align)
+		strncpy_no_null(spec->prnt, tmp, tmp_len);
 	else
-		strncpy_no_null(cur->prnt + len - tmp_len, tmp, tmp_len);
+		strncpy_no_null(spec->prnt + len - tmp_len, tmp, tmp_len);
 	free(tmp);
 }
 
-static void	fill_zero_prec(t_flist *cur, char **tmp)
+static void	fill_zero_prec(t_flist *spec, char **tmp)
 {
 	char	*z;
 	int		z_len;
-	int		neg;
 	int		o_len;
+	int		neg;
 
 	if (!(*tmp))
 		return ;
 	o_len = ft_strlen(*tmp);
 	neg = 0;
-	z_len = cur->prec;
+	z_len = spec->prec;
 	if (*tmp[0] == '-')
 		z_len++;
 	z = (char*)ft_calloc(z_len + 1, 1);
@@ -65,7 +65,7 @@ static void	fill_zero_prec(t_flist *cur, char **tmp)
 	*tmp = z;
 }
 
-static void	fill_zero(t_flist *cur, char **tmp)
+static void	fill_zero(t_flist *spec, char **tmp)
 {
 	char	*z;
 	int		z_len;
@@ -77,9 +77,9 @@ static void	fill_zero(t_flist *cur, char **tmp)
 	o_len = ft_strlen(*tmp);
 	neg = 0;
 	z_len = o_len;
-	if (cur->width > z_len)
-		z_len = cur->width;
-	z = (char*)ft_calloc(z_len + 1, 1);
+	if (spec->width > z_len)
+		z_len = spec->width;
+	z = (char*)ft_calloc((unsigned int)(z_len + 1), 1);
 	if (z)
 	{
 		ft_memset(z, '0', z_len);
@@ -94,7 +94,7 @@ static void	fill_zero(t_flist *cur, char **tmp)
 	*tmp = z;
 }
 
-void		prcss_ints(t_flist *cur, va_list *ap, char f)
+void		prcss_ints(t_flist *spec, va_list *ap, char f)
 {
 	char	*tmp;
 	int		len;
@@ -103,22 +103,22 @@ void		prcss_ints(t_flist *cur, va_list *ap, char f)
 		tmp = ft_itoa(va_arg(*ap, int));
 	else
 		tmp = ft_uitoa(va_arg(*ap, unsigned int));
-	if (cur->zero && !cur->prec)
-		fill_zero(cur, &tmp);
-	else if (cur->prec > (int)ft_strlen(tmp))
-		fill_zero_prec(cur, &tmp);
+	if (spec->zero && !spec->prec)
+		fill_zero(spec, &tmp);
+	else if (spec->prec > (int)ft_strlen(tmp))
+		fill_zero_prec(spec, &tmp);
 	if (!tmp)
 		return ;
 	len = ft_strlen(tmp);
-	if (cur->width > len)
-		len = cur->width;
-	if (tmp[0] == '-' && cur->prec == len)
+	if (spec->width > len)
+		len = spec->width;
+	if (tmp[0] == '-' && spec->prec == len)
 		len++;
-	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (!cur->prnt)
+	spec->prnt = (char*)ft_calloc((unsigned int)(len + 1), 1);
+	if (!spec->prnt)
 	{
 		free(tmp);
 		return ;
 	}
-	flags_to_ints_hex(cur, tmp, len);
+	flags_to_ints_hex(spec, tmp, len);
 }

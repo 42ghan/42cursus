@@ -12,73 +12,37 @@
 
 #include "libftprintf.h"
 
-void				clear_list(t_flist **forms)
+void	clear_spec(t_flist *spec)
 {
-	t_flist	*cur;
-
-	cur = *forms;
-	while (cur)
-	{
-		if (cur->flag)
-			free(cur->flag);
-		cur->flag = NULL;
-		if (cur->prnt)
-			free(cur->prnt);
-		cur->prnt = NULL;
-		cur = cur->next;
-		free(*forms);
-		*forms = cur;
-	}
+	if (spec->flag)
+		free(spec->flag);
+	spec->flag = NULL;
+	if (spec->prnt)
+		free(spec->prnt);
+	spec->prnt = NULL;
 }
 
-static unsigned int	print_elem(t_flist **cur, size_t *cnt)
+size_t	print_and_count(t_flist *spec)
 {
-	unsigned int	next_idx;
-	int				i;
+	size_t	ret_cnt;
+	int		i;
 
-	if ((*cur)->len < 0)
+	ret_cnt = 0;
+	if (spec->form == 'c')
 	{
-		write(1, (*cur)->prnt, ft_strlen((*cur)->prnt));
-		*cnt += ft_strlen((*cur)->prnt);
+		i = 0;
+		while (i < spec->len)
+		{
+			write(1, &(spec->prnt[i]), 1);
+			ret_cnt++;
+			i++;
+		}
 	}
 	else
 	{
-		i = 0;
-		while (i < (*cur)->len)
-		{
-			write(1, &((*cur)->prnt[i]), 1);
-			(*cnt)++;
-			i++;
-		}
+		write(1, spec->prnt, ft_strlen(spec->prnt));
+		ret_cnt += ft_strlen(spec->prnt);
 	}
-	next_idx = (*cur)->end + 1;
-	*cur = (*cur)->next;
-	return (next_idx);
-}
-
-size_t				print_str(char *str, t_flist *forms)
-{
-	size_t			cnt;
-	unsigned int	i;
-	t_flist			*cur;
-
-	cnt = 0;
-	i = 0;
-	cur = forms->next;
-	while (str[i])
-	{
-		if (cur && i == cur->start)
-		{
-			i = print_elem(&cur, &cnt);
-			if (!i)
-				return (0);
-		}
-		else
-		{
-			write(1, &str[i], 1);
-			i++;
-			cnt++;
-		}
-	}
-	return (cnt);
+	clear_spec(spec);
+	return (ret_cnt);
 }

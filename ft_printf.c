@@ -12,34 +12,35 @@
 
 #include "libftprintf.h"
 
-static int	by_format(t_flist *cur, va_list *ap, char f)
+static int		by_format(t_flist *spec, va_list *ap, char f, size_t *cnt)
 {
-	if (cur->flag[0] != 0)
-		check_flags(cur, ap);
-	if ((cur->width >= 0) && (cur->prec >= 0))
+	if (spec->flag[0] != 0)
+		check_flags(spec, ap);
+	if ((spec->width >= 0) && (spec->prec >= 0))
 	{
 		if (f == '%')
-			prcss_perc(cur);
+			prcss_perc(spec);
 		else if (f == 'p')
-			prcss_addr(cur, ap);
+			prcss_addr(spec, ap);
 		else if ((f == 'c') || (f == 's'))
-			prcss_c_or_str(cur, ap, f);
+			prcss_c_or_str(spec, ap, f);
 		else if ((f == 'd') || (f == 'i') || (f == 'u'))
-			prcss_ints(cur, ap, f);
+			prcss_ints(spec, ap, f);
 		else if (f == 'x' || f == 'X')
-			prcss_hex(cur, ap, f);
-		while (cur->ast_cnt)
+			prcss_hex(spec, ap, f);
+		while (spec->ast_cnt)
 		{
 			va_arg(*ap, int);
-			cur->ast_cnt--;
+			spec->ast_cnt--;
 		}
 	}
-	if ((cur->prnt) == NULL)
-		return (0);
+	if ((spec->prnt) == NULL)
+		return (-1);
+	*cnt += print_and_count(spec);
 	return (1);
 }
 
-static int	form_idx_finder(char c)
+static size_t	form_idx_finder(char c)
 {
 	unsigned int	i;
 
@@ -53,79 +54,64 @@ static int	form_idx_finder(char c)
 	return (i);
 }
 
-static int	fill_form(char *format, t_flist **forms, unsigned int start)
+static int		fill_form(char *format, unsigned int start, t_flist *spec)
 {
-	t_flist			*elem;
 	unsigned int	f_idx;
 
-	elem = flist_init();
-	if (!elem)
-		return (0);
-	elem->start = start;
-	elem->end = start + 1;
-	while (format[elem->end])
+	spec->start = start;
+	spec->end = start + 1;
+	while (format[spec->end])
 	{
-		f_idx = form_idx_finder(format[elem->end]);
+		f_idx = form_idx_finder(format[spec->end]);
 		if (f_idx >= 0 && f_idx <= 8)
 		{
-			elem->form = "cspdiuxX%"[f_idx];
+			spec->form = "cspdiuxX%"[f_idx];
 			break ;
 		}
-		elem->end++;
+		spec->end++;
 	}
-	elem->flag = ft_substr(format, elem->start + 1,
-		elem->end - elem->start - 1);
-	if (!elem->flag)
-		return (0);
-	flist_add_back(forms, elem);
-	return (elem->end);
+	spec->flag = ft_substr(format, spec->start + 1,
+		spec->end - spec->start - 1);
+	if (!spec->flag)
+		return (-1);
+	return (spec->end);
 }
 
-static int	check_formats(char *format, t_flist **forms)
+static size_t	print_by_format(char *format, va_list *ap)
 {
-	unsigned int	i;
+	int		i;
+	size_t	cnt;
+	t_flist	spec;
 
+	cnt = 0;
 	i = 0;
 	while (format[i])
 	{
 		if (format[i] == '%')
 		{
-			i = fill_form(format, forms, i);
-			if (i == 0)
-			{
-				clear_list(forms);
-				return (0);
-			}
+			spec_initialize(&spec);
+			i = fill_form(format, i, &spec);
+			if (i == -1 || by_format(&spec, ap, spec.form, &cnt) ==  -1)
+				return (-1);
+		}
+		else
+		{
+			write(1, &format[i], 1);
+			cnt++;
 		}
 		i++;
 	}
-	return (1);
+	return (cnt);
 }
 
-int			ft_printf(const char *format, ...)
+int				ft_printf(const char *format, ...)
 {
-	t_flist	*forms;
-	t_flist *cur;
 	va_list ap;
 	size_t	cnt;
 
 	cnt = 0;
-	forms = flist_init();
-	if (!forms)
-		return (0);
-	if (check_formats((char*)format, &forms) == 0)
-		return (0);
 	va_start(ap, format);
-	cur = forms->next;
-	while (cur)
-	{
-		if (by_format(cur, &ap, cur->form) == 0)
-			break ;
-		cur = cur->next;
-	}
+	cnt = print_by_format((char*)format, &ap);
 	va_end(ap);
-	if (!cur)
-		cnt = print_str((char*)format, forms);
-	clear_list(&forms);
 	return (cnt);
 }

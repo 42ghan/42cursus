@@ -12,16 +12,16 @@
 
 #include "libftprintf.h"
 
-static void	fill_zero_hex(t_flist *cur, char **tmp)
+static void	fill_zero_hex(t_flist *spec, char **tmp)
 {
 	char	*z;
 	int		z_len;
 
 	z_len = ft_strlen(*tmp);
-	if (!cur->prec && cur->width > z_len)
-		z_len = cur->width;
-	if (cur->prec > z_len)
-		z_len = cur->prec;
+	if (!spec->prec && spec->width > z_len)
+		z_len = spec->width;
+	if (spec->prec > z_len)
+		z_len = spec->prec;
 	z = (char*)ft_calloc(z_len + 1, 1);
 	if (z)
 	{
@@ -32,24 +32,24 @@ static void	fill_zero_hex(t_flist *cur, char **tmp)
 	*tmp = z;
 }
 
-static void	flags_to_hex(t_flist *cur, char *tmp)
+static void	flags_to_hex(t_flist *spec, char *tmp)
 {
 	int	len;
 
-	if (cur->zero || cur->prec > (int)ft_strlen(tmp))
-		fill_zero_hex(cur, &tmp);
+	if (spec->zero || spec->prec > (int)ft_strlen(tmp))
+		fill_zero_hex(spec, &tmp);
 	len = ft_strlen(tmp);
-	if (cur->prec > len)
-		len = cur->prec;
-	if (cur->width > len)
-		len = cur->width;
-	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (cur->prnt == NULL)
+	if (spec->prec > len)
+		len = spec->prec;
+	if (spec->width > len)
+		len = spec->width;
+	spec->prnt = (char*)ft_calloc(len + 1, 1);
+	if (spec->prnt == NULL)
 	{
 		free(tmp);
 		return ;
 	}
-	flags_to_ints_hex(cur, tmp, len);
+	flags_to_ints_hex(spec, tmp, len);
 }
 
 static int	hex_cnt(unsigned int n)
@@ -65,7 +65,7 @@ static int	hex_cnt(unsigned int n)
 	return (cnt);
 }
 
-void		prcss_hex(t_flist *cur, va_list *ap, char f)
+void		prcss_hex(t_flist *spec, va_list *ap, char f)
 {
 	unsigned int	n;
 	int				cnt;
@@ -85,5 +85,5 @@ void		prcss_hex(t_flist *cur, va_list *ap, char f)
 		n /= 16;
 		cnt--;
 	}
-	flags_to_hex(cur, tmp);
+	flags_to_hex(spec, tmp);
 }

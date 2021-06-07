@@ -12,45 +12,45 @@
 
 #include "libftprintf.h"
 
-static void	null_addr(t_flist *cur)
+static void	null_addr(t_flist *spec)
 {
 	int	idx;
 
 	idx = 0;
-	if (ft_strchr(cur->flag, '.'))
+	if (ft_strchr(spec->flag, '.'))
 	{
-		if (cur->width > 2)
-			idx = cur->width - 2;
-		cur->prnt[idx++] = '0';
-		cur->prnt[idx++] = 'x';
-		cur->prnt[idx] = 0;
+		if (spec->width > 2)
+			idx = spec->width - 2;
+		spec->prnt[idx++] = '0';
+		spec->prnt[idx++] = 'x';
+		spec->prnt[idx] = 0;
 	}
 	else
 	{
-		if (cur->width > 3)
-			idx = cur->width - 3;
-		cur->prnt[idx++] = '0';
-		cur->prnt[idx++] = 'x';
-		cur->prnt[idx] = '0';
+		if (spec->width > 3)
+			idx = spec->width - 3;
+		spec->prnt[idx++] = '0';
+		spec->prnt[idx++] = 'x';
+		spec->prnt[idx] = '0';
 	}
 }
 
-static void	align_left_or_right(t_flist *cur, int pos, long long addr)
+static void	align_left_or_right(t_flist *spec, int pos, long long addr)
 {
 	int	to;
 
 	to = pos - 8;
 	while (pos >= to)
 	{
-		cur->prnt[pos] = "0123456789abcdef"[addr % 16];
+		spec->prnt[pos] = "0123456789abcdef"[addr % 16];
 		addr /= 16;
 		pos--;
 	}
-	cur->prnt[pos--] = 'x';
-	cur->prnt[pos] = '0';
+	spec->prnt[pos--] = 'x';
+	spec->prnt[pos] = '0';
 }
 
-void		prcss_addr(t_flist *cur, va_list *ap)
+void		prcss_addr(t_flist *spec, va_list *ap)
 {
 	long long		addr;
 	int				len;
@@ -59,18 +59,18 @@ void		prcss_addr(t_flist *cur, va_list *ap)
 	len = 11;
 	if (addr == 0)
 		len = 3;
-	else if (cur->width > len)
-		len = cur->width;
-	cur->prnt = (char*)ft_calloc(len + 1, 1);
-	if (!cur->prnt)
+	else if (spec->width > len)
+		len = spec->width;
+	spec->prnt = (char*)ft_calloc(len + 1, 1);
+	if (!spec->prnt)
 		return ;
-	ft_memset(cur->prnt, '0', len);
-	if (cur->align == 1 || !cur->zero)
-		ft_memset(cur->prnt, ' ', len);
+	ft_memset(spec->prnt, '0', len);
+	if (spec->align == 1 || !spec->zero)
+		ft_memset(spec->prnt, ' ', len);
 	if (addr == 0)
-		null_addr(cur);
-	else if (cur->align == 1)
-		align_left_or_right(cur, 10, addr);
-	else if (cur->align == 0)
-		align_left_or_right(cur, len - 1, addr);
+		null_addr(spec);
+	else if (spec->align == 1)
+		align_left_or_right(spec, 10, addr);
+	else if (spec->align == 0)
+		align_left_or_right(spec, len - 1, addr);
 }
