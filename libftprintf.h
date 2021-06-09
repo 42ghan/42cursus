@@ -21,11 +21,11 @@ typedef struct	s_flist
 {
 	size_t			start;
 	size_t			end;
-	int				ast_cnt;
 	int				align;
 	int				zero;
 	int				width;
 	int				prec;
+	int				isprec;
 	int				len;
 	char			form;
 	char			*flag;

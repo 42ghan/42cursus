@@ -24,13 +24,14 @@ static unsigned int	unsigned_atoi(const char *str)
 	return (ret);
 }
 
-static void			check_prec(t_flist *spec, char *p, va_list ap_cpy)
+static void			check_prec(t_flist *spec, char *p, va_list *ap_cpy)
 {
 	if (!p)
 	{
 		spec->prec = -1;
 		return ;
 	}
+	spec->isprec = 1;
 	if (ft_isdigit(*p))
 	{
 		spec->prec = unsigned_atoi(p);
@@ -39,15 +40,16 @@ static void			check_prec(t_flist *spec, char *p, va_list ap_cpy)
 	}
 	else if (*p == '*')
 	{
-		spec->prec = va_arg(ap_cpy, int);
+		spec->prec = va_arg(*ap_cpy, int);
 		if (spec->prec < 0)
+		{
+			spec->isprec = 0;
 			spec->prec = 0;
+		}
 	}
-	// else if (*p)
-	// 	spec->prec = -1;
 }
 
-static void			check_width(t_flist *spec, char *w, va_list ap_cpy)
+static void			check_width(t_flist *spec, char *w, va_list *ap_cpy)
 {
 	if (*w == '0' || *w == '-')
 	{
@@ -56,6 +58,8 @@ static void			check_width(t_flist *spec, char *w, va_list ap_cpy)
 		else if (*w == '-')
 			spec->align = 1;
 		w++;
+		while (*w == '0' || *w == '-')
+			w++;
 	}
 	if (ft_isdigit(*w))
 	{
@@ -65,15 +69,13 @@ static void			check_width(t_flist *spec, char *w, va_list ap_cpy)
 	}
 	else if (*w == '*')
 	{
-		spec->width = va_arg(ap_cpy, int);
+		spec->width = va_arg(*ap_cpy, int);
 		if (spec->width < 0)
 		{
 			spec->align = 1;
 			spec->width *= -1;
 		}
 	}
-	// else if (*w)
-	// 	spec->width = -1;
 }
 
 static void			cnt_ast(t_flist *spec, va_list *ap)
@@ -114,12 +116,12 @@ void				check_flags(t_flist *spec, va_list *ap)
 		spec->width = -1;
 		return ;
 	}
-	check_width(spec, w, ap_cpy);
+	check_width(spec, w, &ap_cpy);
 	free(w);
 	if (dot_idx != ft_strlen(spec->flag))
 	{
 		p = ft_substr(spec->flag, dot_idx + 1, ft_strlen(spec->flag) - dot_idx);
-		check_prec(spec, p, ap_cpy);
+		check_prec(spec, p, &ap_cpy);
 		free(p);
 	}
 }

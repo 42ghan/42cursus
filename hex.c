@@ -36,7 +36,7 @@ static void	flags_to_hex(t_flist *spec, char *tmp)
 {
 	int	len;
 
-	if (spec->zero || spec->prec > (int)ft_strlen(tmp))
+	if ((spec->zero && !spec->isprec) || spec->prec > (int)ft_strlen(tmp))
 		fill_zero_hex(spec, &tmp);
 	len = ft_strlen(tmp);
 	if (spec->prec > len)

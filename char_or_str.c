@@ -12,18 +12,20 @@
 
 #include "libftprintf.h"
 
-static int	is_dot(char *flag)
+static char	*null_string(void)
 {
-	int	i;
+	char	*tmp;
 
-	i = 0;
-	while (flag[i])
-	{
-		if (flag[i] == '.')
-			return (1);
-		i++;
-	}
-	return (0);
+	tmp = (char*)ft_calloc(7, 1);
+	if (!tmp)
+		return (NULL);
+	tmp[0] = '(';
+	tmp[1] = 'n';
+	tmp[2] = 'u';
+	tmp[3] = 'l';
+	tmp[4] = 'l';
+	tmp[5] = ')';
+	return (tmp);
 }
 
 static void	flags_to_str(t_flist *spec, char *tmp)
@@ -32,13 +34,14 @@ static void	flags_to_str(t_flist *spec, char *tmp)
 	int	idx;
 	int str_len;
 
+	if (!tmp)
+		tmp = null_string();
+	if (!tmp)
+		return ;
 	len = ft_strlen(tmp);
-	str_len = ft_strlen(tmp);
-	if (is_dot(spec->flag) && spec->prec < len)
-	{
+	if (spec->isprec && spec->prec < len)
 		len = spec->prec;
-		str_len = spec->prec;
-	}
+	str_len = len;
 	if (spec->width > len)
 		len = spec->width;
 	spec->prnt = (char*)ft_calloc(len + 1, 1);

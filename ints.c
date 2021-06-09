@@ -18,8 +18,7 @@ void		flags_to_ints_hex(t_flist *spec, char *tmp, int len)
 
 	tmp_len = ft_strlen(tmp);
 	ft_memset(spec->prnt, ' ', len);
-	if (ft_strchr(spec->flag, '.') && spec->prec == 0
-	&& tmp[0] == '0' && tmp[1] == 0)
+	if (spec->isprec && !spec->prec && tmp[0] == '0' && !tmp[1])
 	{
 		if (spec->width == 0)
 		{
@@ -103,9 +102,9 @@ void		prcss_ints(t_flist *spec, va_list *ap, char f)
 		tmp = ft_itoa(va_arg(*ap, int));
 	else
 		tmp = ft_uitoa(va_arg(*ap, int));
-	if (spec->zero && !spec->prec)
+	if (spec->zero && !spec->isprec)
 		fill_zero(spec, &tmp);
-	else if (spec->prec > (int)ft_strlen(tmp))
+	else if (spec->prec >= (int)ft_strlen(tmp))
 		fill_zero_prec(spec, &tmp);
 	if (!tmp)
 		return ;

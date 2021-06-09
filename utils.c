@@ -78,6 +78,7 @@ char		*ft_substr(char const *s, unsigned int start, size_t len)
 	spec->zero = 0;
 	spec->width = 0;
 	spec->prec = 0;
+	spec->isprec = 0;
 	spec->len = -1;
 	spec->form = 0;
 	spec->flag = NULL;
