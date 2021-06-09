@@ -22,7 +22,10 @@ int		digit_cnt(int n)
 		pos_n = 2147483647;
 	pos_n = n;
 	if (n < 0)
+	{
+		cnt++;
 		pos_n = -n;
+	}
 	while (pos_n / 10)
 	{
 		pos_n /= 10;
@@ -33,26 +36,28 @@ int		digit_cnt(int n)
 
 char	*ft_itoa(int n)
 {
-	int		cnt;
-	int		sign;
-	char	*ret;
+	unsigned int	un;
+	int				cnt;
+	int				sign;
+	char			*ret;
 
-	sign = 1;
-	cnt = digit_cnt(n);
+	sign = 0;
+	un = n;
 	if (n < 0)
 	{
-		cnt++;
-		sign = -1;
+		sign = 1;
+		un = n * (-1);
 	}
+	cnt = digit_cnt(n);
 	ret = (char*)ft_calloc(cnt + 1, 1);
 	if (!ret)
 		return (NULL);
 	if (n < 0)
 		ret[0] = '-';
-	while (cnt + sign > 0)
+	while (cnt > sign)
 	{
-		ret[cnt - 1] = "0123456789"[n % 10 * sign];
-		n /= 10;
+		ret[cnt - 1] = "0123456789"[(un % 10)];
+		un /= 10;
 		cnt--;
 	}
 	return (ret);

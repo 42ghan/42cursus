@@ -51,15 +51,13 @@ static void			check_prec(t_flist *spec, char *p, va_list *ap_cpy)
 
 static void			check_width(t_flist *spec, char *w, va_list *ap_cpy)
 {
-	if (*w == '0' || *w == '-')
+	while (*w == '0' || *w == '-')
 	{
 		if (*w == '0')
 			spec->zero = 1;
-		else if (*w == '-')
+		if (*w == '-')
 			spec->align = 1;
 		w++;
-		while (*w == '0' || *w == '-')
-			w++;
 	}
 	if (ft_isdigit(*w))
 	{

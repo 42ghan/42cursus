@@ -12,10 +12,17 @@
 
 #include "libftprintf.h"
 
-static void	align_left_or_right(t_flist *spec, int pos, long long addr, int len)
+static void	align_l_r(t_flist *spec, int pos, unsigned long long addr, int len)
 {
 	int	to;
 
+	if (len == 1)
+	{
+		spec->prnt[pos - 1] = '0';
+		spec->prnt[pos] = 'x';
+		spec->prnt[pos + 1] = 0;
+		return ;
+	}
 	to = pos - len;
 	while (pos >= to)
 	{
@@ -27,7 +34,7 @@ static void	align_left_or_right(t_flist *spec, int pos, long long addr, int len)
 	spec->prnt[pos] = '0';
 }
 
-static int	cnt_addr_len(long long addr)
+static int	cnt_addr_len(unsigned long long addr)
 {
 	int	cnt;
 
@@ -42,12 +49,14 @@ static int	cnt_addr_len(long long addr)
 
 void		prcss_addr(t_flist *spec, va_list *ap)
 {
-	long long	addr;
-	int			len;
-	int			act_len;
+	unsigned long long	addr;
+	int					len;
+	int					act_len;
 
-	addr = (long long)va_arg(*ap, void*);
+	addr = (unsigned long long)va_arg(*ap, void*);
 	act_len = cnt_addr_len(addr);
+	if (addr == 0 && spec->isprec && !spec->prec)
+		act_len = 0;
 	len = act_len + 2;
 	if (spec->width > len)
 		len = spec->width;
@@ -58,7 +67,7 @@ void		prcss_addr(t_flist *spec, va_list *ap)
 	if (spec->align == 1 || !spec->zero)
 		ft_memset(spec->prnt, ' ', len);
 	if (spec->align == 1)
-		align_left_or_right(spec, act_len + 1, addr, act_len - 1);
+		align_l_r(spec, act_len + 1, addr, act_len - 1);
 	else if (spec->align == 0)
-		align_left_or_right(spec, len - 1, addr, act_len - 1);
+		align_l_r(spec, len - 1, addr, act_len - 1);
 }
