@@ -68,7 +68,7 @@ static int		fill_form(char *format, unsigned int start, t_flist *spec)
 		spec->end++;
 	}
 	spec->flag = ft_substr(format, spec->start + 1,
-		spec->end - spec->start - 1);
+	spec->end - spec->start - 1);
 	if (!spec->flag)
 		return (-1);
 	return (spec->end);
@@ -88,7 +88,7 @@ static size_t	print_by_format(char *format, va_list *ap)
 		{
 			spec_initialize(&spec);
 			i = fill_form(format, i, &spec);
-			if (i == -1 || by_format(&spec, ap, spec.form, &cnt) ==  -1)
+			if (i == -1 || by_format(&spec, ap, spec.form, &cnt) == -1)
 				return (-1);
 		}
 		else
@@ -103,7 +103,7 @@ static size_t	print_by_format(char *format, va_list *ap)
 
 int				ft_printf(const char *format, ...)
 {
-	va_list ap;
+	va_list	ap;
 	size_t	cnt;
 
 	cnt = 0;

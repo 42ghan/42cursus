@@ -32,7 +32,7 @@ static void	flags_to_str(t_flist *spec, char *tmp)
 {
 	int	len;
 	int	idx;
-	int str_len;
+	int	str_len;
 
 	if (!tmp)
 		tmp = null_string();

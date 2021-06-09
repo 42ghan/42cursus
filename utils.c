@@ -12,9 +12,9 @@
 
 #include "libftprintf.h"
 
-size_t		ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
-	unsigned int len;
+	unsigned int	len;
 
 	len = 0;
 	while (s[len])
@@ -22,7 +22,7 @@ size_t		ft_strlen(const char *s)
 	return (len);
 }
 
-char		*ft_strndup(const char *s1, size_t n)
+char	*ft_strndup(const char *s1, size_t n)
 {
 	char			*ret;
 	unsigned int	len;
@@ -45,7 +45,7 @@ char		*ft_strndup(const char *s1, size_t n)
 	return (ret);
 }
 
-char		*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char			*ret;
 	unsigned int	i;
@@ -70,7 +70,7 @@ char		*ft_substr(char const *s, unsigned int start, size_t len)
 	return (ret);
 }
 
- void		spec_initialize(t_flist *spec)
+void	spec_initialize(t_flist *spec)
 {
 	spec->start = 0;
 	spec->end = 0;

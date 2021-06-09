@@ -67,7 +67,7 @@ static void	fill_zero_prec(t_flist *spec, char **tmp)
 static void	fill_zero(t_flist *spec, char **tmp)
 {
 	char	*z;
-	int 	z_len;
+	int		z_len;
 	int		o_len;
 	int		neg;
 
@@ -96,7 +96,7 @@ static void	fill_zero(t_flist *spec, char **tmp)
 void		prcss_ints(t_flist *spec, va_list *ap, char f)
 {
 	char	*tmp;
-	int	len;
+	int		len;
 
 	if (f == 'd' || f == 'i')
 		tmp = ft_itoa(va_arg(*ap, int));

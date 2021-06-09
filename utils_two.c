@@ -12,14 +12,14 @@
 
 #include "libftprintf.h"
 
-int			ft_isdigit(int c)
+int		ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }
 
-char		*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
 	int		i;
 	char	*ret;
@@ -37,7 +37,7 @@ char		*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char		*strncpy_no_null(char *dst, const char *src, size_t size)
+char	*strncpy_no_null(char *dst, const char *src, size_t size)
 {
 	unsigned int	i;
 
@@ -50,9 +50,9 @@ char		*strncpy_no_null(char *dst, const char *src, size_t size)
 	return (dst);
 }
 
-void		*ft_memset(void *s, int c, size_t n)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < n)
@@ -60,7 +60,7 @@ void		*ft_memset(void *s, int c, size_t n)
 	return (s);
 }
 
-void		*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t count, size_t size)
 {
 	void			*ret;
 	unsigned int	i;

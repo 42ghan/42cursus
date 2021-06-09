@@ -15,7 +15,7 @@
 int		digit_cnt(int n)
 {
 	int	cnt;
-	int pos_n;
+	int	pos_n;
 
 	cnt = 1;
 	if (n == -2147483648)
