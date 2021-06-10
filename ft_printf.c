@@ -28,11 +28,14 @@ static int		by_format(t_flist *spec, va_list *ap, char f, size_t *cnt)
 			prcss_c_or_str(spec, ap, f);
 		else if ((f == 'd') || (f == 'i') || (f == 'u'))
 			prcss_ints(spec, ap, f);
-		else if (f == 'x' || f == 'X')
+		else if ((f == 'x') || (f == 'X'))
 			prcss_hex(spec, ap, f);
 	}
 	if ((spec->prnt) == NULL)
+	{
+		free(spec->flag);
 		return (-1);
+	}
 	*cnt += print_and_count(spec);
 	return (1);
 }

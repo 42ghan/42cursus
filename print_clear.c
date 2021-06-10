@@ -14,11 +14,9 @@
 
 void	clear_spec(t_flist *spec)
 {
-	if (spec->flag)
-		free(spec->flag);
+	free(spec->flag);
 	spec->flag = NULL;
-	if (spec->prnt)
-		free(spec->prnt);
+	free(spec->prnt);
 	spec->prnt = NULL;
 }
 
