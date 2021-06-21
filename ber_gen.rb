@@ -1,12 +1,13 @@
+#! /usr/bin/ruby
 
 # SECTION Arguments setting
-x_len = rand(3..30)
-y_len = rand(3..30)
+x_len = rand(3..25)
+y_len = rand(3..25)
 
 if x_len == 3 && y_len < 5
-  y_len = rand(5..30)
+  y_len = rand(5..25)
 elsif y_len == 3 && x_len < 5
-  x_len = rand(5..30)
+  x_len = rand(5..25)
 end
 
 # SECTION Map generation function
@@ -15,12 +16,11 @@ def mapgen(x, y)
   mid = Array.new(x, '0')
   mid[0] = '1'
   mid[-1] = '1'
-  map.append(Array.new(x, '1'))
-  (1..(y - 1)).to_a.each { |i| map.append(mid.clone) }
-  map.append(Array.new(x, '1'))
+  2.times { map.append(Array.new(x, '1')) }
+  (1..(y - 1)).to_a.each { |i| map.insert(i, mid.clone) }
   empty = (x - 2) * (y - 2)
 
-  # NOTE Filling appropriate amount of 'C' and '1'
+  # NOTE Filling appropriate amount of 'C's and '1's
   rand(1..(empty / 4)).times { map[rand(1..(y - 2))][rand(1..(x - 2))] = 'C' }
   rand(1..(empty / 4)).times {
     x_idx = rand(1..(x - 2))
@@ -29,24 +29,19 @@ def mapgen(x, y)
   }
 
   # NOTE Fill 'E' and 'P'
-  empty.times {
-    x_idx = rand(1..(x - 2))
-    y_idx = rand(1..(y - 2))
-    if map[y_idx][x_idx] == '0' or map[y_idx][x_idx] == '1'
-      map[y_idx][x_idx] = 'P'
-      break
-    end
-  }
-  empty.times {
-    x_idx = rand(1..(x - 2))
-    y_idx = rand(1..(y - 2))
-    if map[y_idx][x_idx] == '0' or map[y_idx][x_idx] == '1'
-      map[y_idx][x_idx] = 'E'
-      break
-    end
+  pe = ['P', 'E']
+  pe.each { |c|
+    empty.times {
+      x_idx = rand(1..(x - 2))
+      y_idx = rand(1..(y - 2))
+      if map[y_idx][x_idx] == '0' || map[y_idx][x_idx] == '1'
+        map[y_idx][x_idx] = c
+        break
+      end
+    }
   }
 
-  #NOTE Write .ber file
+  # NOTE Write .ber file
   map.each_index { |i|
     if i == 0
       File.write('map.ber', "#{map[i].join}", mode: 'w')
