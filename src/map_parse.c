@@ -22,7 +22,7 @@ static void	epc_cnt(int *exit, int *start, int *collect, char c)
 		(*collect)++;
 }
 
-static int	check_line_validity(t_ln_lst *cur, int *exit, int *start, int *collect)
+static int	check_ln_valid(t_ln_lst *cur, int *exit, int *start, int *collect)
 {
 	int		i;
 
@@ -41,7 +41,8 @@ static int	check_line_validity(t_ln_lst *cur, int *exit, int *start, int *collec
 			if (*(cur->line) != '1' || *(cur->line + cur->len - 1) != '1')
 				return (0);
 			if (*(cur->line + i) != '1' && *(cur->line + i) != '0' &&
-			*(cur->line + i) != 'E' && *(cur->line + i) != 'P' && *(cur->line + i) != 'C')
+			*(cur->line + i) != 'E' && *(cur->line + i) != 'P'
+			&& *(cur->line + i) != 'C')
 				return (0);
 			epc_cnt(exit, start, collect, *(cur->line + i));
 		}
@@ -65,7 +66,7 @@ int			check_map_validity(t_ln_lst **head)
 	cur = (*head)->next;
 	while (cur)
 	{
-		if (!check_line_validity(cur, &exit, &start, &collect) ||
+		if (!check_ln_valid(cur, &exit, &start, &collect) ||
 		(!cur->next && (exit != 1 || start != 1 || !collect)))
 		{
 			clear_ln_lst(head);

@@ -12,6 +12,12 @@
 
 #include "../include/so_long.h"
 
+/* TODO - create display with mlx */
+static display_window(t_ln_lst *head)
+{
+
+}
+
 static void	open_parse_ber(char *ber, t_ln_lst **head)
 {
 	int			fd;
@@ -45,6 +51,7 @@ int			main(int argc, char* argv[])
 		perror("Error\nInvalid map");
 		return (1);
 	}
+	display_window(head);
 	clear_ln_lst(&head);
 	return (0);
 }

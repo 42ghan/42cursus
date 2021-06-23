@@ -18,7 +18,7 @@
 # include <fcntl.h> /* for open */
 # include <unistd.h> /* for close, read, write */
 # include <stdio.h> /* for perror */
-// # include <mlx.h> /* for miniLibX functions */
+# include <mlx.h> /* for miniLibX functions */
 
 /* NOTE - map lines list */
 typedef struct	s_ln_lst
