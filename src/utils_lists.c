@@ -63,6 +63,7 @@ void		clear_ln_lst(t_ln_lst **head)
 	{
 		if (cur->line_num > 0)
 		{
+			printf("%s\n", cur->line);
 			free(cur->line);
 			cur->line = NULL;
 		}

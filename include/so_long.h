@@ -29,6 +29,16 @@ typedef struct	s_ln_lst
 	struct s_ln_lst	*next;
 }				t_ln_lst;
 
+/* NOTE - img bag structure */
+typedef struct	s_img_bag
+{
+	void	*wall;
+	void	*empty;
+	void	*collect;
+	void	*player;
+	void	*start;
+	void	*exit;
+}				t_img_bag;
 
 /* NOTE - utils_one funcitons */
 size_t		ft_strlen(const char *s);

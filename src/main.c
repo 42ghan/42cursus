@@ -12,10 +12,68 @@
 
 #include "../include/so_long.h"
 
-/* TODO - create display with mlx */
-static display_window(t_ln_lst *head)
+static int	imgs_init(void *mlx, t_img_bag *bag)
 {
+	int		w;
+	int		h;
 
+	bag->wall = mlx_xpm_file_to_image(mlx, "texture/wall.xpm", &w, &h);
+	bag->empty = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
+	bag->exit = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
+	// bag->collect = mlx_xpm_file_to_image(mlx, "texture/wall.xpm", &w, &h);
+	// bag->start = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
+	// bag->player = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
+}
+
+static void	put_tiles(void *mlx, void *win, t_ln_lst *cur)
+{
+	int			x;
+	int			y;
+	t_img_bag	bag;
+
+	imgs_init(mlx, &bag);
+	y = 0;
+	while (cur)
+	{
+		x = 0;
+		while ((cur->line)[x])
+		{
+			if ((cur->line)[x] == '1')
+				mlx_put_image_to_window(mlx, win, bag.wall, x * 64, y * 64);
+			else if ((cur->line)[x] == '0')
+				mlx_put_image_to_window(mlx, win, bag.empty, x * 64, y * 64);
+			else
+				mlx_put_image_to_window(mlx, win, bag.exit, x * 64, y * 64);
+			x++;
+		}
+		cur = cur->next;
+		y++;
+	}
+}
+
+/* TODO - create display with mlx */
+static int	display_window(t_ln_lst *head, int w, int h)
+{
+	void	*mlx;
+	void	*m_win;
+
+	mlx = mlx_init();
+	m_win = mlx_new_window(mlx, w * 64, h * 64, "so_long");
+	put_tiles(mlx, m_win, head->next);
+	mlx_loop(mlx);
+	return (1);
+}
+
+static int	map_size_check(t_ln_lst **head, int *width, int *height)
+{
+	*width = (*head)->next->len;
+	*height = ft_ln_lstlast(*head)->line_num;
+	if (*width > 40 || *height > 30 || *width < 3 || *height < 3)
+	{
+		clear_ln_lst(head);
+		return (0);
+	}
+	return (1);
 }
 
 static void	open_parse_ber(char *ber, t_ln_lst **head)
@@ -37,6 +95,8 @@ static void	open_parse_ber(char *ber, t_ln_lst **head)
 int			main(int argc, char* argv[])
 {
 	t_ln_lst	*head;
+	int			width;
+	int			height;
 
 	if (argc != 2)
 	{
@@ -46,12 +106,16 @@ int			main(int argc, char* argv[])
 	head = ft_ln_lstnew(NULL, 0);
 	if (head)
 		open_parse_ber(argv[1], &head);
-	if (!head)
+	if (!head || !map_size_check(&head, &width, &height))
 	{
 		perror("Error\nInvalid map");
 		return (1);
 	}
-	display_window(head);
+	if (!display_window(head, width, height))
+	{
+		perror("Error\nDisplay error");
+		return (1);
+	}
 	clear_ln_lst(&head);
 	return (0);
 }

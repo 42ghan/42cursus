@@ -77,6 +77,20 @@ int			check_map_validity(t_ln_lst **head)
 	return (1);
 }
 
+static int	new_then_addback(t_ln_lst **head, char *ln, int cnt)
+{
+	t_ln_lst	*cur;
+
+	cur = ft_ln_lstnew(ln, cnt);
+	if (!cur || !ln)
+	{
+		clear_ln_lst(head);
+		return (0);
+	}
+	ft_ln_lstadd_back(head, cur);
+	return (1);
+}
+
 void		fill_ln_lst(t_ln_lst **head, int fd)
 {
 	int			cnt;
@@ -86,19 +100,14 @@ void		fill_ln_lst(t_ln_lst **head, int fd)
 	cnt = 1;
 	while (get_next_line(fd, &ln) > 0)
 	{
-		cur = ft_ln_lstnew(ln, cnt++);
-		if (!cur || !ln)
-		{
-			clear_ln_lst(head);
+		if (!new_then_addback(head, ln, cnt))
 			return ;
-		}
-		ft_ln_lstadd_back(head, cur);
+		cnt++;
 	}
-	cur = ft_ln_lstnew(ln, cnt++);
-	if (!cur || !ln)
+	if (!ft_strncmp(ln, "", ft_strlen(ln)))
 	{
-		clear_ln_lst(head);
+		free(ln);
 		return ;
 	}
-	ft_ln_lstadd_back(head, cur);
+	new_then_addback(head, ln, cnt);
 }

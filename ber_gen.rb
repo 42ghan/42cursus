@@ -1,13 +1,13 @@
 #! /usr/bin/ruby
 
 # SECTION Arguments setting
-x_len = rand(3..25)
-y_len = rand(3..25)
+x_len = rand(3..40)
+y_len = rand(3..30)
 
 if x_len == 3 && y_len < 5
-  y_len = rand(5..25)
+  y_len = rand(5..30)
 elsif y_len == 3 && x_len < 5
-  x_len = rand(5..25)
+  x_len = rand(5..40)
 end
 
 # SECTION Map generation function
@@ -17,7 +17,7 @@ def mapgen(x, y)
   mid[0] = '1'
   mid[-1] = '1'
   2.times { map.append(Array.new(x, '1')) }
-  (1..(y - 1)).to_a.each { |i| map.insert(i, mid.clone) }
+  (1..(y - 2)).to_a.each { |i| map.insert(i, mid.clone) }
   empty = (x - 2) * (y - 2)
 
   # NOTE Filling appropriate amount of 'C's and '1's
