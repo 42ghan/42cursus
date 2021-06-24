@@ -95,7 +95,6 @@ void		fill_ln_lst(t_ln_lst **head, int fd)
 {
 	int			cnt;
 	char		*ln;
-	t_ln_lst	*cur;
 
 	cnt = 1;
 	while (get_next_line(fd, &ln) > 0)

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 21:17:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/06/21 21:17:25 by ghan             ###   ########.fr       */
+/*   Updated: 2021/06/24 19:02:58 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h> /* for open */
 # include <unistd.h> /* for close, read, write */
 # include <stdio.h> /* for perror */
-# include <mlx.h> /* for miniLibX functions */
+# include "../minilibx/mlx.h" /* for minilibx functions */
 
 /* NOTE - map lines list */
 typedef struct	s_ln_lst

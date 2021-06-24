@@ -1,27 +1,31 @@
-NAME	= so_long
+NAME	=	so_long
 
-CC		= gcc
+CC		=	gcc
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	=	-Wall -Werror -Wextra
 
-RM		= rm -f
+RM		=	rm -f
 
-INC_DIR	= include/
+INC_DIR	=	include/
 
-MLX_DIR = minilibx/
+MLX_DIR =	minilibx/
 
-SRCS	= src/main.c
+SRCS	=	src/main.c\
+			src/get_next_line.c\
+			src/map_parse.c\
+			src/utils_lists.c\
+			src/utils_one.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS	=	$(SRCS:.c=.o)
 
 all		:	$(NAME)
 
-%.c		:	%.o
-			make -C $(MLX_DIR)
- 			$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+%.o		:	%.c
+			$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 $(NAME)	:	$(OBJS)
-			$(CC) $(CFLAGS) -o $@ $^ -L $(MLX_DIR)
+			make -C $(MLX_DIR)
+			$(CC) $(CFLAGS) -framework OpenGL -framework AppKit -o $@ $^ -L $(MLX_DIR) -l mlx
 
 clean	:
 			make clean -C $(MLX_DIR)
@@ -33,5 +37,3 @@ fclean	:	clean
 re		:	fclean all
 
 .PHONY	:	all clean fclean re
-
-
