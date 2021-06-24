@@ -12,17 +12,36 @@
 
 #include "../include/so_long.h"
 
-static int	imgs_init(void *mlx, t_img_bag *bag)
+static void	imgs_init(void *mlx, void *win, t_img_bag *bag)
 {
 	int		w;
 	int		h;
 
+	bag->mlx = mlx;
+	bag->win = win;
 	bag->wall = mlx_xpm_file_to_image(mlx, "texture/wall.xpm", &w, &h);
 	bag->empty = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
 	bag->exit = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
-	// bag->collect = mlx_xpm_file_to_image(mlx, "texture/wall.xpm", &w, &h);
-	// bag->start = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
-	// bag->player = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
+	bag->collect = mlx_xpm_file_to_image(mlx, "texture/collect.xpm", &w, &h);
+	bag->start = mlx_xpm_file_to_image(mlx, "texture/start.xpm", &w, &h);
+	bag->player = mlx_xpm_file_to_image(mlx, "texture/player.xpm", &w, &h);
+}
+
+static void	image_to_window(t_img_bag bag, char c, int x, int y)
+{
+	if (c == '1')
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.wall, x * 64, y * 64);
+	else if (c == '0')
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.empty, x * 64, y * 64);
+	else if (c == 'E')
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.exit, x * 64, y * 64);
+	else if (c == 'P')
+	{
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.start, x * 64, y * 64);
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.player, x * 64, y * 64);
+	}
+	else if (c == 'C')
+		mlx_put_image_to_window(bag.mlx, bag.win, bag.collect, x * 64, y * 64);
 }
 
 static void	put_tiles(void *mlx, void *win, t_ln_lst *cur)
@@ -31,19 +50,14 @@ static void	put_tiles(void *mlx, void *win, t_ln_lst *cur)
 	int			y;
 	t_img_bag	bag;
 
-	imgs_init(mlx, &bag);
+	imgs_init(mlx, win, &bag);
 	y = 0;
 	while (cur)
 	{
 		x = 0;
 		while ((cur->line)[x])
 		{
-			if ((cur->line)[x] == '1')
-				mlx_put_image_to_window(mlx, win, bag.wall, x * 64, y * 64);
-			else if ((cur->line)[x] == '0')
-				mlx_put_image_to_window(mlx, win, bag.empty, x * 64, y * 64);
-			else
-				mlx_put_image_to_window(mlx, win, bag.exit, x * 64, y * 64);
+			image_to_window(bag, (cur->line)[x], x, y);
 			x++;
 		}
 		cur = cur->next;
@@ -68,7 +82,7 @@ static int	map_size_check(t_ln_lst **head, int *width, int *height)
 {
 	*width = (*head)->next->len;
 	*height = ft_ln_lstlast(*head)->line_num;
-	if (*width > 40 || *height > 30 || *width < 3 || *height < 3)
+	if (*width > 24 || *height > 18 || *width < 3 || *height < 3)
 	{
 		clear_ln_lst(head);
 		return (0);

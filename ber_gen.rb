@@ -1,13 +1,13 @@
 #! /usr/bin/ruby
 
 # SECTION Arguments setting
-x_len = rand(3..40)
-y_len = rand(3..30)
+x_len = rand(3..24)
+y_len = rand(3..18)
 
 if x_len == 3 && y_len < 5
-  y_len = rand(5..30)
+  y_len = rand(5..18)
 elsif y_len == 3 && x_len < 5
-  x_len = rand(5..40)
+  x_len = rand(5..24)
 end
 
 # SECTION Map generation function
