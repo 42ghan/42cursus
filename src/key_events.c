@@ -27,6 +27,8 @@ static int	key_left(int keycode, t_mlx_bag *bag)
 			write(1, bag->moves_str, ft_strlen(bag->moves_str));
 			write(1, "\n", 1);
 		}
+		else
+			str_malloc_error(bag);
 		free(bag->moves_str);
 		bag->moves_str = NULL;
 	}
@@ -48,6 +50,8 @@ static int	key_right(int keycode, t_mlx_bag *bag)
 			write(1, bag->moves_str, ft_strlen(bag->moves_str));
 			write(1, "\n", 1);
 		}
+		else
+			str_malloc_error(bag);
 		free(bag->moves_str);
 		bag->moves_str = NULL;
 	}
@@ -69,6 +73,8 @@ static int	key_up(int keycode, t_mlx_bag *bag)
 			write(1, bag->moves_str, ft_strlen(bag->moves_str));
 			write(1, "\n", 1);
 		}
+		else
+			str_malloc_error(bag);
 		free(bag->moves_str);
 		bag->moves_str = NULL;
 	}
@@ -90,6 +96,8 @@ static int	key_down(int keycode, t_mlx_bag *bag)
 			write(1, bag->moves_str, ft_strlen(bag->moves_str));
 			write(1, "\n", 1);
 		}
+		else
+			str_malloc_error(bag);
 		free(bag->moves_str);
 		bag->moves_str = NULL;
 	}
@@ -107,13 +115,6 @@ int			key_press(int keycode, t_mlx_bag *bag)
 	else if (keycode == 1)
 		key_down(keycode, bag);
 	else if (keycode == 53)
-	{
-		clear_ln_lst(bag->map);
-		free(bag->moves_str);
-		bag->moves_str = NULL;
-		mlx_destroy_window(bag->mlx, bag->win);
-		system("leaks so_long");
-		exit(1);
-	}
+		close_window(bag);
 	return (keycode);
 }

@@ -43,7 +43,14 @@ int		close_window(t_mlx_bag *bag)
 	free(bag->moves_str);
 	bag->moves_str = NULL;
 	mlx_destroy_window(bag->mlx, bag->win);
-	system("leaks so_long");
 	exit(1);
 	return (0);
+}
+
+void	str_malloc_error(t_mlx_bag *bag)
+{
+	clear_ln_lst(bag->map);
+	mlx_destroy_window(bag->mlx, bag->win);
+	perror("Error\nDisplay error");
+	exit(1);
 }

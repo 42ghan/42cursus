@@ -51,26 +51,27 @@ static void	image_to_window(t_mlx_bag *b, char c, int x, int y)
 		else
 			mlx_put_image_to_window(b->mlx, b->win, b->col_two, x, y);
 	}
-	mlx_put_image_to_window(b->mlx, b->win, b->p_img,
-	b->p_x * 64, b->p_y * 64);
+	mlx_put_image_to_window(b->mlx, b->win, b->p_img, b->p_x * 64,
+	b->p_y * 64);
 	mlx_string_put(b->mlx, b->win, 18, 24, 0x00ff0000, "MOVES : ");
 	b->moves_str = ft_uitoa(b->moves);
-	if (b->moves_str)
-		mlx_string_put(b->mlx, b->win, 70, 24, 0x00ff0000, b->moves_str);
+	if (!b->moves_str)
+		str_malloc_error(b);
+	mlx_string_put(b->mlx, b->win, 70, 24, 0x00ff0000, b->moves_str);
 	free(b->moves_str);
 	b->moves_str = NULL;
 }
 
 static void	player_collect_cond(t_mlx_bag *bag, t_ln_lst *map, int x, int y)
 {
-			if (!bag->first && (map->line)[x] == 'P')
-		{
-			bag->p_x = x;
-			bag->p_y = y;
-			bag->first = 1;
-		}
-		if (map->line[x] == 'C' && bag->p_x == x && bag->p_y == y)
-			map->line[x] = '0';
+	if (!bag->first && (map->line)[x] == 'P')
+	{
+		bag->p_x = x;
+		bag->p_y = y;
+		bag->first = 1;
+	}
+	if (map->line[x] == 'C' && bag->p_x == x && bag->p_y == y)
+		map->line[x] = '0';
 }
 
 int			put_tiles(t_mlx_bag *bag)

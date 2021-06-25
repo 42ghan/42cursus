@@ -67,6 +67,7 @@ t_ln_lst	*ft_ln_lstlast(t_ln_lst *lst);
 void		clear_ln_lst(t_ln_lst **head);
 t_ln_lst	*find_cur_line(t_mlx_bag *bag, int line_num);
 int			close_window(t_mlx_bag *bag);
+void		str_malloc_error(t_mlx_bag *bag);
 
 /* NOTE - gnl */
 int			get_next_line(int fd, char **line);
