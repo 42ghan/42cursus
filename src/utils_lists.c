@@ -63,7 +63,6 @@ void		clear_ln_lst(t_ln_lst **head)
 	{
 		if (cur->line_num > 0)
 		{
-			printf("%s\n", cur->line);
 			free(cur->line);
 			cur->line = NULL;
 		}
@@ -71,4 +70,19 @@ void		clear_ln_lst(t_ln_lst **head)
 		free(*head);
 		*head = cur;
 	}
+	head = NULL;
+}
+
+t_ln_lst	*find_cur_line(t_mlx_bag *bag, int line_num)
+{
+	t_ln_lst	*cur;
+
+	cur = *(bag->map);
+	while (cur)
+	{
+		if (line_num == cur->line_num)
+			return (cur);
+		cur = cur->next;
+	}
+	return (*(bag->map));
 }

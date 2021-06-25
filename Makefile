@@ -15,8 +15,11 @@ MLX_DIR =	minilibx/
 SRCS	=	src/main.c\
 			src/get_next_line.c\
 			src/map_parse.c\
+			src/display.c\
+			src/key_events.c\
 			src/utils_lists.c\
-			src/utils_one.c
+			src/utils_one.c\
+			src/utils_two.c
 
 OBJS	=	$(SRCS:.c=.o)
 

@@ -12,75 +12,18 @@
 
 #include "../include/so_long.h"
 
-static void	imgs_init(void *mlx, void *win, t_img_bag *bag)
-{
-	int		w;
-	int		h;
-
-	bag->mlx = mlx;
-	bag->win = win;
-	bag->wall = mlx_xpm_file_to_image(mlx, "texture/wall.xpm", &w, &h);
-	bag->empty = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
-	bag->exit = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
-	bag->collect = mlx_xpm_file_to_image(mlx, "texture/collect.xpm", &w, &h);
-	bag->start = mlx_xpm_file_to_image(mlx, "texture/start.xpm", &w, &h);
-	bag->player = mlx_xpm_file_to_image(mlx, "texture/player.xpm", &w, &h);
-}
-
-static void	image_to_window(t_img_bag bag, char c, int x, int y)
-{
-	if (c == '1')
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.wall, x * 64, y * 64);
-	else if (c == '0')
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.empty, x * 64, y * 64);
-	else if (c == 'E')
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.exit, x * 64, y * 64);
-	else if (c == 'P')
-	{
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.start, x * 64, y * 64);
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.player, x * 64, y * 64);
-	}
-	else if (c == 'C')
-		mlx_put_image_to_window(bag.mlx, bag.win, bag.collect, x * 64, y * 64);
-}
-
-static int	close_win(int keycode, t_img_bag bag)
-{
-	mlx_destroy_window(bag.mlx, bag.win);
-	return (keycode);
-}
-
-static void	put_tiles(t_img_bag bag, t_ln_lst *cur)
-{
-	int			x;
-	int			y;
-
-	y = 0;
-	while (cur)
-	{
-		x = 0;
-		while ((cur->line)[x])
-		{
-			image_to_window(bag, (cur->line)[x], x, y);
-			x++;
-		}
-		cur = cur->next;
-		y++;
-	}
-}
-
-/* TODO - create display with mlx */
-static int	display_window(t_ln_lst *head, int w, int h)
+static int	display_window(t_ln_lst **head, int w, int h)
 {
 	void		*mlx;
 	void		*m_win;
-	t_img_bag	bag;
+	t_mlx_bag	bag;
 
 	mlx = mlx_init();
 	m_win = mlx_new_window(mlx, w * 64, h * 64, "so_long");
-	imgs_init(mlx, m_win, &bag);
-	put_tiles(bag, head->next);
-	mlx_hook(m_win, 2, 1L<<0, close_win, NULL);
+	mlx_bag_init(mlx, m_win, head, &bag);
+	mlx_loop_hook(mlx, put_tiles, &bag);
+	mlx_hook(m_win, 2, 1L<<0, key_press, &bag);
+	mlx_hook(m_win, 17, 0, close_window, &bag);
 	mlx_loop(mlx);
 	return (1);
 }
@@ -132,7 +75,7 @@ int			main(int argc, char* argv[])
 		perror("Error\nInvalid map");
 		return (1);
 	}
-	if (!display_window(head, width, height))
+	if (!display_window(&head, width, height))
 	{
 		perror("Error\nDisplay error");
 		return (1);
