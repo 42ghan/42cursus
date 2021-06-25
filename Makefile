@@ -1,3 +1,4 @@
+NAME	=	so_long
 CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
@@ -31,11 +32,9 @@ O_MAN	=	$(SRCS:.c=.o)
 O_BON	=	$(SRCS_B:.c=.o)
 
 ifdef WITH_BONUS
-	NAME	=	so_long_bonus
 	OBJS	=	$(O_BON)
 	INC_DIR	=	bonus/
 else
-	NAME	=	so_long
 	OBJS	=	$(O_MAN)
 	INC_DIR	=	include/
 endif
@@ -57,8 +56,8 @@ clean	:
 			$(RM) $(O_MAN) $(O_BON)
 
 fclean	:	clean
-			$(RM) so_long so_long_bonus
+			$(RM) $(NAME)
 
 re		:	fclean all
 
-.PHONY	:	all clean fclean re bonus
+.PHONY	:	all clean fclean re bonus $(NAME)
