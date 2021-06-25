@@ -44,13 +44,17 @@ static void	image_to_window(t_img_bag bag, char c, int x, int y)
 		mlx_put_image_to_window(bag.mlx, bag.win, bag.collect, x * 64, y * 64);
 }
 
-static void	put_tiles(void *mlx, void *win, t_ln_lst *cur)
+static int	close_win(int keycode, t_img_bag bag)
+{
+	mlx_destroy_window(bag.mlx, bag.win);
+	return (keycode);
+}
+
+static void	put_tiles(t_img_bag bag, t_ln_lst *cur)
 {
 	int			x;
 	int			y;
-	t_img_bag	bag;
 
-	imgs_init(mlx, win, &bag);
 	y = 0;
 	while (cur)
 	{
@@ -68,12 +72,15 @@ static void	put_tiles(void *mlx, void *win, t_ln_lst *cur)
 /* TODO - create display with mlx */
 static int	display_window(t_ln_lst *head, int w, int h)
 {
-	void	*mlx;
-	void	*m_win;
+	void		*mlx;
+	void		*m_win;
+	t_img_bag	bag;
 
 	mlx = mlx_init();
 	m_win = mlx_new_window(mlx, w * 64, h * 64, "so_long");
-	put_tiles(mlx, m_win, head->next);
+	imgs_init(mlx, m_win, &bag);
+	put_tiles(bag, head->next);
+	mlx_hook(m_win, 2, 1L<<0, close_win, NULL);
 	mlx_loop(mlx);
 	return (1);
 }

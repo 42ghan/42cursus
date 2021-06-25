@@ -4,6 +4,8 @@ CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
 
+FRWRK	=	-framework OpenGL -framework AppKit
+
 RM		=	rm -f
 
 INC_DIR	=	include/
@@ -25,7 +27,7 @@ all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
 			make -C $(MLX_DIR)
-			$(CC) $(CFLAGS) -framework OpenGL -framework AppKit -o $@ $^ -L $(MLX_DIR) -l mlx
+			$(CC) $(CFLAGS) $(FRWRK) -o $@ $^ -L $(MLX_DIR) -l mlx
 
 clean	:
 			make clean -C $(MLX_DIR)
