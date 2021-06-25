@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 
 /* NOTE - including headers for alowed funcitons */
 # include <stdlib.h> 
@@ -38,6 +38,9 @@ typedef struct	s_mlx_bag
 	void		*wall;
 	void		*empty;
 	void		*col;
+	void		*col_two;
+	void		*patrol;
+	void		*pat_two;
 	void		*cnt_collect;
 	void		*start;
 	void		*exit;
@@ -46,6 +49,7 @@ typedef struct	s_mlx_bag
 	int			p_y;
 	int			col_num;
 	int			first;
+	int			time;
 	int			moves;
 	int			result;
 	char		*moves_str;

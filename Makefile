@@ -1,5 +1,3 @@
-NAME	=	so_long
-
 CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
@@ -7,8 +5,6 @@ CFLAGS	=	-Wall -Werror -Wextra
 FRWRK	=	-framework OpenGL -framework AppKit
 
 RM		=	rm -f
-
-INC_DIR	=	include/
 
 MLX_DIR =	minilibx/
 
@@ -21,12 +17,36 @@ SRCS	=	src/main.c\
 			src/utils_one.c\
 			src/utils_two.c
 
-OBJS	=	$(SRCS:.c=.o)
+SRCS_B	=	bonus/main_bonus.c\
+			bonus/get_next_line_bonus.c\
+			bonus/map_parse_bonus.c\
+			bonus/display_bonus.c\
+			bonus/key_events_bonus.c\
+			bonus/utils_lists_bonus.c\
+			bonus/utils_one_bonus.c\
+			bonus/utils_two_bonus.c			
+
+O_MAN	=	$(SRCS:.c=.o)
+
+O_BON	=	$(SRCS_B:.c=.o)
+
+ifdef WITH_BONUS
+	NAME	=	so_long_bonus
+	OBJS	=	$(O_BON)
+	INC_DIR	=	bonus/
+else
+	NAME	=	so_long
+	OBJS	=	$(O_MAN)
+	INC_DIR	=	include/
+endif
 
 all		:	$(NAME)
 
 %.o		:	%.c
 			$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+
+bonus	:
+			make WITH_BONUS=1 all
 
 $(NAME)	:	$(OBJS)
 			make -C $(MLX_DIR)
@@ -34,11 +54,11 @@ $(NAME)	:	$(OBJS)
 
 clean	:
 			make clean -C $(MLX_DIR)
-			$(RM) $(OBJS)
+			$(RM) $(O_MAN) $(O_BON)
 
 fclean	:	clean
-			$(RM) $(NAME)
+			$(RM) so_long so_long_bonus
 
 re		:	fclean all
 
-.PHONY	:	all clean fclean re
+.PHONY	:	all clean fclean re bonus
