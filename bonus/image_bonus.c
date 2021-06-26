@@ -12,39 +12,6 @@
 
 #include "so_long_bonus.h"
 
-void		free_images(t_mlx_bag *bag)
-{
-	free(bag->wall);
-	bag->wall = NULL;
-	free(bag->empty);
-	bag->empty = NULL;
-	free(bag->exit);
-	bag->exit = NULL;
-	free(bag->col);
-	bag->col = NULL;
-	free(bag->col_two);
-	bag->col_two = NULL;
-	free(bag->patrol);
-	bag->patrol = NULL;
-	free(bag->pat_two);
-	bag->pat_two = NULL;
-	free(bag->start);
-	bag->start = NULL;
-	free(bag->p_img);
-	bag->p_img = NULL;
-}
-
-static int	image_create_check(t_mlx_bag *bag)
-{
-	if (!bag->wall || !bag->empty || !bag->exit || !bag->col || !bag->col_two ||
-	!bag->patrol || !bag->pat_two || !bag->start || !bag->p_img)
-	{
-		free_images(bag);
-		return (0);
-	}
-	return (1);
-}
-
 int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 {
 	int		w;
@@ -68,7 +35,8 @@ int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 	bag->moves = 0;
 	bag->result = 0;
 	bag->moves_str = NULL;
-	if (!image_create_check(bag))
+	if (!bag->wall || !bag->empty || !bag->exit || !bag->col || !bag->col_two ||
+	!bag->patrol || !bag->pat_two || !bag->start || !bag->p_img)
 		return (0);
 	return (1);
 }

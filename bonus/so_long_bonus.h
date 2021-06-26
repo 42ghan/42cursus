@@ -73,7 +73,6 @@ int				close_window(t_mlx_bag *bag);
 int				key_press(int keycode, t_mlx_bag *bag);
 void			str_malloc_error(t_mlx_bag *bag);
 int				put_tiles(t_mlx_bag *bag);
-void			free_images(t_mlx_bag *bag);
 int				mlx_bag_init(void *mlx, void *win, t_ln_lst **line,
 t_mlx_bag *bag);
 void			image_to_window(t_mlx_bag *b, char c, int x, int y);

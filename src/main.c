@@ -24,10 +24,8 @@ static int	display_window(t_ln_lst **head, int w, int h)
 	m_win = mlx_new_window(mlx, w * 64, h * 64, "so_long");
 	if (!m_win || !mlx_bag_init(mlx, m_win, head, &bag))
 	{
-		free(mlx);
-		mlx = NULL;
-		free(m_win);
-		m_win = NULL;
+		if (m_win)
+			mlx_destroy_window(mlx, m_win);
 		return (0);
 	}
 	mlx_loop_hook(mlx, put_tiles, &bag);

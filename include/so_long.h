@@ -65,12 +65,10 @@ int				close_window(t_mlx_bag *bag);
 void			str_malloc_error(t_mlx_bag *bag);
 
 int				get_next_line(int fd, char **line);
-
 void			fill_ln_lst(t_ln_lst **head, int fd);
 int				check_map_validity(t_ln_lst **head);
 
 int				put_tiles(t_mlx_bag *bag);
-void			free_images(t_mlx_bag *bag);
 int				mlx_bag_init(void *mlx, void *win, t_ln_lst **line,
 t_mlx_bag *bag);
 int				key_press(int keycode, t_mlx_bag *bag);

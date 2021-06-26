@@ -12,22 +12,6 @@
 
 #include "../include/so_long.h"
 
-void		free_images(t_mlx_bag *bag)
-{
-	free(bag->wall);
-	bag->wall = NULL;
-	free(bag->empty);
-	bag->empty = NULL;
-	free(bag->exit);
-	bag->exit = NULL;
-	free(bag->col);
-	bag->col = NULL;
-	free(bag->start);
-	bag->start = NULL;
-	free(bag->p_img);
-	bag->p_img = NULL;
-}
-
 int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 {
 	int		w;
@@ -49,10 +33,7 @@ int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 	bag->moves_str = NULL;
 	if (!bag->wall || !bag->empty || !bag->exit || !bag->col ||
 	!bag->start || !bag->p_img)
-	{
-		free_images(bag);
 		return (0);
-	}
 	return (1);
 }
 
