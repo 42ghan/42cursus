@@ -26,7 +26,8 @@ static int	display_window(t_ln_lst **head, int w, int h)
 	{
 		if (m_win)
 			mlx_destroy_window(mlx, m_win);
-		return (0);
+		perror("Error\nDisplay error");
+		exit (1);
 	}
 	mlx_loop_hook(mlx, put_tiles, &bag);
 	mlx_hook(m_win, 2, 1L << 0, key_press, &bag);
@@ -49,7 +50,7 @@ static int	map_size_check(t_ln_lst **head, int *width, int *height)
 
 static void	open_parse_ber(char *ber, t_ln_lst **head)
 {
-	int			fd;
+	int		fd;
 
 	fd = open(ber, O_RDONLY);
 	if (fd < 0 || ft_strncmp((ber + ft_strlen(ber) - 4), ".ber", 4))
@@ -84,9 +85,9 @@ int			main(int argc, char *argv[])
 	}
 	if (!display_window(&head, width, height))
 	{
+		clear_ln_lst(&head);
 		perror("Error\nDisplay error");
 		return (1);
 	}
-	clear_ln_lst(&head);
 	return (0);
 }

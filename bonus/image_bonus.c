@@ -12,6 +12,39 @@
 
 #include "so_long_bonus.h"
 
+static void	free_images(t_mlx_bag *bag)
+{
+	if (bag->wall)
+		mlx_destroy_image(bag->mlx, bag->wall);
+	if (bag->empty)
+		mlx_destroy_image(bag->mlx, bag->empty);
+	if (bag->col)
+		mlx_destroy_image(bag->mlx, bag->col);
+	if (bag->col_two)
+		mlx_destroy_image(bag->mlx, bag->col_two);
+	if (bag->patrol)
+		mlx_destroy_image(bag->mlx, bag->patrol);
+	if (bag->pat_two)
+		mlx_destroy_image(bag->mlx, bag->pat_two);
+	if (bag->start)
+		mlx_destroy_image(bag->mlx, bag->start);
+	if (bag->exit)
+		mlx_destroy_image(bag->mlx, bag->exit);
+	if (bag->p_img)
+		mlx_destroy_image(bag->mlx, bag->p_img);
+}
+
+static int	check_images(t_mlx_bag *bag)
+{
+	if (!bag->wall || !bag->empty || !bag->exit || !bag->col || !bag->col_two ||
+	!bag->patrol || !bag->pat_two || !bag->start || !bag->p_img)
+	{
+		free_images(bag);
+		return (0);
+	}
+	return (1);
+}
+
 int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 {
 	int		w;
@@ -35,8 +68,7 @@ int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 	bag->moves = 0;
 	bag->result = 0;
 	bag->moves_str = NULL;
-	if (!bag->wall || !bag->empty || !bag->exit || !bag->col || !bag->col_two ||
-	!bag->patrol || !bag->pat_two || !bag->start || !bag->p_img)
+	if (!check_images(bag))
 		return (0);
 	return (1);
 }

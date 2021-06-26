@@ -53,17 +53,13 @@ char	*ft_uitoa(unsigned int n)
 
 int		close_window(t_mlx_bag *bag)
 {
-	clear_ln_lst(bag->map);
-	free(bag->moves_str);
-	bag->moves_str = NULL;
 	mlx_destroy_window(bag->mlx, bag->win);
-	exit(1);
+	exit(0);
 	return (0);
 }
 
 void	str_malloc_error(t_mlx_bag *bag)
 {
-	clear_ln_lst(bag->map);
 	mlx_destroy_window(bag->mlx, bag->win);
 	perror("Error\nDisplay error");
 	exit(1);

@@ -35,7 +35,6 @@ typedef struct	s_mlx_bag
 	void		*wall;
 	void		*empty;
 	void		*col;
-	void		*cnt_collect;
 	void		*start;
 	void		*exit;
 	void		*p_img;
