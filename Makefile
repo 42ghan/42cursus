@@ -1,4 +1,5 @@
 NAME	=	so_long
+
 CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
@@ -22,6 +23,7 @@ SRCS_B	=	bonus/main_bonus.c\
 			bonus/get_next_line_bonus.c\
 			bonus/map_parse_bonus.c\
 			bonus/display_bonus.c\
+			bonus/image_bonus.c\
 			bonus/key_events_bonus.c\
 			bonus/utils_lists_bonus.c\
 			bonus/utils_one_bonus.c\

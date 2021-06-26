@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   image_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/25 14:41:15 by ghan              #+#    #+#             */
-/*   Updated: 2021/06/25 14:41:17 by ghan             ###   ########.fr       */
+/*   Created: 2021/06/26 16:04:31 by ghan              #+#    #+#             */
+/*   Updated: 2021/06/26 16:04:32 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/so_long.h"
+#include "so_long_bonus.h"
 
 void		free_images(t_mlx_bag *bag)
 {
@@ -22,10 +22,27 @@ void		free_images(t_mlx_bag *bag)
 	bag->exit = NULL;
 	free(bag->col);
 	bag->col = NULL;
+	free(bag->col_two);
+	bag->col_two = NULL;
+	free(bag->patrol);
+	bag->patrol = NULL;
+	free(bag->pat_two);
+	bag->pat_two = NULL;
 	free(bag->start);
 	bag->start = NULL;
 	free(bag->p_img);
 	bag->p_img = NULL;
+}
+
+static int	image_create_check(t_mlx_bag *bag)
+{
+	if (!bag->wall || !bag->empty || !bag->exit || !bag->col || !bag->col_two ||
+	!bag->patrol || !bag->pat_two || !bag->start || !bag->p_img)
+	{
+		free_images(bag);
+		return (0);
+	}
+	return (1);
 }
 
 int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
@@ -40,23 +57,23 @@ int			mlx_bag_init(void *mlx, void *win, t_ln_lst **line, t_mlx_bag *bag)
 	bag->empty = mlx_xpm_file_to_image(mlx, "texture/empty.xpm", &w, &h);
 	bag->exit = mlx_xpm_file_to_image(mlx, "texture/exit.xpm", &w, &h);
 	bag->col = mlx_xpm_file_to_image(mlx, "texture/col.xpm", &w, &h);
+	bag->col_two = mlx_xpm_file_to_image(mlx, "texture/col_two.xpm", &w, &h);
+	bag->patrol = mlx_xpm_file_to_image(mlx, "texture/patrol.xpm", &w, &h);
+	bag->pat_two = mlx_xpm_file_to_image(mlx, "texture/pat_two.xpm", &w, &h);
 	bag->start = mlx_xpm_file_to_image(mlx, "texture/start.xpm", &w, &h);
 	bag->p_img = mlx_xpm_file_to_image(mlx, "texture/player.xpm", &w, &h);
 	bag->col_num = collect_count((*line)->next);
 	bag->first = 0;
+	bag->time = 1;
 	bag->moves = 0;
 	bag->result = 0;
 	bag->moves_str = NULL;
-	if (!bag->wall || !bag->empty || !bag->exit || !bag->col ||
-	!bag->start || !bag->p_img)
-	{
-		free_images(bag);
+	if (!image_create_check(bag))
 		return (0);
-	}
 	return (1);
 }
 
-static void	image_to_window(t_mlx_bag *b, char c, int x, int y)
+void		image_to_window(t_mlx_bag *b, char c, int x, int y)
 {
 	if (c == '1')
 		mlx_put_image_to_window(b->mlx, b->win, b->wall, x, y);
@@ -69,56 +86,17 @@ static void	image_to_window(t_mlx_bag *b, char c, int x, int y)
 	else if (c == 'C')
 	{
 		mlx_put_image_to_window(b->mlx, b->win, b->empty, x, y);
-		mlx_put_image_to_window(b->mlx, b->win, b->col, x, y);
+		if (b->time < 7)
+			mlx_put_image_to_window(b->mlx, b->win, b->col, x, y);
+		else
+			mlx_put_image_to_window(b->mlx, b->win, b->col_two, x, y);
 	}
-	mlx_put_image_to_window(b->mlx, b->win, b->p_img, b->p_x * 64,
-	b->p_y * 64);
-}
-
-static void	player_collect_cond(t_mlx_bag *bag, t_ln_lst *map, int x, int y)
-{
-	if (!bag->first && (map->line)[x] == 'P')
+	else if (c == 'D')
 	{
-		bag->p_x = x;
-		bag->p_y = y;
-		bag->first = 1;
+		mlx_put_image_to_window(b->mlx, b->win, b->empty, x, y);
+		if (b->time < 7)
+			mlx_put_image_to_window(b->mlx, b->win, b->patrol, x, y);
+		else
+			mlx_put_image_to_window(b->mlx, b->win, b->pat_two, x, y);
 	}
-	if (map->line[x] == 'C' && bag->p_x == x && bag->p_y == y)
-	{
-		map->line[x] = '0';
-		(bag->col_num)--;
-	}
-	if (map->line[x] == 'E' && bag->p_x == x && bag->p_y == y &&
-	bag->col_num == 0)
-	{
-		mlx_string_put(bag->mlx, bag->win, 18, 48, 0x00ff0000,
-		"Congratulations :D");
-		mlx_string_put(bag->mlx, bag->win, 18, 72, 0x00ff0000,
-		"You are today's hero!");
-		bag->result = 1;
-	}
-}
-
-int			put_tiles(t_mlx_bag *bag)
-{
-	int			x;
-	int			y;
-	t_ln_lst	*map;
-
-	y = 0;
-	map = *(bag->map);
-	map = map->next;
-	while (map)
-	{
-		x = 0;
-		while ((map->line)[x])
-		{
-			player_collect_cond(bag, map, x, y);
-			image_to_window(bag, (map->line)[x], x * 64, y * 64);
-			x++;
-		}
-		map = map->next;
-		y++;
-	}
-	return (0);
 }

@@ -12,9 +12,9 @@
 
 #include "../include/so_long.h"
 
-size_t		ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
-	unsigned int len;
+	unsigned int	len;
 
 	len = 0;
 	while (s[len])
@@ -40,21 +40,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (*s1_cpy - *s2_cpy);
 }
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	void			*ret;
-	unsigned int	i;
-
-	ret = (unsigned char*)malloc(count * size);
-	if (!ret)
-		return (0);
-	i = 0;
-	while (i < count * size)
-		*(unsigned char*)(ret + i++) = 0;
-	return (ret);
-}
-
-char		*ft_strndup(const char *s1, size_t n)
+char	*ft_strndup(const char *s1, size_t n)
 {
 	char			*ret;
 	unsigned int	len;
@@ -77,7 +63,7 @@ char		*ft_strndup(const char *s1, size_t n)
 	return (ret);
 }
 
-char		*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char			*ret;
 	unsigned int	i;
@@ -100,7 +86,7 @@ char		*ft_substr(char const *s, unsigned int start, size_t len)
 	return (ret);
 }
 
-char		*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char			*ret;
 	unsigned int	i;

@@ -19,10 +19,19 @@ static int	display_window(t_ln_lst **head, int w, int h)
 	t_mlx_bag	bag;
 
 	mlx = mlx_init();
+	if (!mlx)
+		return (0);
 	m_win = mlx_new_window(mlx, w * 64, h * 64, "so_long");
-	mlx_bag_init(mlx, m_win, head, &bag);
+	if (!m_win || !mlx_bag_init(mlx, m_win, head, &bag))
+	{
+		free(mlx);
+		mlx = NULL;
+		free(m_win);
+		m_win = NULL;
+		return (0);
+	}
 	mlx_loop_hook(mlx, put_tiles, &bag);
-	mlx_hook(m_win, 2, 1L<<0, key_press, &bag);
+	mlx_hook(m_win, 2, 1L << 0, key_press, &bag);
 	mlx_hook(m_win, 17, 0, close_window, &bag);
 	mlx_loop(mlx);
 	return (1);
@@ -32,7 +41,7 @@ static int	map_size_check(t_ln_lst **head, int *width, int *height)
 {
 	*width = (*head)->next->len;
 	*height = ft_ln_lstlast(*head)->line_num;
-	if (*width > 24 || *height > 18 || *width < 3 || *height < 3)
+	if (*width > 40 || *height > 20 || *width < 3 || *height < 3)
 	{
 		clear_ln_lst(head);
 		return (0);
@@ -56,7 +65,7 @@ static void	open_parse_ber(char *ber, t_ln_lst **head)
 	close(fd);
 }
 
-int			main(int argc, char* argv[])
+int			main(int argc, char *argv[])
 {
 	t_ln_lst	*head;
 	int			width;

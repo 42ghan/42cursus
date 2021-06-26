@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_two_bonus.c                                   :+:      :+:    :+:   */
+/*   utils_two_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,20 @@
 /* ************************************************************************** */
 
 #include "so_long_bonus.h"
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void			*ret;
+	unsigned int	i;
+
+	ret = (unsigned char*)malloc(count * size);
+	if (!ret)
+		return (0);
+	i = 0;
+	while (i < count * size)
+		*(unsigned char*)(ret + i++) = 0;
+	return (ret);
+}
 
 char	*ft_uitoa(unsigned int n)
 {
@@ -43,6 +57,10 @@ int		close_window(t_mlx_bag *bag)
 	free(bag->moves_str);
 	bag->moves_str = NULL;
 	mlx_destroy_window(bag->mlx, bag->win);
+	free_images(bag);
+	bag->win = NULL;
+	free(bag->mlx);
+	bag->mlx = NULL;
 	exit(1);
 	return (0);
 }
@@ -51,6 +69,30 @@ void	str_malloc_error(t_mlx_bag *bag)
 {
 	clear_ln_lst(bag->map);
 	mlx_destroy_window(bag->mlx, bag->win);
+	free_images(bag);
+	bag->win = NULL;
+	free(bag->mlx);
+	bag->mlx = NULL;
 	perror("Error\nDisplay error");
 	exit(1);
+}
+
+int		collect_count(t_ln_lst *cur)
+{
+	int		cnt;
+	int		i;
+
+	cnt = 0;
+	while (cur)
+	{
+		i = 0;
+		while (cur->line[i])
+		{
+			if (cur->line[i] == 'C')
+				cnt++;
+			i++;
+		}
+		cur = cur->next;
+	}
+	return (cnt);
 }
