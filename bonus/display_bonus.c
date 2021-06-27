@@ -88,9 +88,9 @@ int			put_tiles(t_mlx_bag *bag)
 		x = 0;
 		while ((map->line)[x])
 		{
-			player_collect_cond(bag, map, x, y);
 			image_to_window(bag, (map->line)[x], x * 64, y * 64);
 			player_mes_to_win(bag);
+			player_collect_cond(bag, map, x, y);
 			x++;
 		}
 		map = map->next;
