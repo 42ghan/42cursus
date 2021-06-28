@@ -35,16 +35,16 @@ O_BON	=	$(SRCS_B:.c=.o)
 
 ifdef WITH_BONUS
 	OBJS	=	$(O_BON)
-	INC_DIR	=	bonus/
+	INCDIR	=	bonus/
 else
 	OBJS	=	$(O_MAN)
-	INC_DIR	=	include/
+	INCDIR	=	include/
 endif
 
 all		:	$(NAME)
 
 %.o		:	%.c
-			$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+			$(CC) $(CFLAGS) -c $< -o $@ -I $(INCDIR)
 
 bonus	:
 			make WITH_BONUS=1 all
