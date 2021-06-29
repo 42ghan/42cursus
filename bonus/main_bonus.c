@@ -28,7 +28,7 @@ static int	display_window(t_ln_lst **head, int w, int h)
 		if (m_win)
 			mlx_destroy_window(mlx, m_win);
 		perror("Error\nDisplay error");
-		exit (1);
+		exit(1);
 	}
 	mlx_loop_hook(mlx, put_tiles, &bag);
 	mlx_hook(m_win, 2, 1L << 0, key_press, &bag);
@@ -57,6 +57,7 @@ static void	open_parse_ber(char *ber, t_ln_lst **head)
 	if (fd < 0 || ft_strncmp((ber + ft_strlen(ber) - 4), ".ber", 4))
 	{
 		perror("Error\nFile open error");
+		close(fd);
 		exit(1);
 	}
 	fill_ln_lst(head, fd);
