@@ -13,24 +13,52 @@
 #include "../include/minitalk.h"
 #include <stdio.h>
 
-char	*g_str = NULL;
-
-static void	client_signal_handler(int	signal)
+static void	send_signal(int pid, int *byte)
 {
-	write(1, g_str, ft_strlen(g_str));
-	printf("%d\n", signal);
+	int		status;
+	int		i;
+
+	i = 0;
+	while (i < 8)
+	{
+		if (!(byte[i] % 2))
+			status = kill(pid, SIGUSR1);
+		else
+			status = kill(pid, SIGUSR2);
+		if (status == -1)
+		{
+			write(1, "Wrong pid\n", 10);
+			exit(1);
+		}
+		usleep(100);
+		i++;
+	}
 }
 
 int			main(int argc, char *argv[])
 {
-	g_str = NULL;
+	int		i;
+	int		bit;
+	int		byte[8];
+	unsigned char	c;
+
 	if (argc != 3 || ft_atoi(argv[1]) < 0)
 	{
 		write(1, "Argument Error\n", 15);
 		return (1);
 	}
-	g_str = argv[2];
-	signal(SIGUSR1, client_signal_handler);
-	kill(ft_atoi(argv[1]), SIGUSR1);
+	i = 0;
+	while (argv[2][i])
+	{
+		c = (unsigned char)argv[2][i];
+		bit = 7;
+		while (bit >= 0)
+		{
+			byte[bit--] = c % 2;
+			c /= 2;
+		}
+		send_signal(ft_atoi(argv[1]), byte);
+		i++;
+	}
 	return (0);
 }
