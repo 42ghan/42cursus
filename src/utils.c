@@ -12,6 +12,16 @@
 
 #include "../include/minitalk.h"
 
+void	sa_init(struct sigaction *sa,
+void (*f)(int, struct __siginfo *, void *))
+{
+	sigemptyset(&sa->sa_mask);
+	sigaddset(&sa->sa_mask, SIGUSR1);
+	sigaddset(&sa->sa_mask, SIGUSR2);
+	sa->sa_flags = SA_SIGINFO;
+	sa->sa_sigaction = f;
+}
+
 size_t	ft_strlen(const char *s)
 {
 	unsigned int	len;

@@ -21,5 +21,7 @@ size_t		ft_strlen(const char *s);
 void		*ft_calloc(size_t count, size_t size);
 char		*ft_uitoa(unsigned int n);
 int			ft_atoi(const char *str);
+void	    sa_init(struct sigaction *sa,
+void (*f)(int, struct __siginfo *, void *));
 
 #endif

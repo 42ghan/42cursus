@@ -13,25 +13,52 @@
 #include "../include/minitalk.h"
 #include <stdio.h>
 
+int			g_prev = 0;
+
+static void	kill_error(void)
+{
+	write(1, "Wrong pid\n", 10);
+	exit(1);
+}
+
+static void	check_receipt(int sig, siginfo_t *info, void *ctxt)
+{
+	ctxt = NULL;
+	if (g_prev == sig)
+	{
+		kill(info->si_pid, sig);
+		usleep(200);
+	}
+	// else
+	// {
+	// 	kill(info->si_pid, sig);
+	// }
+}
+
 static void	send_signal(int pid, int *byte)
 {
-	int		status;
-	int		i;
+	int					i;
+	struct sigaction	sa_c;
 
-	i = 0;
-	while (i < 8)
+	sa_init(&sa_c, check_receipt);
+	i = -1;
+	while (++i < 8)
 	{
 		if (!(byte[i] % 2))
-			status = kill(pid, SIGUSR1);
-		else
-			status = kill(pid, SIGUSR2);
-		if (status == -1)
 		{
-			write(1, "Wrong pid\n", 10);
-			exit(1);
+			if (kill(pid, SIGUSR1) == -1)
+				kill_error();				
+			g_prev = SIGUSR1;
 		}
+		else
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				kill_error();
+			g_prev = SIGUSR2;
+		}
+		sigaction(SIGUSR1, &sa_c, NULL);
+		sigaction(SIGUSR2, &sa_c, NULL);
 		usleep(100);
-		i++;
 	}
 }
 

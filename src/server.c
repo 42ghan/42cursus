@@ -13,24 +13,34 @@
 #include "../include/minitalk.h"
 #include <stdio.h>
 
-static void	srv_sig_handler(int sig)
+int			g_check = 0;
+
+static void	srv_sig_handler(int sig, siginfo_t *info, void *ctxt)
 {
-	// static char	str[4];
 	static char	c;
 	static int	rep;
-	// static int	rep_s;
+	static int	prev;
 
-	if (sig == SIGUSR1)
+	ctxt = NULL;
+	if (!g_check)
 	{
-		c <<= 1;
-		c |= 0;
+		prev = sig;
+		kill(info->si_pid, sig);
+		g_check = 1;
 	}
-	else if (sig == SIGUSR2)
+	else
 	{
-		c <<= 1;
-		c |= 1;
+		if (prev == sig)
+		{
+			c <<= 1;
+			if (prev == SIGUSR1)
+				c |= 0;
+			else if (prev == SIGUSR2)
+				c |= 1;
+			g_check = 0;
+			rep++;
+		}
 	}
-	rep++;
 	if (rep == 8)
 	{
 		write(1, &c, 1);
@@ -44,10 +54,7 @@ int			main(void)
 	struct sigaction	sa;
 	char				*pid;
 
-	sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);
-	sa.sa_handler = srv_sig_handler;
+	sa_init(&sa, srv_sig_handler);
 	pid = ft_uitoa(getpid());
 	if (!pid)
 	{
