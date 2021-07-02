@@ -15,6 +15,20 @@
 
 int			g_prev = 0;
 
+static void	send_null(int pid)
+{
+	int		i;
+
+	i = 0;
+	while (i < 8)
+	{
+		kill(pid, SIGUSR1);
+		usleep(500);
+		i++;
+	}
+	g_prev = 0;
+}
+
 static void	kill_error(void)
 {
 	write(1, "Wrong pid\n", 10);
@@ -27,12 +41,8 @@ static void	check_receipt(int sig, siginfo_t *info, void *ctxt)
 	if (g_prev == sig)
 	{
 		kill(info->si_pid, sig);
-		usleep(200);
+		usleep(150);
 	}
-	// else
-	// {
-	// 	kill(info->si_pid, sig);
-	// }
 }
 
 static void	send_signal(int pid, int *byte)
@@ -41,6 +51,8 @@ static void	send_signal(int pid, int *byte)
 	struct sigaction	sa_c;
 
 	sa_init(&sa_c, check_receipt);
+	sigaction(SIGUSR1, &sa_c, NULL);
+	sigaction(SIGUSR2, &sa_c, NULL);
 	i = -1;
 	while (++i < 8)
 	{
@@ -56,9 +68,7 @@ static void	send_signal(int pid, int *byte)
 				kill_error();
 			g_prev = SIGUSR2;
 		}
-		sigaction(SIGUSR1, &sa_c, NULL);
-		sigaction(SIGUSR2, &sa_c, NULL);
-		usleep(100);
+		usleep(500);
 	}
 }
 
@@ -87,5 +97,6 @@ int			main(int argc, char *argv[])
 		send_signal(ft_atoi(argv[1]), byte);
 		i++;
 	}
+	send_null(ft_atoi(argv[1]));
 	return (0);
 }
