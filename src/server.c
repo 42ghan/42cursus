@@ -11,7 +11,36 @@
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-#include <stdio.h>
+
+static void	write_char(char *c, int *rep, int *prev, int *check)
+{
+	if (!(*c))
+	{
+		write(1, "\n\nEnd of transmission----------\n\n", 34);
+		*prev = 0;
+		*check = 0;
+	}
+	else
+		write(1, c, 1);
+	*c = 0;
+	*rep = 0;
+}
+
+static void	corrupt_byte(char *c, int *rep, int *prev, int *check)
+{
+	write(1, "\n\nSignal mingled! Please send again :)\n\n", 41);
+	*c = 0;
+	*prev = 0;
+	*check = 0;
+	*rep = 0;
+}
+
+static void	send_check_signal(int sig, int c_pid, int *prev, int *check)
+{
+	*prev = sig;
+	kill(c_pid, sig);
+	*check = 1;
+}
 
 static void	srv_sig_handler(int sig, siginfo_t *info, void *ctxt)
 {
@@ -22,11 +51,7 @@ static void	srv_sig_handler(int sig, siginfo_t *info, void *ctxt)
 
 	ctxt = NULL;
 	if (!check)
-	{
-		prev = sig;
-		kill(info->si_pid, sig);
-		check = 1;
-	}
+		send_check_signal(sig, info->si_pid, &prev, &check);
 	else
 	{
 		if (prev == sig)
@@ -38,20 +63,11 @@ static void	srv_sig_handler(int sig, siginfo_t *info, void *ctxt)
 				c |= 1;
 			check = 0;
 			rep++;
-		}
-	}
-	if (rep == 8)
-	{
-		if (!c)
-		{
-			write(1, "\n\nEnd of transmission----------\n\n", 34);
-			prev = 0;
-			check = 0;
+			if (rep == 8)
+				write_char(&c, &rep, &prev, &check);
 		}
 		else
-			write(1, &c, 1);
-		c = 0;
-		rep = 0;
+			corrupt_byte(&c, &rep, &prev, &check);
 	}
 }
 

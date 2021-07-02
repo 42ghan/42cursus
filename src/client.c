@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
-#include <stdio.h>
 
 int			g_prev = 0;
 
@@ -23,16 +22,10 @@ static void	send_null(int pid)
 	while (i < 8)
 	{
 		kill(pid, SIGUSR1);
-		usleep(500);
+		usleep(100);
 		i++;
 	}
-	g_prev = 0;
-}
-
-static void	kill_error(void)
-{
-	write(1, "Wrong pid\n", 10);
-	exit(1);
+	write(1, "\n\nCommunication was successful!\n", 33);
 }
 
 static void	check_receipt(int sig, siginfo_t *info, void *ctxt)
@@ -41,8 +34,20 @@ static void	check_receipt(int sig, siginfo_t *info, void *ctxt)
 	if (g_prev == sig)
 	{
 		kill(info->si_pid, sig);
-		usleep(150);
+		usleep(60);
 	}
+	else
+	{
+		kill(info->si_pid, g_prev);
+		write(1, "\n\nSignal mingled!\n", 19);
+		exit(1);
+	}
+}
+
+static void	kill_error(void)
+{
+	write(1, "Wrong pid\n", 10);
+	exit(1);
 }
 
 static void	send_signal(int pid, int *byte)
@@ -68,15 +73,16 @@ static void	send_signal(int pid, int *byte)
 				kill_error();
 			g_prev = SIGUSR2;
 		}
-		usleep(500);
+		usleep(120);
 	}
+
 }
 
 int			main(int argc, char *argv[])
 {
-	int		i;
-	int		bit;
-	int		byte[8];
+	int				i;
+	int				bit;
+	int				byte[8];
 	unsigned char	c;
 
 	if (argc != 3 || ft_atoi(argv[1]) < 0)
@@ -84,8 +90,8 @@ int			main(int argc, char *argv[])
 		write(1, "Argument Error\n", 15);
 		return (1);
 	}
-	i = 0;
-	while (argv[2][i])
+	i = -1;
+	while (argv[2][++i])
 	{
 		c = (unsigned char)argv[2][i];
 		bit = 7;
@@ -95,7 +101,6 @@ int			main(int argc, char *argv[])
 			c /= 2;
 		}
 		send_signal(ft_atoi(argv[1]), byte);
-		i++;
 	}
 	send_null(ft_atoi(argv[1]));
 	return (0);
