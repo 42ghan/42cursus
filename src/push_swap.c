@@ -14,10 +14,16 @@
 
 int	main(int argc, char *argv[])
 {
-	t_stack	*a_stack;
-	t_stack	*b_stack;
+	t_head	*a_head;
+	t_head	*b_head;
+	int		*nbrs;
+	int		key;
 
-	init_stack(&a_stack, arg_check(argc, argv));
-	init_stack(&b_stack, NULL);
+	if (argc <= 2)
+		return (0);
+	nbrs = arg_check(argc, argv);
+	init_stack(&a_head, nbrs);
+	init_stack(&b_head, NULL);
+	// key = pre_sort(nbrs);
 	return (0);
 }

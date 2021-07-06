@@ -22,23 +22,33 @@ int	double_arr_len(char **ptr)
 	return (len);
 }
 
-void    free_double_arr(char **ptr)
+void	free_double_arr(char **ptr)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (ptr[i])
-    {
-        free(ptr[i]);
-        ptr[i] = NULL;
-        i++;
-    }
-    free(ptr);
-    ptr = NULL;
+	i = 0;
+	while (ptr[i])
+	{
+		free(ptr[i]);
+		ptr[i] = NULL;
+		i++;
+	}
+	free(ptr);
+	ptr = NULL;
 }
 
-void    error_exit(int  code)
+int	check_int_range(char *nbr)
 {
-    write(2, "Error\n", 7);
-    exit(code);
+	if (((nbr[0] >= '0' && nbr[0] <= '9') || nbr[0] == '+')
+		&& ft_atoi(nbr) < 0)
+		return (0);
+	else if (nbr[0] == '-' && ft_atoi(nbr) >= 0)
+		return (0);
+	return (1);
+}
+
+void	error_exit(int code)
+{
+	write(2, "Error\n", 7);
+	exit(code);
 }

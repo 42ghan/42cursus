@@ -27,12 +27,12 @@ void	*ft_calloc(size_t count, size_t size)
 	void			*ret;
 	unsigned int	i;
 
-	ret = (unsigned char*)malloc(count * size);
+	ret = (unsigned char *)malloc(count * size);
 	if (!ret)
 		return (0);
 	i = 0;
 	while (i < count * size)
-		*(unsigned char*)(ret + i++) = 0;
+		*(unsigned char *)(ret + i++) = 0;
 	return (ret);
 }
 
@@ -47,8 +47,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 	{
-        if (str[i] == '-')
-		    sign = -1;
+		if (str[i] == '-')
+			sign = -1;
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
@@ -67,7 +67,7 @@ char	*ft_strndup(const char *s1, size_t n)
 		len++;
 	if (len > n)
 		len = n;
-	ret = (char*)ft_calloc(len + 1, 1);
+	ret = (char *)ft_calloc(len + 1, 1);
 	if (!ret)
 		return (0);
 	i = 0;
@@ -87,7 +87,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (0);
-    ret = (char*)ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), 1);
+	ret = (char *)ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), 1);
 	if (!ret)
 		return (0);
 	i = 0;

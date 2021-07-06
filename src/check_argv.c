@@ -31,16 +31,6 @@ static void	check_duplicates(int *nbrs, int len)
 	}
 }
 
-static int	check_int_range(char *nbr)
-{
-	if (((nbr[0] >= '0' && nbr[0] <= '9') || nbr[0] == '+')
-		&& ft_atoi(nbr) < 0)
-		return (0);
-	else if (nbr[0] == '-' && ft_atoi(nbr) >= 0)
-		return (0);
-	return (1);
-}
-
 static int	*nbr_strs_map(char **nbr_strs, int len)
 {
 	int	*ret;
@@ -50,8 +40,8 @@ static int	*nbr_strs_map(char **nbr_strs, int len)
 	ret = (int *)ft_calloc(len + 1, sizeof(int));
 	if (!ret)
 		error_exit(2);
-	nbrs[0] = len;
-	i = 0;
+	ret[0] = len;
+	i = -1;
 	while (nbr_strs[++i])
 	{
 		if (ft_strlen(nbr_strs[i]) > 11 || !check_int_range(nbr_strs[i]))
@@ -65,16 +55,27 @@ static int	*nbr_strs_map(char **nbr_strs, int len)
 				error_exit(1);
 			k++;
 		}
-		ret[i] = ft_atoi(nbr_strs[i]);
+		ret[i + 1] = ft_atoi(nbr_strs[i]);
 	}
 	return (ret);
+}
+
+static void	join_with_space(char **one_ln, char *to_join)
+{
+	char	*tmp;
+
+	tmp = *one_ln;
+	*one_ln = ft_strjoin(*one_ln, to_join);
+	free(tmp);
+	tmp = NULL;
+	if (!(*one_ln))
+		error_exit(2);
 }
 
 static char	**join_n_split(int ac, char *av[])
 {
 	char	**ret;
 	char	*one_ln;
-	char	*tmp;
 	int		i;
 
 	one_ln = ft_strndup("", 1);
@@ -83,17 +84,12 @@ static char	**join_n_split(int ac, char *av[])
 	i = 1;
 	while (i < ac)
 	{
-		tmp = one_ln;
-		one_ln = ft_strjoin(one_ln, av[i++]);
-		free(tmp);
-		if (!one_ln)
-			error_exit(2);
-		one_ln = ft_strjoin(one_ln, " ");
-		if (!one_ln)
-			error_exit(2);
+		join_with_space(&one_ln, av[i++]);
+		join_with_space(&one_ln, " ");
 	}
-	tmp = NULL;
 	ret = ft_split(one_ln, ' ');
+	free(one_ln);
+	one_ln = NULL;
 	if (!ret)
 		error_exit(2);
 	return (ret);
@@ -105,8 +101,6 @@ int	*arg_check(int ac, char *av[])
 	int		*nbrs;
 	int		len;
 
-	if (ac < 2)
-		error_exit(1);
 	nbr_strs = join_n_split(ac, av);
 	len = double_arr_len(nbr_strs);
 	nbrs = nbr_strs_map(nbr_strs, len);
