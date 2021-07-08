@@ -38,6 +38,7 @@ static t_stack	*init_stack_elem(int nbr)
 	if (!elem)
 		error_exit(2);
 	elem->nbr = nbr;
+	elem->u_nbr = nbr + 2147483648;
 	return (elem);
 }
 

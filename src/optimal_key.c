@@ -78,6 +78,8 @@ int	*get_qsort_key(int *nbrs)
 	free(u_nbrs);
 	u_nbrs = NULL;
 	keys = (int *)ft_calloc(2, sizeof(int));
+	if (!keys)
+		error_exit(2);
 	keys[0] = sorted[nbrs[0] / 3];
 	keys[1] = sorted[nbrs[0] * 2 / 3];
 	free(sorted);
