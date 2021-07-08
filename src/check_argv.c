@@ -18,10 +18,10 @@ static void	check_duplicates(int *nbrs, int len)
 	int	k;
 
 	i = 1;
-	while (i < len - 1)
+	while (i < len)
 	{
 		k = i + 1;
-		while (k < len)
+		while (k <= len)
 		{
 			if (nbrs[i] == nbrs[k])
 				error_exit(1);

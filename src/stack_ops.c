@@ -32,13 +32,23 @@ void	push_top(t_head **from, t_head **to)
 	t_stack	*f_top;
 	t_stack	*t_top;
 
+	if ((*from)->start == NULL)
+		return ;
 	f_top = (*from)->start->prev;
-	t_top = (*to)->start->prev;
 	f_top->prev->next = (*from)->start;
 	(*from)->start->prev = f_top->prev;
-	t_top->next = f_top;
-	f_top->prev = t_top;
-	f_top->next = (*to)->start;
+	if ((*to)->start == NULL)
+	{
+		(*to)->start = f_top;
+		(*to)->start->prev = (*to)->start;
+		(*to)->start->next = (*to)->start;
+	}
+	else
+		elem_to_top(to, f_top);
+	if ((*from)->len == 1)
+		(*from)->start = NULL;
+	((*from)->len)--;
+	((*to)->len)++;
 }
 
 void	rot_n_rev_rot(t_head **head, int direction)
