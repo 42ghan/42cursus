@@ -52,3 +52,21 @@ void	error_exit(int code)
 	write(2, "Error\n", 7);
 	exit(code);
 }
+
+char	*hex_uitoa(unsigned int n)
+{
+	char	*ret;
+	int		i;
+
+	ret = (char *)ft_calloc(9, 1);
+	if (!ret)
+		return (NULL);
+	i = 7;
+	while (i >= 0)
+	{
+		ret[i] = "0123456789abcdef"[n % 16];
+		n /= 16;
+		i--;
+	}
+	return (ret);
+}

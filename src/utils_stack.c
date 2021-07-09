@@ -29,7 +29,7 @@ void	elem_to_top(t_head **head, t_stack *elem)
 	(*head)->start->prev->next = elem;
 	(*head)->start->prev = elem;
 }
-
+#include <stdio.h>
 static t_stack	*init_stack_elem(int nbr)
 {
 	t_stack	*elem;
@@ -38,7 +38,9 @@ static t_stack	*init_stack_elem(int nbr)
 	if (!elem)
 		error_exit(2);
 	elem->nbr = nbr;
-	elem->u_nbr = nbr + 2147483648;
+	elem->u_str = hex_uitoa(nbr + 2147483648);
+	if (!elem->u_str)
+		error_exit(2);
 	return (elem);
 }
 

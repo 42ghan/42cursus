@@ -29,14 +29,14 @@ int     *digits_cnt(t_head **a_head)
     while (++i < (*a_head)->len)
     {
         cnt = 1;
-        u_nbr = cur->u_nbr;
+        u_nbr = cur->nbr + 2147483648;
         while (u_nbr / 16)
         {
             u_nbr /= 16;
             cnt++;
         }
         hex_cnt[cnt - 1]++;
-        cur->prev;
+        cur = cur->prev;
     }
     return (hex_cnt);
 }
@@ -49,6 +49,14 @@ int	main(int argc, char *argv[])
 	int		*hex_cnt;
 	int		*keys;
 
+	/* SECTION - print ARGVs */
+	// printf("\n\nARGVs are : \n");
+	// int k = 1;
+	// while (k < argc)
+	// 	printf("%s ", argv[k++]);
+	// printf("\n\n-----------------------\n\n");
+	/* --------------------- */
+
 	nbrs = arg_check(argc, argv);
 	if (argc < 2 || nbrs[0] == 1)
 	{
@@ -60,18 +68,19 @@ int	main(int argc, char *argv[])
 	a_head->len = nbrs[0];
 	init_stack(&b_head, NULL);
 	b_head->len = 0;
-	hex_cnt = digits_cnt(a_head);
-	radix_sort_stacks(a_head, b_head, hex_cnt);
+	hex_cnt = digits_cnt(&a_head);
+	radix_sort_stacks(&a_head, &b_head, hex_cnt);
 	// keys = get_qsort_key(nbrs);
 
 	/* SECTION - test print */
-	// t_stack *cur = a_head->start->prev;
-	// while (cur != a_head->start)
-	// {
-	// 	printf("%d\n", cur->nbr);
-	// 	cur = cur->prev;
-	// }
-	// printf("%d\n\n", cur->nbr);
+	printf("\n\n-----A_STACK----------\n\n");
+	t_stack *cur = a_head->start->prev;
+	while (cur != a_head->start)
+	{
+		printf("%d\n", cur->nbr);
+		cur = cur->prev;
+	}
+	printf("%d\n\n", cur->nbr);
 
 	// t_stack *cur_b = b_head->start->prev;
 	// while (cur_b != b_head->start)

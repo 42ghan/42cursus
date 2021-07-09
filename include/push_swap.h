@@ -20,6 +20,7 @@
 typedef struct s_stack
 {
 	int				nbr;
+	char			*u_str;
 	struct s_stack	*prev;
 	struct s_stack	*next;
 }				t_stack;
@@ -37,6 +38,7 @@ int				ft_atoi(const char *str);
 char			**ft_split(char const *s, char c);
 char			*ft_strndup(const char *s1, size_t n);
 char			*ft_strjoin(char const *s1, char const *s2);
+char			*hex_uitoa(unsigned int n);
 int				*arg_check(int argc, char *argv[]);
 void    		error_exit(int  code); /* NOTE - arg error : 1; malloc error : 2 */
 int				double_arr_len(char **ptr);
@@ -50,12 +52,10 @@ unsigned int	*int_to_unsigned_arr(int *nbrs);
 int				*unsigned_to_int_arr(int *nbrs, unsigned int *u_nbrs);
 
 /* NOTE - stack operations */
-void			swap_top_two(t_head **head);
-void			push_top(t_head **from, t_head **to);
-void			rot_n_rev_rot(t_head **head, int direction);
+void			swap_top_two(t_head **head, int flag);
+void			push_top(t_head **from, t_head **to, int flag);
+void			rot_n_rev_rot(t_head **head, int direction, int flag);
 
-void			qsort_stack_large(t_head **a_head, t_head **b_head, int key);
-void			qsort_stack_mid(t_head **a_head, t_head **b_head, int key);
-void			move_small(t_head **a_head, t_head **b_head);
+void	radix_sort_stacks(t_head **a_head, t_head **b_head, int *hex_cnt);
 
 #endif

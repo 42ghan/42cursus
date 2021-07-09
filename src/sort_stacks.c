@@ -11,21 +11,59 @@
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
+#include <stdio.h>
 
+static int	check_remaining_digit(t_head **head, int pos, int digit)
+{
+	t_stack	*cur;
+	int		i;
 
+	if ((*head)->start == NULL)
+		return (0);
+	cur = (*head)->start->prev;
+	i = 0;
+	while (i < (*head)->len)
+	{
+		if (cur->u_str[pos] == "0123456789abcdef"[digit])
+			return (1);
+		cur = cur->prev;
+		i++;
+	}
+	return (0);
+}
 
 void	radix_sort_stacks(t_head **a_head, t_head **b_head, int *hex_cnt)
 {
-	t_stack				*a_top;
-	static unsigned int	rem = 0;
+	t_stack	*a_top;
+	t_stack	*b_top;
+	int		digit;
+	int		pos;
 
-	a_top = (*a_head)->start->prev;
-	while ((*a_head)->start)
+	pos = 7;
+	while (pos >= 0)
 	{
-		if (a_top->u_nbr % 16 == rem)
-			push_top(a_head, b_head, 0);
-		else
-			rot_n_rev_rot(a_head, 0, 0);
-		a_top = a_top->prev;
+		digit = 0;
+		while ((*a_head)->start && (pos % 2 == 1))
+		{
+			if (!check_remaining_digit(a_head, pos, digit))
+				digit++;
+			a_top = (*a_head)->start->prev;
+			if (a_top->u_str[pos] == "0123456789abcdef"[digit])
+				push_top(a_head, b_head, 0);
+			else
+				rot_n_rev_rot(a_head, 0, 0);
+		}
+		digit = 15;
+		while ((*b_head)->start && !(pos % 2))
+		{
+			if (!check_remaining_digit(b_head, pos, digit))
+				digit--;
+			b_top = (*b_head)->start->prev;
+			if (b_top->u_str[pos] == "0123456789abcdef"[digit])
+				push_top(b_head, a_head, 1);
+			else
+				rot_n_rev_rot(b_head, 0, 1);
+		}
+		pos--;
 	}
 }
