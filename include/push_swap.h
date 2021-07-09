@@ -56,6 +56,6 @@ void			swap_top_two(t_head **head, int flag);
 void			push_top(t_head **from, t_head **to, int flag);
 void			rot_n_rev_rot(t_head **head, int direction, int flag);
 
-void	radix_sort_stacks(t_head **a_head, t_head **b_head, int *hex_cnt);
+void	radix_sort_stacks(t_head **a_head, t_head **b_head);
 
 #endif

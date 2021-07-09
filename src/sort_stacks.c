@@ -24,7 +24,7 @@ static int	check_remaining_digit(t_head **head, int pos, int digit)
 	i = 0;
 	while (i < (*head)->len)
 	{
-		if (cur->u_str[pos] == "0123456789abcdef"[digit])
+		if (cur->u_str[pos] == "0123456789"[digit])
 			return (1);
 		cur = cur->prev;
 		i++;
@@ -32,37 +32,59 @@ static int	check_remaining_digit(t_head **head, int pos, int digit)
 	return (0);
 }
 
-void	radix_sort_stacks(t_head **a_head, t_head **b_head, int *hex_cnt)
+void	radix_sort_stacks(t_head **a_head, t_head **b_head)
 {
 	t_stack	*a_top;
 	t_stack	*b_top;
 	int		digit;
 	int		pos;
+	int		rot_cnt;
 
-	pos = 7;
+	pos = 9;
 	while (pos >= 0)
 	{
+		rot_cnt = 0;
 		digit = 0;
-		while ((*a_head)->start && (pos % 2 == 1))
+		while ((*a_head)->start && (digit < 10) && (pos % 2 == 1))
 		{
 			if (!check_remaining_digit(a_head, pos, digit))
+			{
 				digit++;
+				while (rot_cnt > 0)
+				{
+					rot_n_rev_rot(a_head, 1, 0);
+					rot_cnt--;
+				}
+			}
 			a_top = (*a_head)->start->prev;
-			if (a_top->u_str[pos] == "0123456789abcdef"[digit])
+			if (a_top->u_str[pos] == "0123456789"[digit])
 				push_top(a_head, b_head, 0);
 			else
+			{
 				rot_n_rev_rot(a_head, 0, 0);
+				rot_cnt++;
+			}
 		}
-		digit = 15;
-		while ((*b_head)->start && !(pos % 2))
+		digit = 9;
+		while ((*b_head)->start && (digit >= 0) && !(pos % 2))
 		{
 			if (!check_remaining_digit(b_head, pos, digit))
+			{
 				digit--;
+				while (rot_cnt > 0)
+				{
+					rot_n_rev_rot(b_head, 1, 1);
+					rot_cnt--;
+				}
+			}
 			b_top = (*b_head)->start->prev;
-			if (b_top->u_str[pos] == "0123456789abcdef"[digit])
+			if (b_top->u_str[pos] == "0123456789"[digit])
 				push_top(b_head, a_head, 1);
 			else
+			{
 				rot_n_rev_rot(b_head, 0, 1);
+				rot_cnt++;
+			}
 		}
 		pos--;
 	}
