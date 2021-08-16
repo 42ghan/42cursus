@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   optimal_key.c                                         :+:      :+:    :+:   */
+/*   sorted_ints.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -66,7 +66,7 @@ static unsigned int	*radix_sort(unsigned int *u_nbrs, int len)
 	return (u_nbrs);
 }
 
-int	*get_qsort_key(int *nbrs)
+int	*get_sorted_array(int *nbrs)
 {
 	unsigned int	*u_nbrs;
 	int				*sorted;
@@ -75,14 +75,9 @@ int	*get_qsort_key(int *nbrs)
 	u_nbrs = int_to_unsigned_arr(nbrs);
 	u_nbrs = radix_sort(u_nbrs, nbrs[0]);
 	sorted = unsigned_to_int_arr(nbrs, u_nbrs);
+	free(nbrs);
+	nbrs = NULL;
 	free(u_nbrs);
 	u_nbrs = NULL;
-	keys = (int *)ft_calloc(2, sizeof(int));
-	if (!keys)
-		error_exit(2);
-	keys[0] = sorted[nbrs[0] / 3];
-	keys[1] = sorted[nbrs[0] * 2 / 3];
-	free(sorted);
-	sorted = NULL;
-	return (keys);
+	return (sorted);
 }
