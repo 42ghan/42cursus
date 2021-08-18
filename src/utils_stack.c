@@ -14,9 +14,9 @@
 
 void	elem_to_top(t_head *head, t_stack *elem)
 {
+	head->start->prev->next = elem;
 	elem->prev = head->start->prev;
 	elem->next = head->start;
-	head->start->prev->next = elem;
 	head->start->prev = elem;
 }
 
@@ -39,11 +39,11 @@ void	init_stack(t_head *head, int *nbrs)
 
 	if (nbrs)
 	{
-		i = 0;
-		while (++i < nbrs[0] + 1)
+		i = nbrs[0];
+		while (i >= 1)
 		{
 			cur = init_stack_elem(nbrs[i]);
-			if (i == 1)
+			if (i == nbrs[0])
 			{
 				head->start = cur;
 				cur->next = cur;
@@ -51,6 +51,7 @@ void	init_stack(t_head *head, int *nbrs)
 			}
 			else
 				elem_to_top(head, cur);
+			i--;
 		}
 	}
 	else

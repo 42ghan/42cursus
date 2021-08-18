@@ -14,7 +14,7 @@
 
 static int	bit_value(unsigned int nbr, int bit)
 {
-	int mask;
+	int	mask;
 
 	mask = 1 << bit;
 	if (nbr & mask)

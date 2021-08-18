@@ -49,6 +49,6 @@ int	check_int_range(char *nbr)
 
 void	error_exit(int code)
 {
-	write(2, "Error\n", 7);
+	write(2, "Error\n", 6);
 	exit(code);
 }

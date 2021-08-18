@@ -14,8 +14,8 @@
 
 static void	ops_lstnew_addback(t_head *head, int idx, char stack)
 {
-	t_ops *new;
-	t_ops *elem;
+	t_ops	*new;
+	t_ops	*elem;
 
 	new = (t_ops *)ft_calloc(1, sizeof(t_ops));
 	if (!new)
@@ -83,10 +83,10 @@ void	push_top(t_head *from, t_head *to, int flag)
 		ops_lstnew_addback(from, 2, 'a');
 }
 
-void	rot_n_rev_rot(t_head *head, int direction, int flag)
+int	rot_n_rev_rot(t_head *head, int direction, int flag)
 {
 	if (head->len < 2 || direction == -1)
-		return ;
+		return (-1);
 	if (!direction)
 	{
 		head->start = head->start->prev;
@@ -103,4 +103,7 @@ void	rot_n_rev_rot(t_head *head, int direction, int flag)
 		else if (flag == 1)
 			ops_lstnew_addback(head, 4, 'b');
 	}
+	if (!flag)
+		return (1);
+	return (0);
 }
