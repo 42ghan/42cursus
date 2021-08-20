@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 12:09:18 by ghan              #+#    #+#             */
-/*   Updated: 2021/08/20 16:52:06 by ghan             ###   ########.fr       */
+/*   Updated: 2021/08/20 17:07:24 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	main(int argc, char *argv[])
 	{
 		free(nbrs);
 		nbrs = NULL;
-		return (0);
+		return (1);
 	}
 	prep_stacks(&a_hd, &b_hd, nbrs);
 	ops_lst = (t_ops *)ft_calloc(1, sizeof(t_ops));
