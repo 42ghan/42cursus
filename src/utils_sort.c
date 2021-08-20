@@ -18,6 +18,8 @@ int	cnt_sorted(t_head *head, int skip, int flag)
 	int		i;
 
 	cur = head->start;
+	if (!cur)
+		return (0);
 	i = -1;
 	while (++i < skip)
 		cur = cur->next;
@@ -57,6 +59,8 @@ int	determine_optimal_direction(t_head *head, int flag)
 	int		i;
 	t_stack	*cur;
 
+	if (head->start == NULL)
+		return (-1);
 	cur = head->start->prev;
 	i = 0;
 	while (i < head->len)

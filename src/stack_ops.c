@@ -36,19 +36,19 @@ void	swap_top_two(t_head *head, int flag)
 
 	if (head->len < 2)
 		return ;
-	if (head->len == 2)
-	{
+	else if (head->len == 2)
 		head->start = head->start->prev;
-		return ;
+	else
+	{
+		top = head->start->prev;
+		new_top = top->prev;
+		new_top->prev->next = top;
+		top->prev = new_top->prev;
+		top->next = new_top;
+		new_top->prev = top;
+		new_top->next = head->start;
+		head->start->prev = new_top;
 	}
-	top = head->start->prev;
-	new_top = top->prev;
-	new_top->prev->next = top;
-	top->prev = new_top->prev;
-	top->next = new_top;
-	new_top->prev = top;
-	new_top->next = head->start;
-	head->start->prev = new_top;
 	if (flag == 0)
 		ops_lstnew_addback(head, 1, 'a');
 	else if (flag == 1)
@@ -58,7 +58,6 @@ void	swap_top_two(t_head *head, int flag)
 void	push_top(t_head *from, t_head *to, int flag)
 {
 	t_stack	*f_top;
-	t_stack	*t_top;
 
 	if (from->start == NULL)
 		return ;

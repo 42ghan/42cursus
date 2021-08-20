@@ -70,7 +70,6 @@ int	*get_sorted_array(int *nbrs)
 {
 	unsigned int	*u_nbrs;
 	int				*sorted;
-	int				*keys;
 
 	u_nbrs = int_to_unsigned_arr(nbrs);
 	u_nbrs = radix_sort(u_nbrs, nbrs[0]);

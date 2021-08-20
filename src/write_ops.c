@@ -47,7 +47,7 @@ void	write_ops(t_ops *ops_lst)
 			else if (op->ops_idx == 3)
 				write(1, "rr\n", 3);
 			else if (op->ops_idx == 4)
-				write(1, "rrr\n", 3);
+				write(1, "rrr\n", 4);
 			op = op->next->next;
 		}
 		else

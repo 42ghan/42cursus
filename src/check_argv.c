@@ -44,7 +44,7 @@ static int	*nbr_strs_map(char **nbr_strs, int len)
 	i = -1;
 	while (nbr_strs[++i])
 	{
-		if (ft_strlen(nbr_strs[i]) > 11 || !check_int_range(nbr_strs[i]))
+		if (!check_int_range(nbr_strs[i]))
 			error_exit(1);
 		k = 0;
 		if (nbr_strs[i][k] == '-' || nbr_strs[i][k] == '+')

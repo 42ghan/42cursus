@@ -93,7 +93,7 @@ int	main(int argc, char *argv[])
 	a_hd.ops = &ops_lst;
 	b_hd.ops = &ops_lst;
 	put_in_order(&a_hd, get_sorted_array(nbrs));
-	sort_stacks(&a_hd, &b_hd, a_hd.t_len);
+	sort_by_len(&a_hd, &b_hd, a_hd.t_len);
 	write_ops(ops_lst);
 	free_alloc(&a_hd, &ops_lst);
 	return (0);

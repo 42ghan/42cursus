@@ -59,18 +59,18 @@ int				*unsigned_to_int_arr(int *nbrs, unsigned int *u_nbrs);
 void			swap_top_two(t_head *head, int flag);
 void			push_top(t_head *from, t_head *to, int flag);
 int				rot_n_rev_rot(t_head *head, int direction, int flag);
-void			sort_stacks(t_head *a_hd, t_head *b_hd, int t_len);
+void			sort_by_len(t_head *a_hd, t_head *b_hd, int t_len);
 void			write_ops(t_ops *ops_lst);
 void			sort_only_three_b(t_head *b_hd);
 void			sort_only_three_a(t_head *a_hd);
 void			sort_three_on_top_b(t_head *b_hd);
 void			sort_three_on_top_a(t_head *a_hd);
+void			sort_five_a(t_head *a_hd, t_head *b_hd);
 int				cnt_sorted(t_head *head, int skip, int flag);
 int				check_remainder(t_head *head, int len, int flag);
 int				determine_optimal_direction(t_head *head, int flag);
 int				check_three_consecutive(t_head *head);
-int				b_to_a_push_rot_opt(t_head *b_hd, t_head *a_hd,
-					int cnt, int flag);
+int				b_to_a_push_rot_opt(t_head *b_hd, t_head *a_hd, int cnt);
 void			qsort_a_to_b(t_head *a_hd, t_head *b_hd, int cnt_s, int skip);
 
 #endif

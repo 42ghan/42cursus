@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_two.c                                        :+:      :+:    :+:   */
+/*   utils_gen_two.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -39,6 +39,15 @@ void	free_double_arr(char **ptr)
 
 int	check_int_range(char *nbr)
 {
+	int	skip_len;
+
+	skip_len = 0;
+	if (nbr[0] == '-' || nbr[0] == '+')
+		skip_len++;
+	while (nbr[skip_len] == '0')
+		skip_len++;
+	if (ft_strlen(nbr) - skip_len > 11)
+		return (0);
 	if (((nbr[0] >= '0' && nbr[0] <= '9') || nbr[0] == '+')
 		&& ft_atoi(nbr) < 0)
 		return (0);

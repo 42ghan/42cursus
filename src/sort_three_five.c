@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_three.c                                       :+:      :+:    :+:   */
+/*   sort_three_five.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -21,7 +21,7 @@ void	sort_only_three_b(t_head *b_hd)
 		&& b_hd->start->idx > top->prev->idx)
 	{
 		swap_top_two(b_hd, 1);
-		rot_n_rev_rot(b_hd, 1, 1);
+		rot_n_rev_rot(b_hd, 0, 1);
 	}
 	else if (top->idx < top->prev->idx && top->idx > b_hd->start->idx)
 		swap_top_two(b_hd, 1);
@@ -47,7 +47,7 @@ void	sort_only_three_a(t_head *a_hd)
 		&& a_hd->start->idx < top->prev->idx)
 	{
 		swap_top_two(a_hd, 0);
-		rot_n_rev_rot(a_hd, 1, 0);
+		rot_n_rev_rot(a_hd, 0, 0);
 	}
 	else if (top->idx > top->prev->idx && top->idx < a_hd->start->idx)
 		swap_top_two(a_hd, 0);
@@ -117,5 +117,27 @@ void	sort_three_on_top_a(t_head *a_hd)
 	{
 		swap_top_two(a_hd, 0);
 		sort_three_on_top_a(a_hd);
+	}
+}
+
+void	sort_five_a(t_head *a_hd, t_head *b_hd)
+{
+	if (cnt_sorted(a_hd, 0, 0) == 2)
+		sort_three_on_top_a(a_hd);
+	else if (cnt_sorted(a_hd, 0, 0) == 3)
+		swap_top_two(a_hd, 0);
+	else
+	{
+		while (a_hd->start->prev->idx != 1 && a_hd->start->prev->idx != 2)
+			rot_n_rev_rot(a_hd, 0, 0);
+		push_top(a_hd, b_hd, 0);
+		while (a_hd->start->prev->idx != 1 && a_hd->start->prev->idx != 2)
+			rot_n_rev_rot(a_hd, 0, 0);
+		push_top(a_hd, b_hd, 0);
+		sort_only_three_a(a_hd);
+		if (!cnt_sorted(b_hd, 0, 1))
+			swap_top_two(b_hd, 1);
+		push_top(b_hd, a_hd, 1);
+		push_top(b_hd, a_hd, 1);
 	}
 }

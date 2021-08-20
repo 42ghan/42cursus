@@ -52,9 +52,9 @@ static void	fill(char *d, char *s, int start, int end)
 
 static void	assign_arr(char **ret, char *s, char c, unsigned int cnt)
 {
-	int		i;
-	int		start;
-	int		end;
+	unsigned int	i;
+	int				start;
+	int				end;
 
 	i = 0;
 	start = 0;
