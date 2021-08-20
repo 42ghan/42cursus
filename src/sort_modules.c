@@ -6,13 +6,11 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 00:50:33 by ghan              #+#    #+#             */
-/*   Updated: 2021/08/19 01:57:59 by ghan             ###   ########.fr       */
+/*   Updated: 2021/08/20 16:56:05 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
-
-void	qsort_a_to_b(t_head *a_hd, t_head *b_hd, int cnt_s, int skip);
 
 int	b_to_a_push_rot_opt(t_head *b_hd, t_head *a_hd, int cnt)
 {

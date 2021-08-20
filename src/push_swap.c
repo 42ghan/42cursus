@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 12:09:18 by ghan              #+#    #+#             */
-/*   Updated: 2021/08/19 01:57:35 by ghan             ###   ########.fr       */
+/*   Updated: 2021/08/20 16:52:06 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	free_alloc(t_head *a_hd, t_ops **ops_lst)
 	free(*ops_lst);
 }
 
-void	put_in_order(t_head *a_hd, int *sorted)
+static void	put_in_order(t_head *a_hd, int *sorted)
 {
 	t_stack	*cur;
 	int		i;
@@ -62,7 +62,7 @@ void	put_in_order(t_head *a_hd, int *sorted)
 	sorted = NULL;
 }
 
-void	prep_stacks(t_head *a_hd, t_head *b_hd, int *nbrs)
+static void	prep_stacks(t_head *a_hd, t_head *b_hd, int *nbrs)
 {
 	init_stack(a_hd, nbrs);
 	a_hd->len = nbrs[0];
