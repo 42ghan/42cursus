@@ -74,7 +74,7 @@ static void	qsort_sect(t_head *a_hd, t_head *b_hd, int skip, int len)
 	}
 }
 
-static void	more_than_fifty(t_head *a_hd, t_head *b_hd, int t_len)
+static void	qsort_section(t_head *a_hd, t_head *b_hd, int t_len)
 {
 	divide_to_three(a_hd, b_hd);
 	qsort_sect(a_hd, b_hd, 2 * t_len / 3, t_len / 3 + t_len % 3);
@@ -101,5 +101,5 @@ void	sort_by_len(t_head *a_hd, t_head *b_hd, int t_len)
 	else if (t_len == 5 && cnt_sorted(a_hd, 0, 0) < t_len)
 		sort_five_a(a_hd, b_hd);
 	else if (cnt_sorted(a_hd, 0, 0) < t_len)
-		more_than_fifty(a_hd, b_hd, t_len);
+		qsort_section(a_hd, b_hd, t_len);
 }
