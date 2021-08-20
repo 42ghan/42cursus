@@ -39,15 +39,22 @@ void	free_double_arr(char **ptr)
 
 int	check_int_range(char *nbr)
 {
-	int	skip_len;
+	unsigned int	skip_len;
+	unsigned int	sign;
 
+	sign = 0;
 	skip_len = 0;
 	if (nbr[0] == '-' || nbr[0] == '+')
-		skip_len++;
+		sign++;
 	while (nbr[skip_len] == '0')
 		skip_len++;
-	if (ft_strlen(nbr) - skip_len > 11)
+	if (ft_strlen(nbr) - skip_len > 10 + sign)
 		return (0);
+	if (ft_strlen(nbr) - skip_len == 10 + sign)
+	{
+		if ((!sign && nbr[0] > '2') || (sign && nbr[1] > '2'))
+			return (0);
+	}
 	if (((nbr[0] >= '0' && nbr[0] <= '9') || nbr[0] == '+')
 		&& ft_atoi(nbr) < 0)
 		return (0);
