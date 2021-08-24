@@ -23,11 +23,11 @@
 
 typedef	struct	s_opt
 {
-	int	n_philo;
-	int	time_die;
-	int	time_eat;
-	int	time_slp;
-	int	n_must_eat;
+	int		n_philo;
+	int		time_die;
+	int		time_eat;
+	int		time_slp;
+	int		n_must_eat;
 }				t_opt;
 
 
@@ -47,8 +47,7 @@ typedef struct	s_philo
 size_t			ft_strlen(const char *s);
 void			*ft_calloc(size_t count, size_t size);
 int				ft_atoi(const char *str);
-void			free_alloc(t_philo *philo);
-
+void			free_alloc(t_philo *philo, int n);
 
 #endif
 

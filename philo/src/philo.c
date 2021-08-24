@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-static int	check_opts(int ac, char **av, t_opt *opts)
+static int	check_fill_opts(int ac, char **av, t_opt *opts)
 {
 	if (!(ac == 5 || ac == 6))
 		return (0);
@@ -33,14 +33,6 @@ static int	check_opts(int ac, char **av, t_opt *opts)
 	return (1);
 }
 
-static void	*philo_action(void *arg)
-{
-	t_philo *philo;
-	
-	philo = (t_philo *)arg;
-	return (NULL);
-}
-
 static t_philo	*philo_new(t_opt opts, int i)
 {
 	t_philo	*elem;
@@ -53,7 +45,8 @@ static t_philo	*philo_new(t_opt opts, int i)
 	elem->cur_act = 's';
 	elem->opts = opts;
 	pthread_mutex_init(&(elem->fork), NULL);
-	elem->next = NULL;
+	if (i == -1)
+		elem->next = NULL;
 	return (elem);
 }
 
@@ -63,37 +56,76 @@ static int	philo_addback(t_philo **head, t_philo *new)
 
 	if (!new)
 		return (0);
-	cur = *head;
-	while (cur->next != NULL)
+	if (!(*head)->next)
+	{
+		(*head)->next = new;
+		new->next = new;
+	}
+	cur = (*head)->next;
+	while (cur->next != (*head)->next)
 		cur = cur->next;
 	cur->next = new;
+	new->next = (*head)->next;
 	return (1);
 }
+
+static void	*philo_action(void *arg)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)arg;
+	// while (1)
+	// {
+		pthread_mutex_lock(&(philo->fork));
+		pthread_mutex_lock(&(philo->next->fork));
+		printf("%d has taken a fork\n", philo->nth);
+		printf("%d is eating\n", philo->nth);
+		usleep(philo->opts.time_eat);
+		pthread_mutex_unlock(&(philo->fork));
+		pthread_mutex_unlock(&(philo->next->fork));
+		printf("%d is sleeping\n", philo->nth);
+		usleep(philo->opts.time_slp);
+		printf("%d is thinking\n", philo->nth);
+	// }
+	return (NULL);
+}
+
+/* TODO ==============================
+- make time cal. function
+- death check system
+====================================*/
 
 int	main(int argc, char *argv[])
 {
 	t_opt	opts;
-	t_philo	*philo;
+	t_philo	*head;
 	t_philo *cur;
 	int		i;
 
-	if (!check_opts(argc, argv, &opts))
+	if (!check_fill_opts(argc, argv, &opts))
 		return (1);
-	philo = philo_new(opts, -1);
-	if (!philo)
+	head = philo_new(opts, -1);
+	if (!head)
 		return (1);
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&philo, philo_new(opts, i)))
+		if (!philo_addback(&head, philo_new(opts, i)))
 			return (1);
 	}
-	cur = philo->next;
-	while (cur)
+	cur = head->next;
+	i = -1;
+	while (++i < opts.n_philo)
 	{
 		pthread_create(&(cur->tid), NULL, philo_action, cur);
 		cur = cur->next;
 	}
-	free_alloc(philo);
+	i = -1;
+	while (++i < opts.n_philo)
+	{
+		pthread_join(cur->tid, NULL);
+		cur = cur->next;
+	}
+	free_alloc(head, opts.n_philo);
 	return (0);
 }

@@ -53,14 +53,17 @@ int	ft_atoi(const char *str)
 	return (ret);
 }
 
-void	free_alloc(t_philo *philo)
+void	free_alloc(t_philo *philo, int n)
 {
 	t_philo	*cur;
+	int		i;
 
-	while (philo)
+	i = 0;
+	while (i < n + 1)
 	{
-		cur = philo->next;
+		cur = philo;
 		free(philo);
 		philo = cur->next;
+		i++;
 	}
 }
