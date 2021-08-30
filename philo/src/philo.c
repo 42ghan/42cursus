@@ -45,7 +45,7 @@ static t_philo	*philo_new(t_opt opts, int i, int *vital, long start_t)
 	elem->n_eat = 0;
 	elem->cur_act = 's';
 	elem->opts = opts;
-	elem->prev_t = start_t;
+	elem->start_t = start_t;
 	pthread_mutex_init(&(elem->fork), NULL);
 	if (i == -1)
 		elem->next = NULL;
@@ -71,15 +71,15 @@ static int	philo_addback(t_philo **head, t_philo *new)
 	return (1);
 }
 
-static long	time_cal(long prev_t)
+static long	time_cal(long start_t)
 {
-	struct timeval		c_time;
-	long	cur_t;
-	long	ret;
+	struct timeval	c_time;
+	long			cur_t;
+	long			ret;
 
 	gettimeofday(&c_time, NULL);
 	cur_t = (long)c_time.tv_usec + (long)c_time.tv_sec * 1000000;
-	ret = (cur_t - prev_t) / 1000;
+	ret = (cur_t - start_t) / 1000;
 	return (ret);
 }
 
@@ -92,7 +92,7 @@ static long	get_now(struct timeval *cur)
 	return (ret);
 }
 
-static void	ft_usleep(long interval)
+static int	ft_usleep(long interval, t_philo *philo)
 {
 	struct timeval	cur;
 	long	end;
@@ -101,29 +101,50 @@ static void	ft_usleep(long interval)
 	get_now(&cur);
 	now = (long)cur.tv_sec * 1000000 + (long)cur.tv_usec;
 	end = interval + now;
-	while (end > get_now(&cur))
-		usleep(100);
+	while (end > now)
+	{
+		now = get_now(&cur);
+		if (now > philo->last_eat_t + philo->opts.time_die * 1000)
+			return (-1);
+		usleep(1);
+	}
+	return (1);
 }
 
 static void	*philo_action(void *arg)
 {
-	t_philo *philo;
-	int	i;
+	t_philo 		*philo;
+	struct timeval	now;
 
 	philo = (t_philo *)arg;
-	while (1)
+	while (*(philo->vital) == 0)
 	{
 		pthread_mutex_lock(&(philo->fork));
 		pthread_mutex_lock(&(philo->next->fork));
-		printf("%ldms %d has taken a fork\n", time_cal(philo->prev_t), philo->nth);
-		printf("%ldms %d has taken a fork\n", time_cal(philo->prev_t), philo->nth);
-		printf("%ldms %d is eating\n", time_cal(philo->prev_t), philo->nth);
-		ft_usleep(philo->opts.time_eat * 1000);
+		printf("%ldms %d has taken a fork\n", time_cal(philo->start_t), philo->nth);
+		printf("%ldms %d has taken a fork\n", time_cal(philo->start_t), philo->nth);
+		if (*(philo->vital))
+			break ;
+		printf("%ldms %d is eating\n", time_cal(philo->start_t), philo->nth);
+		philo->last_eat_t = get_now(&now);
+		ft_usleep(philo->opts.time_eat * 1000, philo);
 		pthread_mutex_unlock(&(philo->fork));
 		pthread_mutex_unlock(&(philo->next->fork));
-		printf("%ldms %d is sleeping\n", time_cal(philo->prev_t), philo->nth);
-		ft_usleep(philo->opts.time_slp * 1000);
-		printf("%ldms %d is thinking\n", time_cal(philo->prev_t), philo->nth);
+		if (*(philo->vital))
+			break ;
+		printf("%ldms %d is sleeping\n", time_cal(philo->start_t), philo->nth);
+		if (ft_usleep(philo->opts.time_slp * 1000, philo) == -1)
+		{
+			if (*(philo->vital) == 0)
+			{
+				*(philo->vital) = 1;
+				printf("%ldms %d died\n", time_cal(philo->start_t), philo->nth);
+			}
+			break ;
+		}
+		if (*(philo->vital))
+			break ;
+		printf("%ldms %d is thinking\n", time_cal(philo->start_t), philo->nth);
 	}
 	return (NULL);
 }

@@ -37,7 +37,8 @@ typedef struct	s_philo
 	int				*vital;
 	int				nth;
 	int				n_eat;
-	long			prev_t;
+	long			last_eat_t;
+	long			start_t;
 	char			cur_act;
 	t_opt			opts;
 	pthread_mutex_t	fork;
