@@ -33,13 +33,14 @@ static int	check_fill_opts(int ac, char **av, t_opt *opts)
 	return (1);
 }
 
-static t_philo	*philo_new(t_opt opts, int i, unsigned long long start_t)
+static t_philo	*philo_new(t_opt opts, int i, int *vital, long start_t)
 {
 	t_philo	*elem;
 
 	elem = (t_philo *)ft_calloc(1, sizeof(t_philo));
 	if (!elem)
 		return (NULL);
+	elem->vital = vital;
 	elem->nth = i;
 	elem->n_eat = 0;
 	elem->cur_act = 's';
@@ -70,70 +71,90 @@ static int	philo_addback(t_philo **head, t_philo *new)
 	return (1);
 }
 
-static unsigned long long	time_cal(unsigned long long prev_t)
+static long	time_cal(long prev_t)
 {
 	struct timeval		c_time;
-	struct timeval		p_time;
-	unsigned long long	cur_t;
-	unsigned long long	ret;
+	long	cur_t;
+	long	ret;
 
 	gettimeofday(&c_time, NULL);
-	cur_t = (unsigned long long)c_time.tv_usec;
-	cur_t += (unsigned long long)c_time.tv_sec * 1000000;
-	ret = cur_t - prev_t;
-	gettimeofday(&p_time, NULL);
-	prev_t = (unsigned long long)p_time.tv_usec;
-	prev_t += (unsigned long long)p_time.tv_sec * 1000000;
+	cur_t = (long)c_time.tv_usec + (long)c_time.tv_sec * 1000000;
+	ret = (cur_t - prev_t) / 1000;
 	return (ret);
+}
+
+static long	get_now(struct timeval *cur)
+{
+	long	ret;
+
+	gettimeofday(cur, NULL);
+	ret = (long)cur->tv_sec * 1000000 + (long)cur->tv_usec;
+	return (ret);
+}
+
+static void	ft_usleep(long interval)
+{
+	struct timeval	cur;
+	long	end;
+	long	now;
+
+	get_now(&cur);
+	now = (long)cur.tv_sec * 1000000 + (long)cur.tv_usec;
+	end = interval + now;
+	while (end > get_now(&cur))
+		usleep(100);
 }
 
 static void	*philo_action(void *arg)
 {
 	t_philo *philo;
+	int	i;
 
 	philo = (t_philo *)arg;
-	// while (1)
-	// {
+	while (1)
+	{
 		pthread_mutex_lock(&(philo->fork));
 		pthread_mutex_lock(&(philo->next->fork));
-		printf("%llums %d has taken a fork\n", time_cal(philo->prev_t), philo->nth);
-		printf("%llums %d is eating\n", time_cal(philo->prev_t), philo->nth);
-		usleep(philo->opts.time_eat);
+		printf("%ldms %d has taken a fork\n", time_cal(philo->prev_t), philo->nth);
+		printf("%ldms %d has taken a fork\n", time_cal(philo->prev_t), philo->nth);
+		printf("%ldms %d is eating\n", time_cal(philo->prev_t), philo->nth);
+		ft_usleep(philo->opts.time_eat * 1000);
 		pthread_mutex_unlock(&(philo->fork));
 		pthread_mutex_unlock(&(philo->next->fork));
-		printf("%llums %d is sleeping\n", time_cal(philo->prev_t), philo->nth);
-		usleep(philo->opts.time_slp);
-		printf("%llums %d is thinking\n", time_cal(philo->prev_t), philo->nth);
-	// }
+		printf("%ldms %d is sleeping\n", time_cal(philo->prev_t), philo->nth);
+		ft_usleep(philo->opts.time_slp * 1000);
+		printf("%ldms %d is thinking\n", time_cal(philo->prev_t), philo->nth);
+	}
 	return (NULL);
 }
 
 /* TODO ==============================
-- improve time cal. function, make it more accurate
+- time accuracy has been immensely improved, but cannot find a certain answer to kernel panic...why does usleep prevent kernel panic?
 - death check system
 ====================================*/
 
 int	main(int argc, char *argv[])
 {
-	t_opt				opts;
-	t_philo				*head;
-	t_philo 			*cur;
-	int					i;
-	struct timeval		time;
-	unsigned long long	start_t;
+	t_opt			opts;
+	t_philo			*head;
+	t_philo 		*cur;
+	int				i;
+	int				vital;
+	struct timeval	time;
+	long			start_t;
 
 	if (!check_fill_opts(argc, argv, &opts))
 		return (1);
-	head = philo_new(opts, -1, 0);
+	head = philo_new(opts, -1, NULL, 0);
 	if (!head)
 		return (1);
 	gettimeofday(&time, NULL);
-	start_t = (unsigned long long)time.tv_usec;
-	start_t += (unsigned long long)time.tv_sec * 1000000;
+	start_t = (long)time.tv_usec + (long)time.tv_sec * 1000000;
+	vital = 0;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&head, philo_new(opts, i, start_t)))
+		if (!philo_addback(&head, philo_new(opts, i, &vital, start_t)))
 			return (1);
 	}
 	cur = head->next;
