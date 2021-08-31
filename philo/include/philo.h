@@ -34,14 +34,15 @@ typedef	struct	s_opt
 typedef struct	s_philo
 {
 	pthread_t		tid;
-	int				*vital;
+	pthread_t		monitor;
 	int				nth;
 	int				n_eat;
 	long			last_eat_t;
 	long			start_t;
-	char			cur_act;
 	t_opt			opts;
 	pthread_mutex_t	fork;
+	pthread_mutex_t	*vital_m;
+	int *vital;
 	struct s_philo	*next;
 }				t_philo;
 
