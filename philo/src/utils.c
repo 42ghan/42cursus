@@ -62,8 +62,21 @@ void	free_alloc(t_philo *philo, int n)
 	while (i < n + 1)
 	{
 		cur = philo;
-		free(philo);
+		if (i == 1)
+			pthread_mutex_destroy(cur->vital_m);
 		philo = cur->next;
+		free(cur);
+		pthread_mutex_destroy(&(cur->fork));
 		i++;
 	}
+}
+
+long	get_now(void)
+{
+	struct timeval	now;
+	long			ret;
+
+	gettimeofday(&now, NULL);
+	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
+	return (ret);
 }

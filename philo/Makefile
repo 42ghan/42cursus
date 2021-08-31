@@ -18,7 +18,7 @@ CFLAGS	=	-Wall -Werror -Wextra
 
 RM		=	rm -f
 
-SRCS	=
+SRCS	=	src/philo.c src/utils.c src/philo_routine.c src/init_lst.c
 
 INCDIR	=	include/
 
