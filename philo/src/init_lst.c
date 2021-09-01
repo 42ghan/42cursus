@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-t_philo	*philo_new(t_opt opts, long start_t,
+t_philo	*philo_new(t_opt opts, int idx,
 	int *v_flag, pthread_mutex_t *vital_m)
 {
 	t_philo	*elem;
@@ -20,17 +20,16 @@ t_philo	*philo_new(t_opt opts, long start_t,
 	elem = (t_philo *)ft_calloc(1, sizeof(t_philo));
 	if (!elem)
 		return (NULL);
+	elem->idx = idx;
 	elem->n_eat = 0;
-	elem->opts = opts;
-	elem->start_t = start_t;
-	elem->last_eat_t = elem->start_t;
-	pthread_mutex_init(&(elem->fork), NULL);
-	elem->vital_m = vital_m;
 	elem->v_flag = v_flag;
+	elem->vital_m = vital_m;
+	elem->opts = opts;
+	pthread_mutex_init(&(elem->fork), NULL);
 	return (elem);
 }
 
-int	philo_addback(t_philo **head, t_philo *new, int idx)
+int	philo_addback(t_philo **head, t_philo *new)
 {
 	t_philo	*cur;
 
@@ -46,6 +45,5 @@ int	philo_addback(t_philo **head, t_philo *new, int idx)
 		cur = cur->next;
 	cur->next = new;
 	new->next = (*head)->next;
-	new->idx = idx;
 	return (1);
 }

@@ -36,63 +36,68 @@ static int	check_fill_opts(int ac, char **av, t_opt *opts)
 	return (1);
 }
 
-static void	create_and_join(t_philo *head, t_opt opts)
+static t_philo	*init_philos(t_opt opts, int *v_flag,
+	pthread_mutex_t *vital_m)
 {
-	t_philo	*cur;
+	t_philo	*head;
 	int		i;
 
-	cur = head->next;
-	i = -1;
-	while (++i < opts.n_philo)
-	{
-		pthread_create(&(cur->tid), NULL, philo_action, cur);
-		pthread_create(&(cur->monitor), NULL, monitor_death, cur);
-		cur = cur->next;
-	}
-	i = -1;
-	while (++i < opts.n_philo)
-	{
-		pthread_join(cur->monitor, NULL);
-		cur = cur->next;
-	}
-}
-
-static t_philo	*init_philos(t_opt opts)
-{
-	t_philo			*head;
-	pthread_mutex_t	vital_m;
-	long			start_t;
-	int				v_flag;
-	int				i;
-
-	head = philo_new(opts, 0, NULL, NULL);
+	head = philo_new(opts, -1, NULL, NULL);
 	if (!head)
 		return (NULL);
 	head->next = NULL;
-	v_flag = 0;
-	start_t = get_now();
-	pthread_mutex_init(&vital_m, NULL);
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&head,
-				philo_new(opts, start_t, &v_flag, &vital_m), i))
+		if (!philo_addback(&head, philo_new(opts, i, v_flag, vital_m)))
 			return (NULL);
 	}
 	return (head);
 }
 
+static void	create_and_join(t_philo *head, t_opt opts)
+{
+	t_philo	*cur;
+	long	start_t;
+	int		i;
+
+	start_t = get_now();
+	cur = head->next;
+	i = -1;
+	while (++i < opts.n_philo)
+	{
+		cur->start_t = start_t;
+		cur->last_eat_t = start_t;
+		pthread_create(&(cur->tid), NULL, philo_action, cur);
+		pthread_create(&(cur->monitor), NULL, monitor_death, cur);
+		cur = cur->next;
+		usleep(10);
+	}
+	i = -1;
+	while (++i < opts.n_philo)
+	{
+		pthread_join(cur->monitor, NULL);
+		pthread_detach(cur->tid);
+		cur = cur->next;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
-	t_opt	opts;
-	t_philo	*head;
+	pthread_mutex_t	vital_m;
+	int				v_flag;
+	t_opt			opts;
+	t_philo			*head;
 
 	if (!check_fill_opts(argc, argv, &opts))
 		return (1);
-	head = init_philos(opts);
+	v_flag = 0;
+	pthread_mutex_init(&vital_m, NULL);
+	head = init_philos(opts, &v_flag, &vital_m);
 	if (!head)
 		return (1);
 	create_and_join(head, opts);
+	printf("%d\n", *(head->next->next->v_flag));
 	free_alloc(head, opts.n_philo);
 	return (0);
 }
