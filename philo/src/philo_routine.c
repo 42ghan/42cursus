@@ -28,13 +28,13 @@ void	*monitor_death(void *arg)
 	while (*(philo->v_flag) == 0
 		&& philo->last_eat_t + philo->opts.time_die * 1000 > get_now())
 	{
+		usleep(100);
 		if (philo->opts.n_must_eat > 0
-			&& philo->n_eat >= philo->opts.n_must_eat)
+			&& *(philo->n_eat) >= philo->opts.n_must_eat * philo->opts.n_philo)
 		{
 			*(philo->v_flag) = 1;
-			break ;
+			return (NULL);
 		}
-		usleep(1);
 	}
 	pthread_mutex_lock(philo->vital_m);
 	if (*(philo->v_flag) == 0)
@@ -53,7 +53,7 @@ static int	ft_usleep(long interval)
 
 	end = interval + get_now();
 	while (end > get_now())
-		usleep(1);
+		usleep(100);
 	return (1);
 }
 
@@ -65,11 +65,11 @@ static void	philo_eat(t_philo *philo)
 		time_cal(philo->start_t), philo->idx);
 	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
 		time_cal(philo->start_t), philo->idx);
+	*(philo->n_eat) += 1;
 	philo->last_eat_t = get_now();
 	printf("\033[31;1m%ld\033[0mms %d is eating\n",
 		time_cal(philo->start_t), philo->idx);
 	ft_usleep(philo->opts.time_eat * 1000);
-	(philo->n_eat)++;
 	pthread_mutex_unlock(&(philo->fork));
 	pthread_mutex_unlock(&(philo->next->fork));
 }
@@ -81,6 +81,7 @@ void	*philo_action(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
+		usleep(100);
 		philo_eat(philo);
 		printf("\033[31;1m%ld\033[0mms %d is sleeping\n",
 			time_cal(philo->start_t), philo->idx);

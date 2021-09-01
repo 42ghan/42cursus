@@ -33,7 +33,7 @@ typedef struct s_philo
 	pthread_t		tid;
 	pthread_t		monitor;
 	int				idx;
-	int				n_eat;
+	int				*n_eat;
 	int				*v_flag;
 	long			last_eat_t;
 	long			start_t;
@@ -50,8 +50,8 @@ void			free_alloc(t_philo *philo, int n);
 long			get_now(void);
 void			*monitor_death(void *arg);
 void			*philo_action(void *arg);
-t_philo			*philo_new(t_opt opts, int idx,
+t_philo			*philo_new(t_opt opts, int *n_eat,
 					int *v_flag, pthread_mutex_t *vital_m);
-int				philo_addback(t_philo **head, t_philo *new);
+int				philo_addback(t_philo **head, t_philo *new, int idx);
 
 #endif
