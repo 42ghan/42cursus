@@ -29,7 +29,7 @@ void	*monitor_death(void *arg)
 		&& philo->last_eat_t + philo->opts.time_die * 1000 > get_now())
 	{
 		if (philo->opts.n_must_eat > 0
-			&& philo->n_eat > philo->opts.n_must_eat)
+			&& philo->n_eat >= philo->opts.n_must_eat)
 		{
 			*(philo->v_flag) = 1;
 			break ;
@@ -65,11 +65,11 @@ static void	philo_eat(t_philo *philo)
 		time_cal(philo->start_t), philo->idx);
 	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
 		time_cal(philo->start_t), philo->idx);
-	(philo->n_eat)++;
 	philo->last_eat_t = get_now();
 	printf("\033[31;1m%ld\033[0mms %d is eating\n",
 		time_cal(philo->start_t), philo->idx);
 	ft_usleep(philo->opts.time_eat * 1000);
+	(philo->n_eat)++;
 	pthread_mutex_unlock(&(philo->fork));
 	pthread_mutex_unlock(&(philo->next->fork));
 }

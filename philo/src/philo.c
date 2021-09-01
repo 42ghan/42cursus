@@ -97,7 +97,6 @@ int	main(int argc, char *argv[])
 	if (!head)
 		return (1);
 	create_and_join(head, opts);
-	printf("%d\n", *(head->next->next->v_flag));
 	free_alloc(head, opts.n_philo);
 	return (0);
 }
