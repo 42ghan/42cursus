@@ -37,7 +37,7 @@ typedef struct s_philo
 	long			start_t;
 	t_opt			opts;
 	pthread_mutex_t	fork;
-	pthread_mutex_t	*eat_cnt_m;
+	pthread_mutex_t	*print_m;
 	struct s_philo	*next;
 }				t_philo;
 
@@ -49,6 +49,6 @@ long			get_now(void);
 long			time_cal(long start_t);
 void			*philo_action(void *arg);
 t_philo			*init_philos(t_opt opts, int *n_eat,
-					pthread_mutex_t *eat_cnt_m);
+					pthread_mutex_t *print_m);
 
 #endif

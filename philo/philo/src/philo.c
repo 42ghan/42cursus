@@ -66,15 +66,12 @@ static void	start_dinner(t_philo *cur, t_opt opts, long start_t)
 	}
 }
 
-static void	dine_or_die(t_philo *head, t_opt opts)
+static void	dine_or_die(t_philo *cur, t_opt opts, pthread_mutex_t *print_m)
 {
-	t_philo	*cur;
 	long	start_t;
-	int		i;
 	int		vital;
 
 	start_t = get_now();
-	cur = head->next;
 	start_dinner(cur, opts, start_t);
 	while (1)
 	{
@@ -82,10 +79,12 @@ static void	dine_or_die(t_philo *head, t_opt opts)
 		if (vital)
 		{
 			if (vital == 1)
+			{
+				pthread_mutex_lock(print_m);
 				printf("\033[31;1m%ld\033[0mms %d died\n",
 					time_cal(cur->start_t), cur->idx);
-			i = -1;
-			while (++i < opts.n_philo)
+			}
+			while (--opts.n_philo >= 0)
 			{
 				pthread_detach(cur->tid);
 				cur = cur->next;
@@ -97,7 +96,7 @@ static void	dine_or_die(t_philo *head, t_opt opts)
 
 int	main(int argc, char *argv[])
 {
-	pthread_mutex_t	eat_cnt_m;
+	pthread_mutex_t	print_m;
 	int				n_eat;
 	t_opt			opts;
 	t_philo			*head;
@@ -108,15 +107,15 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	n_eat = 0;
-	pthread_mutex_init(&eat_cnt_m, NULL);
-	head = init_philos(opts, &n_eat, &eat_cnt_m);
+	pthread_mutex_init(&print_m, NULL);
+	head = init_philos(opts, &n_eat, &print_m);
 	if (!head)
 	{
 		write(2, "Error : malloc failed\n", 22);
 		return (1);
 	}
-	dine_or_die(head, opts);
-	pthread_mutex_destroy(&eat_cnt_m);
+	dine_or_die(head->next, opts, &print_m);
+	pthread_mutex_destroy(&print_m);
 	free_alloc(head, opts.n_philo);
 	return (0);
 }
