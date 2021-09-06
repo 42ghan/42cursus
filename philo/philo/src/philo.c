@@ -16,73 +16,88 @@ static int	check_fill_opts(int ac, char **av, t_opt *opts)
 {
 	if (!(ac == 5 || ac == 6))
 		return (0);
-	opts->n_philo = ft_atoi(av[1]);
-	opts->time_die = ft_atoi(av[2]);
-	opts->time_eat = ft_atoi(av[3]);
-	opts->time_slp = ft_atoi(av[4]);
+	opts->n_philo = ft_pos_atoi(av[1]);
+	opts->time_die = ft_pos_atoi(av[2]);
+	opts->time_eat = ft_pos_atoi(av[3]);
+	opts->time_slp = ft_pos_atoi(av[4]);
 	if (opts->n_philo < 1 || opts->time_die < 0
 		|| opts->time_eat < 0 || opts->time_slp < 0)
 		return (0);
 	opts->n_must_eat = -1;
 	if (ac == 6)
 	{
-		opts->n_must_eat = ft_atoi(av[5]);
+		opts->n_must_eat = ft_pos_atoi(av[5]);
 		if (opts->n_must_eat < 0)
 			return (0);
 	}
 	return (1);
 }
 
-static t_philo	*init_philos(t_opt opts, int *n_eat, int *v_flag,
-	pthread_mutex_t *vital_m)
+static int	monitor_end(t_philo **cur, t_opt opts)
 {
-	t_philo	*head;
-	int		i;
+	int	i;
 
-	head = philo_new(opts, NULL, NULL, NULL);
-	if (!head)
-		return (NULL);
-	head->next = NULL;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&head, philo_new(opts, n_eat, v_flag, vital_m), i))
-			return (NULL);
+		if ((*cur)->last_eat_t + opts.time_die * 1000 <= get_now())
+			return (1);
+		if (*((*cur)->n_eat) >= opts.n_must_eat * opts.n_philo
+			&& opts.n_must_eat > 0)
+			return (2);
+		*cur = (*cur)->next;
 	}
-	return (head);
+	return (0);
 }
 
-static void	create_and_join(t_philo *head, t_opt opts)
+static void	start_dinner(t_philo *cur, t_opt opts, long start_t)
 {
-	t_philo	*cur;
-	long	start_t;
-	int		i;
+	int	i;
 
-	start_t = get_now();
-	cur = head->next;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
 		cur->start_t = start_t;
 		cur->last_eat_t = start_t;
 		pthread_create(&(cur->tid), NULL, philo_action, cur);
-		pthread_create(&(cur->monitor), NULL, monitor_death, cur);
 		cur = cur->next;
-		usleep(10);
+		if (cur->idx % 2 == 1)
+			usleep(20);
 	}
-	i = -1;
-	while (++i < opts.n_philo)
+}
+
+static void	dine_or_die(t_philo *head, t_opt opts)
+{
+	t_philo	*cur;
+	long	start_t;
+	int		i;
+	int		vital;
+
+	start_t = get_now();
+	cur = head->next;
+	start_dinner(cur, opts, start_t);
+	while (1)
 	{
-		pthread_join(cur->monitor, NULL);
-		pthread_detach(cur->tid);
-		cur = cur->next;
+		vital = monitor_end(&cur, opts);
+		if (vital)
+		{
+			if (vital == 1)
+				printf("\033[31;1m%ld\033[0mms %d died\n",
+					time_cal(cur->start_t), cur->idx);
+			i = -1;
+			while (++i < opts.n_philo)
+			{
+				pthread_detach(cur->tid);
+				cur = cur->next;
+			}
+			break ;
+		}
 	}
 }
 
 int	main(int argc, char *argv[])
 {
-	pthread_mutex_t	vital_m;
-	int				v_flag;
+	pthread_mutex_t	eat_cnt_m;
 	int				n_eat;
 	t_opt			opts;
 	t_philo			*head;
@@ -92,13 +107,16 @@ int	main(int argc, char *argv[])
 		write(2, "Error : Wrong ARGV\n", 19);
 		return (1);
 	}
-	v_flag = 0;
 	n_eat = 0;
-	pthread_mutex_init(&vital_m, NULL);
-	head = init_philos(opts, &n_eat, &v_flag, &vital_m);
+	pthread_mutex_init(&eat_cnt_m, NULL);
+	head = init_philos(opts, &n_eat, &eat_cnt_m);
 	if (!head)
+	{
+		write(2, "Error : malloc failed\n", 22);
 		return (1);
-	create_and_join(head, opts);
+	}
+	dine_or_die(head, opts);
+	pthread_mutex_destroy(&eat_cnt_m);
 	free_alloc(head, opts.n_philo);
 	return (0);
 }

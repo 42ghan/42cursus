@@ -12,39 +12,22 @@
 
 #include "../include/philo.h"
 
-static long	time_cal(long start_t)
+long	get_now(void)
+{
+	struct timeval	now;
+	long			ret;
+
+	gettimeofday(&now, NULL);
+	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
+	return (ret);
+}
+
+long	time_cal(long start_t)
 {
 	long	ret;
 
 	ret = (get_now() - start_t) / 1000;
 	return (ret);
-}
-
-void	*monitor_death(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	while (*(philo->v_flag) == 0
-		&& philo->last_eat_t + philo->opts.time_die * 1000 > get_now())
-	{
-		usleep(100);
-		if (philo->opts.n_must_eat > 0
-			&& *(philo->n_eat) >= philo->opts.n_must_eat * philo->opts.n_philo)
-		{
-			*(philo->v_flag) = 1;
-			return (NULL);
-		}
-	}
-	pthread_mutex_lock(philo->vital_m);
-	if (*(philo->v_flag) == 0)
-	{
-		*(philo->v_flag) = 1;
-		printf("\033[31;1m%ld\033[0mms %d died\n",
-			time_cal(philo->start_t), philo->idx);
-	}
-	pthread_mutex_unlock(philo->vital_m);
-	return (NULL);
 }
 
 static int	ft_usleep(long interval)
@@ -53,7 +36,7 @@ static int	ft_usleep(long interval)
 
 	end = interval + get_now();
 	while (end > get_now())
-		usleep(100);
+		usleep(50);
 	return (1);
 }
 
@@ -65,10 +48,16 @@ static void	philo_eat(t_philo *philo)
 		time_cal(philo->start_t), philo->idx);
 	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
 		time_cal(philo->start_t), philo->idx);
-	*(philo->n_eat) += 1;
-	philo->last_eat_t = get_now();
+	pthread_mutex_lock(philo->eat_cnt_m);
+	if (philo->opts.n_must_eat >= 0)
+		*(philo->n_eat) += 1;
 	printf("\033[31;1m%ld\033[0mms %d is eating\n",
 		time_cal(philo->start_t), philo->idx);
+	if (philo->opts.n_must_eat < 0)
+		pthread_mutex_unlock(philo->eat_cnt_m);
+	else if (*(philo->n_eat) < philo->opts.n_philo * philo->opts.n_must_eat)
+		pthread_mutex_unlock(philo->eat_cnt_m);
+	philo->last_eat_t = get_now();
 	ft_usleep(philo->opts.time_eat * 1000);
 	pthread_mutex_unlock(&(philo->fork));
 	pthread_mutex_unlock(&(philo->next->fork));
@@ -81,7 +70,6 @@ void	*philo_action(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		usleep(100);
 		philo_eat(philo);
 		printf("\033[31;1m%ld\033[0mms %d is sleeping\n",
 			time_cal(philo->start_t), philo->idx);

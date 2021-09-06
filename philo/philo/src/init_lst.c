@@ -12,8 +12,7 @@
 
 #include "../include/philo.h"
 
-t_philo	*philo_new(t_opt opts, int *n_eat,
-	int *v_flag, pthread_mutex_t *vital_m)
+static t_philo	*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *eat_cnt_m)
 {
 	t_philo	*elem;
 
@@ -21,14 +20,13 @@ t_philo	*philo_new(t_opt opts, int *n_eat,
 	if (!elem)
 		return (NULL);
 	elem->n_eat = n_eat;
-	elem->v_flag = v_flag;
-	elem->vital_m = vital_m;
+	elem->eat_cnt_m = eat_cnt_m;
 	elem->opts = opts;
 	pthread_mutex_init(&(elem->fork), NULL);
 	return (elem);
 }
 
-int	philo_addback(t_philo **head, t_philo *new, int idx)
+static int	philo_addback(t_philo **head, t_philo *new, int idx)
 {
 	t_philo	*cur;
 
@@ -46,4 +44,22 @@ int	philo_addback(t_philo **head, t_philo *new, int idx)
 	new->next = (*head)->next;
 	new->idx = idx;
 	return (1);
+}
+
+t_philo	*init_philos(t_opt opts, int *n_eat, pthread_mutex_t *eat_cnt_m)
+{
+	t_philo	*head;
+	int		i;
+
+	head = philo_new(opts, NULL, NULL);
+	if (!head)
+		return (NULL);
+	head->next = NULL;
+	i = -1;
+	while (++i < opts.n_philo)
+	{
+		if (!philo_addback(&head, philo_new(opts, n_eat, eat_cnt_m), i))
+			return (NULL);
+	}
+	return (head);
 }
