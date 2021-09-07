@@ -26,34 +26,34 @@ t_philo	*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *print_m)
 	return (elem);
 }
 
-static int	philo_addback(t_philo **head, t_philo *new, int idx)
+static int	philo_addback(t_philo *head, t_philo *new, int idx)
 {
 	t_philo	*cur;
 
 	if (!new)
 		return (0);
-	if (!(*head)->next)
+	if (!head->next)
 	{
-		(*head)->next = new;
+		head->next = new;
 		new->next = new;
 	}
-	cur = (*head)->next;
-	while (cur->next != (*head)->next)
+	cur = head->next;
+	while (cur->next != head->next)
 		cur = cur->next;
 	cur->next = new;
-	new->next = (*head)->next;
+	new->next = head->next;
 	new->idx = idx;
 	return (1);
 }
 
-int	init_philo_profile(t_philo **head, t_opt opts, int *n_eat,
+int	init_philo_profile(t_philo *head, t_opt opts, int *n_eat,
 	pthread_mutex_t *print_m)
 {
 	int	i;
 
-	if (!(*head))
+	if (!head)
 		return (0);
-	(*head)->next = NULL;
+	head->next = NULL;
 	i = -1;
 	while (++i < opts.n_philo)
 	{

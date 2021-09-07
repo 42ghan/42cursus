@@ -68,11 +68,9 @@ static void	start_dinner(t_philo *cur, t_opt opts, long start_t)
 
 static void	dine_or_die(t_philo *cur, t_opt opts, pthread_mutex_t *print_m)
 {
-	long	start_t;
 	int		vital;
 
-	start_t = get_now();
-	start_dinner(cur, opts, start_t);
+	start_dinner(cur, opts, get_now());
 	while (1)
 	{
 		vital = monitor_end(&cur, opts);
@@ -109,7 +107,7 @@ int	main(int argc, char *argv[])
 	n_eat = 0;
 	pthread_mutex_init(&print_m, NULL);
 	head = philo_new(opts, NULL, NULL);
-	if (!head || !init_philo_profile(&head, opts, &n_eat, &print_m))
+	if (!head || !init_philo_profile(head, opts, &n_eat, &print_m))
 	{
 		write(2, "Error : malloc failed\n", 22);
 		free_alloc(head);
