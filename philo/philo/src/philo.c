@@ -108,14 +108,15 @@ int	main(int argc, char *argv[])
 	}
 	n_eat = 0;
 	pthread_mutex_init(&print_m, NULL);
-	head = init_philos(opts, &n_eat, &print_m);
-	if (!head)
+	head = philo_new(opts, NULL, NULL);
+	if (!head || !init_philo_profile(&head, opts, &n_eat, &print_m))
 	{
 		write(2, "Error : malloc failed\n", 22);
+		free_alloc(head);
 		return (1);
 	}
 	dine_or_die(head->next, opts, &print_m);
 	pthread_mutex_destroy(&print_m);
-	free_alloc(head, opts.n_philo);
+	free_alloc(head);
 	return (0);
 }

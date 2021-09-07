@@ -21,11 +21,11 @@
 
 typedef struct s_opt
 {
-	int		n_philo;
-	int		time_die;
-	int		time_eat;
-	int		time_slp;
-	int		n_must_eat;
+	int	n_philo;
+	int	time_die;
+	int	time_eat;
+	int	time_slp;
+	int	n_must_eat;
 }				t_opt;
 
 typedef struct s_philo
@@ -44,11 +44,12 @@ typedef struct s_philo
 size_t			ft_strlen(const char *s);
 void			*ft_calloc(size_t count, size_t size);
 int				ft_pos_atoi(const char *str);
-void			free_alloc(t_philo *philo, int n);
+void			free_alloc(t_philo *philo);
 long			get_now(void);
 long			time_cal(long start_t);
 void			*philo_action(void *arg);
-t_philo			*init_philos(t_opt opts, int *n_eat,
+t_philo			*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *print_m);
+int				init_philo_profile(t_philo **head, t_opt opts, int *n_eat,
 					pthread_mutex_t *print_m);
 
 #endif

@@ -53,18 +53,23 @@ int	ft_pos_atoi(const char *str)
 	return (ret);
 }
 
-void	free_alloc(t_philo *philo, int n)
+void	free_alloc(t_philo *philo)
 {
 	t_philo	*cur;
-	int		i;
 
-	i = 0;
-	while (i < n + 1)
+	cur = philo->next;
+	free(philo);
+	philo = cur;
+	while (philo->next != cur)
+		philo = philo->next;
+	philo->next = NULL;
+	philo = cur;
+	while (cur)
 	{
-		cur = philo;
-		philo = cur->next;
-		free(cur);
-		pthread_mutex_destroy(&(cur->fork));
-		i++;
+		philo = cur;
+		cur = philo->next;
+		pthread_mutex_destroy(&(philo->fork));
+		free(philo);
+		philo = NULL;
 	}
 }
