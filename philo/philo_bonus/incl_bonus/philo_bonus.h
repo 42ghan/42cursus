@@ -24,28 +24,31 @@
 
 typedef struct s_opt
 {
-	int		n_philo;
-	int		time_die;
-	int		time_eat;
-	int		time_slp;
-	int		n_must_eat;
+	int	n_philo;
+	int	time_die;
+	int	time_eat;
+	int	time_slp;
+	int	n_must_eat;
 }				t_opt;
 
 typedef struct s_philo
 {
 	pid_t			pid;
-	pthread_t		tid;
 	int				idx;
-	int				n_eat;
+	int				*n_eat;
 	long			start_t;
 	long			last_eat_t;
 	t_opt			opts;
+	sem_t			*print_s;
+	sem_t			*fork;
 	struct s_philo	*next;
 }				t_philo;
 
 size_t	ft_strlen(const char *s);
 void	*ft_calloc(size_t count, size_t size);
-int		ft_atoi(const char *str);
+int		ft_pos_atoi(const char *str);
+char	*ft_pos_itoa(int n);
 long	get_now(void);
+t_philo	*init_philo_profile(t_opt opts, int *n_eat, sem_t *print_s);
 
 #endif
