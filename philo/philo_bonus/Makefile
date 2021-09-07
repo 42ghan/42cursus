@@ -18,7 +18,8 @@ CFLAGS	=	-Wall -Werror -Wextra
 
 RM		=	rm -f
 
-SRCS	=	src_bonus/philo.c src_bonus/utils.c src_bonus/philo_routine.c src_bonus/init_lst.c
+SRCS	=	src_bonus/philo_bonus.c src_bonus/utils_bonus.c\
+			src_bonus/routine_bonus.c src_bonus/init_lst_bonus.c
 
 INCDIR	=	incl_bonus/
 

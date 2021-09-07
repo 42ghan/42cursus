@@ -12,7 +12,7 @@
 
 #include "../incl_bonus/philo_bonus.h"
 
-static t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx)
+t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx)
 {
 	t_philo	*elem;
 	char	*sem_name;
@@ -23,6 +23,7 @@ static t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx)
 	elem->idx = idx;
 	elem->n_eat = n_eat;
 	elem->opts = opts;
+	elem->print_s = print_s;
 	if (idx >= 0)
 	{
 		sem_name = ft_pos_itoa(idx);
@@ -53,20 +54,18 @@ static int	philo_addback(t_philo **head, t_philo *new)
 	return (1);
 }
 
-t_philo	*init_philo_profile(t_opt opts, int *n_eat, sem_t *print_s)
+int	init_philo_profile(t_philo **head, t_opt opts, int *n_eat, sem_t *print_s)
 {
-	t_philo	*head;
-	int		i;
+	int	i;
 
-	head = philo_new(opts, NULL, NULL, -1);
-	if (!head)
-		return (NULL);
-	head->next = NULL;
+	if (!(*head))
+		return (0);
+	(*head)->next = NULL;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&head, philo_new(opts, n_eat, print_s, i)))
-			return (NULL);
+		if (!philo_addback(head, philo_new(opts, n_eat, print_s, i)))
+			return (0);
 	}
-	return (head);
+	return (1);
 }

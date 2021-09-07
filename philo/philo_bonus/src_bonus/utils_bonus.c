@@ -78,12 +78,23 @@ char	*ft_pos_itoa(int n)
 	return (ret);
 }
 
-long	get_now(void)
+void	free_alloc(t_philo *philo)
 {
-	struct timeval	now;
-	long			ret;
+	t_philo	*cur;
 
-	gettimeofday(&now, NULL);
-	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
-	return (ret);
+	cur = philo->next;
+	free(philo);
+	philo = cur;
+	while (philo->next != cur)
+		philo = philo->next;
+	philo->next = NULL;
+	philo = cur;
+	while (cur)
+	{
+		philo = cur;
+		cur = philo->next;
+		sem_close(philo->fork);
+		free(philo);
+		philo = NULL;
+	}
 }

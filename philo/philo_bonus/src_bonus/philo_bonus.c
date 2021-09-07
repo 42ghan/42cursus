@@ -66,7 +66,16 @@ static void	dine_with_fork(t_philo *head, t_opt opts)
 	if (!(cur->pid))
 		start_dinner(cur);
 	else
-		monitor_end(cur);
+	{
+		sleep(5);
+		i = -1;
+		while (++i < opts.n_philo)
+		{
+			kill(cur->pid, 9);
+			cur = cur->next;
+		}
+	}
+	// 	monitor_end(cur);
 }
 
 int main(int argc, char *argv[])
@@ -83,13 +92,15 @@ int main(int argc, char *argv[])
 	}
 	n_eat = 0;
 	print_s = sem_open("print_s", O_CREAT, S_IRUSR | S_IWUSR, 1);
-	head = init_philo_profile(opts, &n_eat, print_s);
-	if (!head)
+	head = philo_new(opts, NULL, NULL, -1);
+	if (!head || !init_philo_profile(&head, opts, &n_eat, print_s))
 	{
 		write(2, "Error : malloc failed\n", 22);
+		free_alloc(head);
 		return (1);
 	}
 	dine_with_fork(head, opts);
 	sem_close(print_s);
+	free_alloc(head);
 	return (0);
 }

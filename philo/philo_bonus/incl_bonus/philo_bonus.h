@@ -21,6 +21,7 @@
 # include <semaphore.h>
 /* NOTE - why phtread.h? */
 # include <pthread.h>
+# include <signal.h>
 
 typedef struct s_opt
 {
@@ -48,7 +49,11 @@ size_t	ft_strlen(const char *s);
 void	*ft_calloc(size_t count, size_t size);
 int		ft_pos_atoi(const char *str);
 char	*ft_pos_itoa(int n);
+void	free_alloc(t_philo *philo);
 long	get_now(void);
-t_philo	*init_philo_profile(t_opt opts, int *n_eat, sem_t *print_s);
+t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx);
+int		init_philo_profile(t_philo **head, t_opt opts, int *n_eat,
+			sem_t *print_s);
+void	start_dinner(t_philo *philo);
 
 #endif
