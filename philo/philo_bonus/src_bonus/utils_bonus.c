@@ -36,7 +36,7 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ret);
 }
 
-int	ft_atoi(const char *str)
+int	ft_pos_atoi(const char *str)
 {
 	int	ret;
 	int	i;
@@ -50,6 +50,31 @@ int	ft_atoi(const char *str)
 		return (-1);
 	while (str[i] >= '0' && str[i] <= '9')
 		ret = ret * 10 + str[i++] - '0';
+	return (ret);
+}
+
+char	*ft_pos_itoa(int n)
+{
+	char	*ret;
+	int		cnt;
+	int		n_cpy;
+
+	n_cpy = n;
+	cnt = 1;
+	while (n_cpy / 10)
+	{
+		n_cpy /= 10;
+		cnt++;
+	}
+	ret = ft_calloc((cnt + 1), 1);
+	if (!ret)
+		return (NULL);
+	while (cnt)
+	{
+		ret[cnt - 1] = "0123456789"[n % 10];
+		n /= 10;
+		cnt--;
+	}
 	return (ret);
 }
 

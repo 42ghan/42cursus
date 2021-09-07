@@ -16,82 +16,45 @@ static int	check_fill_opts(int ac, char **av, t_opt *opts)
 {
 	if (!(ac == 5 || ac == 6))
 		return (0);
-	opts->n_philo = ft_atoi(av[1]);
-	opts->time_die = ft_atoi(av[2]);
-	opts->time_eat = ft_atoi(av[3]);
-	opts->time_slp = ft_atoi(av[4]);
+	opts->n_philo = ft_pos_atoi(av[1]);
+	opts->time_die = ft_pos_atoi(av[2]);
+	opts->time_eat = ft_pos_atoi(av[3]);
+	opts->time_slp = ft_pos_atoi(av[4]);
 	if (opts->n_philo < 1 || opts->time_die < 0
 		|| opts->time_eat < 0 || opts->time_slp < 0)
 		return (0);
 	opts->n_must_eat = -1;
 	if (ac == 6)
 	{
-		opts->n_must_eat = ft_atoi(av[5]);
+		opts->n_must_eat = ft_pos_atoi(av[5]);
 		if (opts->n_must_eat < 0)
 			return (0);
 	}
 	return (1);
 }
 
-t_philo	*philo_new(t_opt opts)
+static void	create_philos(t_philo **cur, t_opt opts, long start_t)
 {
-	t_philo	*elem;
+	int	i;
 
-	elem = (t_philo *)ft_calloc(1, sizeof(t_philo));
-	if (!elem)
-		return (NULL);
-	elem->opts = opts;
-	return (elem);
-}
-
-int	philo_addback(t_philo **head, t_philo *new, int idx)
-{
-	t_philo	*cur;
-
-	if (!new)
-		return (0);
-	if (!(*head)->next)
-	{
-		(*head)->next = new;
-		new->next = new;
-	}
-	cur = (*head)->next;
-	while (cur->next != (*head)->next)
-		cur = cur->next;
-	cur->next = new;
-	new->next = (*head)->next;
-	new->idx = idx;
-	return (1);
-}
-
-static t_philo	*init_philos(t_opt opts)
-{
-	t_philo	*head;
-	int		i;
-
-	head = philo_new(opts);
-	if (!head)
-		return (NULL);
-	head->next = NULL;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(&head, philo_new(opts), i))
-			return (NULL);
+		(*cur)->start_t = start_t;
+		(*cur)->last_eat_t = start_t;
+		(*cur)->pid = fork();
+		if (!((*cur)->pid))
+			break ;
+		*cur = (*cur)->next;
 	}
-	return (head);
 }
 
-// static void *birth_to_child(void *arg)
+// static void	monitor_end(t_philo *cur)
 // {
-// 	t_philo	*philo;
 
-// 	philo = (t_philo *)arg;
-// 	philo->pid = fork();
-// 	return (NULL);
 // }
 
-static void	create_to_fork(t_philo *head, t_opt opts)
+static void	dine_with_fork(t_philo *head, t_opt opts)
 {
 	t_philo	*cur;
 	long	start_t;
@@ -99,42 +62,34 @@ static void	create_to_fork(t_philo *head, t_opt opts)
 
 	start_t = get_now();
 	cur = head->next;
-	i = -1;
-	while (++i < opts.n_philo)
-	{
-		cur->start_t = start_t;
-		cur->last_eat_t = start_t;
-		// pthread_create(&(cur->tid), NULL, birth_to_child, cur);
-		// pthread_detach(cur->tid);
-		cur->pid = fork();
-		cur = cur->next;
-		// usleep(10);
-	}
-	// i = -1;
-	// while (++i < opts.n_philo)
-	// {
-	// 	pthread_join(cur->tid, NULL);
-	// 	// waitpid(cur->pid, NULL, 0);
-	// 	cur = cur->next;
-	// }
+	create_philos(&cur, opts, start_t);
+	if (!(cur->pid))
+		start_dinner(cur);
+	else
+		monitor_end(cur);
 }
 
 int main(int argc, char *argv[])
 {
 	t_opt		opts;
 	t_philo		*head;
+	sem_t		*print_s;
+	int			n_eat;
 
 	if (!check_fill_opts(argc, argv, &opts))
 	{
 		write(2, "Error : Wrong ARGV\n", 19);
 		return (1);
 	}
-	head = init_philos(opts);
+	n_eat = 0;
+	print_s = sem_open("print_s", O_CREAT, S_IRUSR | S_IWUSR, 1);
+	head = init_philo_profile(opts, &n_eat, print_s);
 	if (!head)
+	{
+		write(2, "Error : malloc failed\n", 22);
 		return (1);
-	create_to_fork(head, opts);
-		printf("hello\n");
-	while (1)
-		;
+	}
+	dine_with_fork(head, opts);
+	sem_close(print_s);
 	return (0);
 }
