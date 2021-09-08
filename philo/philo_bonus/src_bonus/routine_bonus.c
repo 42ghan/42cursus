@@ -53,13 +53,9 @@ static void	philo_eat(t_philo *philo)
 		time_cal(philo->start_t), philo->idx);
 	sem_post(philo->print_s);
 	sem_wait(philo->print_s);
-	*(philo->n_eat) += 1;
 	printf("\033[31;1m%ld\033[0mms %d is eating\n",
 		time_cal(philo->start_t), philo->idx);
 	if (philo->opts.n_must_eat < 0)
-		sem_post(philo->print_s);
-	else if (*(philo->n_eat)
-		< philo->opts.n_philo * philo->opts.n_must_eat)
 		sem_post(philo->print_s);
 	philo->last_eat_t = get_now();
 	ft_usleep(philo->opts.time_eat * 1000);

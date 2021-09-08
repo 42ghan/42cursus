@@ -12,7 +12,7 @@
 
 #include "../incl_bonus/philo_bonus.h"
 
-t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx)
+t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx)
 {
 	t_philo	*elem;
 	char	*sem_name;
@@ -21,7 +21,7 @@ t_philo	*philo_new(t_opt opts, int *n_eat, sem_t *print_s, int idx)
 	if (!elem)
 		return (NULL);
 	elem->idx = idx;
-	elem->n_eat = n_eat;
+	elem->n_eat = 0;
 	elem->opts = opts;
 	elem->print_s = print_s;
 	if (idx >= 0)
@@ -55,7 +55,7 @@ static int	philo_addback(t_philo *head, t_philo *new)
 	return (1);
 }
 
-int	init_philo_profile(t_philo *head, t_opt opts, int *n_eat, sem_t *print_s)
+int	init_philo_profile(t_philo *head, t_opt opts, sem_t *print_s)
 {
 	int	i;
 
@@ -65,7 +65,7 @@ int	init_philo_profile(t_philo *head, t_opt opts, int *n_eat, sem_t *print_s)
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(head, philo_new(opts, n_eat, print_s, i)))
+		if (!philo_addback(head, philo_new(opts, print_s, i)))
 			return (0);
 	}
 	return (1);
