@@ -52,11 +52,16 @@ static void	philo_eat(t_philo *philo)
 	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
 		time_cal(philo->start_t), philo->idx);
 	sem_post(philo->print_s);
+	if (philo->opts.n_must_eat >= 0)
+	{
+		philo->opts.n_must_eat--;
+		if (philo->opts.n_must_eat == -1)
+			exit(1);
+	}
 	sem_wait(philo->print_s);
 	printf("\033[31;1m%ld\033[0mms %d is eating\n",
 		time_cal(philo->start_t), philo->idx);
-	if (philo->opts.n_must_eat < 0)
-		sem_post(philo->print_s);
+	sem_post(philo->print_s);
 	philo->last_eat_t = get_now();
 	ft_usleep(philo->opts.time_eat * 1000);
 	sem_post(philo->fork);

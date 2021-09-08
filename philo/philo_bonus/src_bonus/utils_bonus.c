@@ -78,10 +78,11 @@ char	*ft_pos_itoa(int n)
 	return (ret);
 }
 
-void	free_alloc(t_philo *philo)
+void	free_alloc(t_philo *philo, sem_t *print_s)
 {
 	t_philo	*cur;
 
+	sem_close(print_s);
 	cur = philo->next;
 	free(philo);
 	philo = cur;

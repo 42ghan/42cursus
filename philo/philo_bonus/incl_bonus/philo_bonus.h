@@ -41,6 +41,7 @@ typedef struct s_philo
 	long			last_eat_t;
 	t_opt			opts;
 	sem_t			*print_s;
+	sem_t			*eat_s;
 	sem_t			*fork;
 	struct s_philo	*next;
 }				t_philo;
@@ -49,7 +50,7 @@ size_t	ft_strlen(const char *s);
 void	*ft_calloc(size_t count, size_t size);
 int		ft_pos_atoi(const char *str);
 char	*ft_pos_itoa(int n);
-void	free_alloc(t_philo *philo);
+void	free_alloc(t_philo *philo, sem_t *print_s);
 long	get_now(void);
 long	time_cal(long start_t);
 t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx);

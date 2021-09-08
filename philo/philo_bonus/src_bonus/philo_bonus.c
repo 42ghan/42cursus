@@ -36,9 +36,7 @@ static void	*monitor_end(void *arg)
 
 	philo = (t_philo *)arg;
 	while (philo->last_eat_t + philo->opts.time_die * 1000 > get_now())
-	{
-		usleep(1);
-	}
+		usleep(10);
 	sem_wait(philo->print_s);
 	printf("\033[31;1m%ld\033[0mms %d died\n",
 		time_cal(philo->start_t), philo->idx);
@@ -83,11 +81,10 @@ int	main(int argc, char *argv[])
 	if (!head || !init_philo_profile(head, opts, print_s))
 	{
 		write(2, "Error : malloc failed\n", 22);
-		free_alloc(head);
+		free_alloc(head, print_s);
 		return (1);
 	}
 	dine_with_fork(head->next, opts);
-	sem_close(print_s);
-	free_alloc(head);
+	free_alloc(head, print_s);
 	return (0);
 }
