@@ -52,9 +52,8 @@ static void	philo_eat(t_philo *philo)
 	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
 		time_cal(philo->start_t), philo->idx);
 	sem_post(philo->print_s);
-	if (philo->opts.n_must_eat >= 0)
+	if (--philo->opts.n_must_eat >= -1)
 	{
-		philo->opts.n_must_eat--;
 		if (philo->opts.n_must_eat == -1)
 			exit(1);
 	}

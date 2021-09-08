@@ -36,12 +36,10 @@ typedef struct s_philo
 	pid_t			pid;
 	pthread_t		monitor;
 	int				idx;
-	int				n_eat;
 	long			start_t;
 	long			last_eat_t;
 	t_opt			opts;
 	sem_t			*print_s;
-	sem_t			*eat_s;
 	sem_t			*fork;
 	struct s_philo	*next;
 }				t_philo;

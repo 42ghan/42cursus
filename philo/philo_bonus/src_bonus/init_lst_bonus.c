@@ -21,7 +21,6 @@ t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx)
 	if (!elem)
 		return (NULL);
 	elem->idx = idx;
-	elem->n_eat = 0;
 	elem->opts = opts;
 	elem->print_s = print_s;
 	if (idx >= 0)
