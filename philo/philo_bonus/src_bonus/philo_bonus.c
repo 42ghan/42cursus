@@ -30,23 +30,6 @@ static void	create_philos(t_philo **cur, t_opt opts)
 	}
 }
 
-static int	monitor_end(t_philo **cur, t_opt opts)
-{
-	int	i;
-
-	i = -1;
-	while (++i < opts.n_philo)
-	{
-		if ((*cur)->last_eat_t + opts.time_die * 1000 <= get_now())
-			return (1);
-		if (*((*cur)->n_eat) >= opts.n_must_eat * opts.n_philo
-			&& opts.n_must_eat > 0)
-			return (2);
-		*cur = (*cur)->next;
-	}
-	return (0);
-}
-
 static void	kill_children(t_philo *cur, int n)
 {
 	while (--n >= 0)
@@ -56,31 +39,52 @@ static void	kill_children(t_philo *cur, int n)
 	}
 }
 
+static void	*monitor_end(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	while (philo->last_eat_t + philo->opts.time_die * 1000 > get_now())
+	{
+		usleep(1);
+	}
+	printf("\033[31;1m%ld\033[0mms %d died\n",
+		time_cal(philo->start_t), philo->idx);
+	exit(1);
+	return (NULL);
+}
+
 static void	dine_with_fork(t_philo *cur, t_opt opts)
 {
-	int	vital;
-
 	create_philos(&cur, opts);
 	if (!(cur->pid))
-		start_dinner(&cur);
+	{
+		pthread_create(&(cur->monitor), NULL, monitor_end, cur);
+		start_dinner(cur);
+		pthread_join(cur->monitor, NULL);
+	}
 	else
 	{
-		while (1)
-		{
-			vital = monitor_end(&cur, opts);
-			if (vital)
-			{
-				if (vital == 1)
-				{
-					sem_wait(cur->print_s);
-					printf("\033[31;1m%ld\033[0mms %d died\n",
-						time_cal(cur->start_t), cur->idx);
-				}
-				kill_children(cur, opts.n_philo);
-				break ;
-			}
-		}
+		waitpid(-1, NULL, 0);
+		kill_children(cur, opts.n_philo);
 	}
+	// {
+	// 	while (1)
+	// 	{
+	// 		vital = monitor_end(&cur, opts);
+	// 		if (vital)
+	// 		{
+	// 			if (vital == 1)
+	// 			{
+	// 				sem_wait(cur->print_s);
+	// 				printf("\033[31;1m%ld\033[0mms %d died\n",
+	// 					time_cal(cur->start_t), cur->idx);
+	// 			}
+	// 			kill_children(cur, opts.n_philo);
+	// 			break ;
+	// 		}
+	// 	}
+	// }
 }
 
 int	main(int argc, char *argv[])
