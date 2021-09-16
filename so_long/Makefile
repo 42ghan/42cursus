@@ -1,38 +1,9 @@
-<<<<<<< HEAD
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/07/05 12:02:01 by ghan              #+#    #+#              #
-#    Updated: 2021/07/05 12:02:03 by ghan             ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME	=	push_swap
-=======
 NAME	=	so_long
->>>>>>> so_long/master
 
 CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
 
-<<<<<<< HEAD
-RM		=	rm -f
-
-SRCS		=	src/check_argv.c src/ft_split.c src/push_swap.c src/sort_modules.c\
-			src/sort_stacks.c src/sort_three_five.c src/sorted_ints.c src/stack_ops.c\
-			src/utils_radix.c src/utils_gen_one.c src/utils_sort.c src/utils_stack.c\
-			src/utils_gen_two.c src/write_ops.c
-
-
-INCDIR	=	include/
-
-OBJS	=	$(SRCS:.c=.o)
-=======
 FRWRK	=	-framework OpenGL -framework AppKit
 
 RM		=	rm -f
@@ -69,20 +40,12 @@ else
 	OBJS	=	$(O_MAN)
 	INCDIR	=	include/
 endif
->>>>>>> so_long/master
 
 all		:	$(NAME)
 
 %.o		:	%.c
 			$(CC) $(CFLAGS) -c $< -o $@ -I $(INCDIR)
 
-<<<<<<< HEAD
-$(NAME)	:	$(OBJS)
-			$(CC) $(CFLAGS) -o $@ $^
-
-clean	:
-			$(RM) $(OBJS)
-=======
 bonus	:
 			make WITH_BONUS=1 all
 
@@ -93,7 +56,6 @@ $(NAME)	:	$(OBJS)
 clean	:
 			make clean -C $(MLX_DIR)
 			$(RM) $(O_MAN) $(O_BON)
->>>>>>> so_long/master
 
 fclean	:	clean
 			$(RM) $(NAME)
