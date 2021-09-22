@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:58:20 by ghan              #+#    #+#             */
-/*   Updated: 2021/09/22 22:43:43 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/23 00:21:50 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,17 @@ char	*ft_itoa(int n)
 	ret = (char *)ft_calloc(cnt + 1, sizeof(char));
 	if (!ret)
 		return (NULL);
+	if (n < 0)
+		ret[0] = '-';
 	while (cnt)
 	{
 		if (n < 0)
-			ret[cnt - 1] = "0123456789"[n % 10 * -1];
+			ret[cnt-- - 1] = "0123456789"[n % 10 * -1];
 		else
-			ret[cnt - 1] = "0123456789"[n % 10];
-		cnt--;
+			ret[cnt-- - 1] = "0123456789"[n % 10];
+		if (n < 0 && cnt == 1)
+			break ;
 		n /= 10;
 	}
-	if (n < 0)
-		ret[0] = '-';
 	return (ret);
 }

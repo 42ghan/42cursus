@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:58:09 by ghan              #+#    #+#             */
-/*   Updated: 2021/09/22 22:44:39 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/23 00:29:01 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static void	assign_arr(char **ret, char *s, char c, size_t cnt)
 			if (!alloc_str(ret, i, k - j + 1))
 				return ;
 			if (!i && *s != c)
-				ft_strlcpy(ret[i++], s, k - j + 1);
+				ft_strlcpy(ret[i++], s + j, k - j + 1);
 			else
-				ft_strlcpy(ret[i++], s, k - ++j + 1);
+				ft_strlcpy(ret[i++], s + j + 1, k - j);
 			j = k;
 		}
 	}
