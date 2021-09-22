@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 11:12:04 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 11:12:05 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:42:00 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void			*ret;
-	unsigned int	i;
+	void	*ret;
 
-	if (!(ret = (unsigned char*)malloc(count * size)))
-		return (0);
-	i = 0;
-	while (i < count * size)
-		*(unsigned char*)(ret + i++) = 0;
+	ret = (unsigned char *)malloc(count * size);
+	if (!ret)
+		return (NULL);
+	ft_bzero(ret, count * size);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 20:33:29 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 20:34:47 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 21:45:41 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_extremes(unsigned long long ret, int sign)
 	return (ret);
 }
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	unsigned long long	ret;
 	int					i;

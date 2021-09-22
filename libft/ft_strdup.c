@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 11:23:40 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 11:23:41 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:44:05 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,11 @@ char	*ft_strdup(const char *s1)
 {
 	char	*ret;
 	int		len;
-	int		i;
 
-	len = 0;
-	while (s1[len])
-		len++;
-	if (!(ret = (char*)malloc(len + 1)))
+	len = ft_strlen(s1);
+	ret = (char *)ft_calloc(len + 1, 1);
+	if (!ret)
 		return (0);
-	i = 0;
-	while (i < len)
-	{
-		ret[i] = s1[i];
-		i++;
-	}
-	ret[i] = 0;
+	ft_strlcpy(ret, s1, len + 1);
 	return (ret);
 }

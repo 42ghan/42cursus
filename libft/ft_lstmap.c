@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:13:09 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/05 16:13:09 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:40:04 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*head;
 	t_list	*new;
 
-	if (!(head = ft_lstnew(0)))
+	head = ft_lstnew(NULL);
+	if (!head)
 		return (0);
 	while (lst)
 	{

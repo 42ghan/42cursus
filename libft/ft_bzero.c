@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:29:13 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 16:29:18 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:38:20 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_bzero(void *s, size_t n)
 {
-	unsigned int i;
+	size_t	i;
 
 	i = 0;
 	while (i < n)
-		*(unsigned char*)(s + i++) = 0;
+		*(unsigned char *)(s + i++) = 0;
 }

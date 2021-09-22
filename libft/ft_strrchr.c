@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 19:22:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:22:27 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:36:35 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ char	*ft_strrchr(const char *s, int c)
 	int		len;
 	char	*ret;
 
-	ret = (char*)s;
+	ret = (char *)s;
 	len = 0;
 	while (s[len])
 		len++;

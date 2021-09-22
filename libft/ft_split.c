@@ -6,13 +6,13 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:58:09 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 15:58:10 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:44:39 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static unsigned int	find_del_idx(char *s, char c, unsigned int idx)
+static size_t	find_del_idx(char *s, char c, size_t idx)
 {
 	while (s[idx])
 	{
@@ -23,38 +23,34 @@ static unsigned int	find_del_idx(char *s, char c, unsigned int idx)
 	return (idx);
 }
 
-static void			clear_arr(char **ret, unsigned int i)
+static void	clear_arr(char **ret, size_t i)
 {
-	unsigned int	j;
+	size_t	j;
 
 	j = 0;
 	while (j < i)
 	{
-		free(ret[j]);
+		free(ret[j++]);
 		free(ret);
-		j++;
 	}
 }
 
-static void			fill(char *d, char *s, unsigned int start, unsigned int end)
+static int	alloc_str(char **ret, int i, int len)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (start < end)
+	ret[i] = (char *)ft_calloc(len, sizeof(char));
+	if (!ret[i])
 	{
-		d[i] = s[start];
-		start++;
-		i++;
+		clear_arr(ret, i);
+		return (0);
 	}
-	d[i] = 0;
+	return (1);
 }
 
-static void			assign_arr(char **ret, char *s, char c, unsigned int cnt)
+static void	assign_arr(char **ret, char *s, char c, size_t cnt)
 {
-	unsigned int	i;
-	unsigned int	j;
-	unsigned int	k;
+	size_t	i;
+	size_t	j;
+	size_t	k;
 
 	i = 0;
 	j = 0;
@@ -68,42 +64,41 @@ static void			assign_arr(char **ret, char *s, char c, unsigned int cnt)
 		}
 		else
 		{
-			if (!(ret[i] = (char*)malloc(k - j + 1)))
-			{
-				clear_arr(ret, i);
+			if (!alloc_str(ret, i, k - j + 1))
 				return ;
-			}
-			!i && *s != c ? fill(ret[i++], s, j, k) : fill(ret[i++], s, ++j, k);
+			if (!i && *s != c)
+				ft_strlcpy(ret[i++], s, k - j + 1);
+			else
+				ft_strlcpy(ret[i++], s, k - ++j + 1);
 			j = k;
 		}
 	}
 }
 
-char				**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
-	char			**ret;
-	char			*s_cpy;
-	unsigned int	cnt;
-	unsigned int	i;
+	char	**ret;
+	size_t	cnt;
+	size_t	i;
 
 	if (!s)
 		return (0);
-	s_cpy = (char*)s;
 	cnt = 0;
 	if (s[0])
 	{
-		cnt = s[0] == c ? 0 : 1;
+		cnt = 1;
+		if (s[0] == c)
+			cnt = 0;
 		i = 0;
-		while (s[++i])
+		while (ft_strlen(s) > 1 && s[++i])
 		{
 			if (s[i - 1] == c && s[i] != c)
 				cnt++;
 		}
 	}
-	if (!(ret = (char**)malloc(sizeof(char*) * (cnt + 1))))
-		return (0);
-	assign_arr(ret, s_cpy, c, cnt);
-	if (ret)
-		ret[cnt] = 0;
+	ret = (char **)ft_calloc(cnt + 1, sizeof(char *));
+	if (!ret)
+		return (NULL);
+	assign_arr(ret, (char *)s, c, cnt);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:11:33 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/05 16:11:33 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:37:03 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_list	*ft_lstnew(void *content)
 {
 	t_list	*ret;
 
-	if (!(ret = (t_list*)malloc(sizeof(t_list*))))
+	ret = (t_list *)ft_calloc(sizeof(t_list), 1);
+	if (!ret)
 		return (0);
 	ret->content = content;
 	ret->next = 0;

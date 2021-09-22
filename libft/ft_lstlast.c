@@ -6,13 +6,13 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:12:09 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/05 16:12:10 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 21:53:44 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list		*ft_lstlast(t_list *lst)
+t_list	*ft_lstlast(t_list *lst)
 {
 	if (!lst)
 		return (0);

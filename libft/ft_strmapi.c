@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:58:40 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 15:58:41 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:31:54 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char			*ret;
-	unsigned int	i;
+	char	*ret;
+	size_t	i;
 
 	if (!s)
-		return (0);
+		return (NULL);
 	ret = ft_strdup(s);
 	if (!ret)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (ret[i])
 	{

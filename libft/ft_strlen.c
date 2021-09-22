@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 17:58:10 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 17:58:11 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:37:21 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	unsigned int len;
+	size_t	len;
 
 	len = 0;
 	while (s[len])

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:59:35 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 15:59:36 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:38:10 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	char digit;
+	char	digit;
 
 	if (n == 0)
 		write(fd, "0", 1);
@@ -36,7 +36,7 @@ void	ft_putnbr_fd(int n, int fd)
 		}
 		else
 			digit = '0' + n;
-		write(fd, &digit, 1);
+		ft_putchar_fd(digit, fd);
 	}
 	return ;
 }

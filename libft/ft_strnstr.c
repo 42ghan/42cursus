@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 19:29:46 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:29:49 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:33:00 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 char	*ft_strnstr(const char *h, const char *n, size_t len)
 {
-	unsigned int	i;
-	unsigned int	j;
-	char			*h_ret;
+	size_t	i;
+	size_t	j;
+	char	*h_ret;
 
-	h_ret = (char*)h;
+	h_ret = (char *)h;
 	if (*n == 0)
 		return (h_ret);
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 19:14:06 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/03 19:14:10 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:41:46 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	unsigned int dst_len;
-	unsigned int src_len;
-	unsigned int i;
+	size_t	dst_len;
+	size_t	src_len;
+	size_t	i;
 
 	dst_len = ft_strlen(dst);
 	src_len = ft_strlen(src);

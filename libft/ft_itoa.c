@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 15:58:20 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/04 15:58:25 by ghan             ###   ########.fr       */
+/*   Updated: 2021/09/22 22:43:43 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	digit_cnt(int n)
 {
 	int	cnt;
-	int pos_n;
+	int	pos_n;
 
 	cnt = 1;
 	if (n == -2147483648)
@@ -29,31 +29,27 @@ static int	digit_cnt(int n)
 	return (cnt);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	int		cnt;
 	char	*ret;
 
-	cnt = n < 0 ? digit_cnt(n) + 1 : digit_cnt(n);
-	if (!(ret = (char*)malloc(cnt + 1)))
-		return (0);
-	ret[cnt] = 0;
+	cnt = digit_cnt(n);
 	if (n < 0)
+		cnt++;
+	ret = (char *)ft_calloc(cnt + 1, sizeof(char));
+	if (!ret)
+		return (NULL);
+	while (cnt)
 	{
-		while (cnt)
-		{
-			ret[cnt-- - 1] = "0123456789"[(n % 10) * -1];
-			n /= 10;
-		}
+		if (n < 0)
+			ret[cnt - 1] = "0123456789"[n % 10 * -1];
+		else
+			ret[cnt - 1] = "0123456789"[n % 10];
+		cnt--;
+		n /= 10;
+	}
+	if (n < 0)
 		ret[0] = '-';
-	}
-	else
-	{
-		while (cnt)
-		{
-			ret[cnt-- - 1] = "0123456789"[n % 10];
-			n /= 10;
-		}
-	}
 	return (ret);
 }

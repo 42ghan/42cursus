@@ -6,7 +6,7 @@
 #    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/03 20:01:24 by ghan              #+#    #+#              #
-#    Updated: 2021/05/07 10:26:58 by ghan             ###   ########.fr        #
+#    Updated: 2021/09/22 22:50:13 by ghan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,12 @@ OBJS_MAN	= $(SRCS_MAN:.c=.o)
 
 OBJS_BON	= $(SRCS_BON:.c=.o)
 
+ifdef WITH_BONUS
+	OBJS	= $(OBJS_MAN) $(OBJS_BON)
+else
+	OBJS	= $(OBJS_MAN)
+endif
+
 CC			= gcc
 
 CFLAGS		= -Wall -Werror -Wextra
@@ -74,12 +80,11 @@ all			:	$(NAME)
 %.o			:	%.c
 				$(CC) $(CFLAGS) -c $< -o $@ -I .
 
-$(NAME)		:	$(OBJS_MAN)
+$(NAME)		:	$(OBJS)
 				ar $(ARFLAGS) $@ $^
 
-bonus		:	$(NAME) $(OBJS_BON)
-				ar $(ARFLAGS) $(NAME) $(OBJS_BON)
-
+bonus		:
+				make WITH_BONUS=1 all
 clean		:
 				$(RM) $(OBJS_MAN) $(OBJS_BON)
 
@@ -87,3 +92,5 @@ fclean		:	clean
 				$(RM) $(NAME)
 
 re			:	fclean all
+
+.PHONY		:	all bonus clean fclean re
