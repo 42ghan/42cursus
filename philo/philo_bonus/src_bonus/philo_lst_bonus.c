@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_lst_bonus.c                                   :+:      :+:    :+:   */
+/*   philo_lst_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:25:00 by ghan              #+#    #+#             */
-/*   Updated: 2021/09/07 16:25:00 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 22:49:24 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl_bonus/philo_bonus.h"
+#include "philo_bonus.h"
 
 t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx)
 {
@@ -65,27 +65,6 @@ int	init_philo_profile(t_philo *head, t_opt opts, sem_t *print_s)
 	while (++i < opts.n_philo)
 	{
 		if (!philo_addback(head, philo_new(opts, print_s, i)))
-			return (0);
-	}
-	return (1);
-}
-
-int	check_fill_opts(int ac, char **av, t_opt *opts)
-{
-	if (!(ac == 5 || ac == 6))
-		return (0);
-	opts->n_philo = ft_pos_atoi(av[1]);
-	opts->time_die = ft_pos_atoi(av[2]);
-	opts->time_eat = ft_pos_atoi(av[3]);
-	opts->time_slp = ft_pos_atoi(av[4]);
-	if (opts->n_philo < 1 || opts->time_die < 0
-		|| opts->time_eat < 0 || opts->time_slp < 0)
-		return (0);
-	opts->n_must_eat = -1;
-	if (ac == 6)
-	{
-		opts->n_must_eat = ft_pos_atoi(av[5]);
-		if (opts->n_must_eat < 0)
 			return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 #    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 11:22:46 by ghan              #+#    #+#              #
-#    Updated: 2021/10/13 15:10:06 by ghan             ###   ########.fr        #
+#    Updated: 2021/10/13 22:54:57 by ghan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,14 @@ RM				=	rm -f
 SRCS_BONUS_DIR	=	./src_bonus/
 
 SRCS_BONUS		=	$(addprefix $(SRCS_BONUS_DIR), \
-						philo_bonus.c\
+						main_bonus.c\
 						utils_bonus.c\
+						utils_two_bonus.c\
 						routine_bonus.c\
-						init_lst_bonus.c\
+						philo_lst_bonus.c\
+						dinner_time_bonus.c\
+						prep_bonus.c\
+						time_bonus.c\
 						)
 
 INC_DIR_BONUS	=	./incl_bonus/

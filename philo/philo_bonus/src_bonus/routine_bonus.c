@@ -6,80 +6,40 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:27:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/09/07 16:27:45 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 23:09:49 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl_bonus/philo_bonus.h"
+#include "philo_bonus.h"
 
-long	get_now(void)
+static void	print_stat(char *status, t_philo *philo)
 {
-	struct timeval	now;
-	long			ret;
-
-	gettimeofday(&now, NULL);
-	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
-	return (ret);
-}
-
-long	time_cal(long start_t)
-{
-	long	ret;
-
-	ret = (get_now() - start_t) / 1000;
-	return (ret);
-}
-
-static int	ft_usleep(long interval)
-{
-	long	end;
-
-	end = interval + get_now();
-	while (end > get_now())
-		usleep(50);
-	return (1);
-}
-
-static void	philo_eat(t_philo *philo)
-{
-	sem_wait(philo->fork);
-	sem_wait(philo->next->fork);
 	sem_wait(philo->print_s);
-	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
-		time_cal(philo->start_t), philo->idx);
+	printf("\033[31;1m%ld\033[0mms ", time_cal(philo->start_t));
+	printf("%d %s\n", philo->idx, status);
 	sem_post(philo->print_s);
-	sem_wait(philo->print_s);
-	printf("\033[31;1m%ld\033[0mms %d has taken a fork\n",
-		time_cal(philo->start_t), philo->idx);
-	sem_post(philo->print_s);
-	if (--philo->opts.n_must_eat >= -1)
-	{
-		if (philo->opts.n_must_eat == -1)
-			exit(1);
-	}
-	sem_wait(philo->print_s);
-	printf("\033[31;1m%ld\033[0mms %d is eating\n",
-		time_cal(philo->start_t), philo->idx);
-	sem_post(philo->print_s);
-	philo->last_eat_t = get_now();
-	ft_usleep(philo->opts.time_eat * 1000);
-	sem_post(philo->fork);
-	sem_post(philo->next->fork);
 }
 
-void	start_dinner(t_philo *philo)
+void	have_dinner(t_philo *philo)
 {
 	while (1)
 	{
-		philo_eat(philo);
-		sem_wait(philo->print_s);
-		printf("\033[31;1m%ld\033[0mms %d is sleeping\n",
-			time_cal(philo->start_t), philo->idx);
-		sem_post(philo->print_s);
-		ft_usleep(philo->opts.time_slp * 1000);
-		sem_wait(philo->print_s);
-		printf("\033[31;1m%ld\033[0mms %d is thinking\n",
-			time_cal(philo->start_t), philo->idx);
-		sem_post(philo->print_s);
+		sem_wait(philo->fork);
+		sem_wait(philo->next->fork);
+		print_stat("has taken a fork", philo);
+		print_stat("has taken a fork", philo);
+		if (--philo->opts.n_must_eat >= -1)
+		{
+			if (philo->opts.n_must_eat == -1)
+				exit(EXIT_SUCCESS);
+		}
+		print_stat("is eating", philo);
+		philo->last_eat_t = get_now();
+		ft_usleep(philo->opts.time_eat);
+		sem_post(philo->fork);
+		sem_post(philo->next->fork);
+		print_stat("is sleeping", philo);
+		ft_usleep(philo->opts.time_slp);
+		print_stat("is thinking", philo);
 	}
 }

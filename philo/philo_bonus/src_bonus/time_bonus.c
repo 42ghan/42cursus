@@ -1,45 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   time_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/03 12:27:21 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:52:44 by ghan             ###   ########.fr       */
+/*   Created: 2021/10/13 22:26:42 by ghan              #+#    #+#             */
+/*   Updated: 2021/10/13 22:59:26 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-size_t	ft_strlen(const char *s)
+long	get_now(void)
 {
-	unsigned int	len;
+	struct timeval	now;
+	long			ret;
 
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void			*ret;
-	unsigned int	i;
-
-	ret = (unsigned char *)malloc(count * size);
-	if (!ret)
-		return (0);
-	i = 0;
-	while (i < count * size)
-		*(unsigned char *)(ret + i++) = 0;
+	gettimeofday(&now, NULL);
+	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
 	return (ret);
 }
 
-void	ft_putendl_fd(char *s, int fd)
+long	time_cal(long start_t)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
-	write(fd, "\n", 1);
+	long	ret;
+
+	ret = (get_now() - start_t) / 1000;
+	return (ret);
+}
+
+int	ft_usleep(long interval)
+{
+	long	end;
+
+	end = interval + get_now();
+	while (end > get_now())
+		usleep(50);
+	return (1);
 }
