@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 11:11:39 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:53:33 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 00:58:09 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_philo
 	long			last_eat_t;
 	t_opt			opts;
 	sem_t			*print_s;
-	sem_t			*fork;
+	sem_t			*forks;
 	struct s_philo	*next;
 }				t_philo;
 
@@ -55,14 +55,16 @@ void	ft_putendl_fd(char *s, int fd);
 void	*ft_calloc(size_t count, size_t size);
 int		ft_pos_atoi(const char *str);
 char	*ft_pos_itoa(int n);
-void	free_alloc(t_philo *philo, sem_t *print_s);
+void	free_alloc(t_philo *philo, sem_t *print_s, sem_t *forks_s);
 
 /* Preparation */
 
-t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx);
-int		init_philo_profile(t_philo *head, t_opt opts, sem_t *print_s);
+t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx, sem_t *forks_s);
+int		init_philo_profile(t_philo *hd, t_opt opts,
+			sem_t *print_s, sem_t *forks_s);
 int		check_fill_opts(int ac, char **av, t_opt *opts);
-int		prepare_the_table(t_philo **head, t_opt opts, sem_t *print_s);
+int		prep_the_table(t_philo **head, t_opt opts, sem_t *print_s,
+			sem_t *forks_s);
 
 /* Dinner Time */
 

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:46:58 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:58:27 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 00:58:29 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,17 @@ int	check_fill_opts(int ac, char **av, t_opt *opts)
 	return (1);
 }
 
-int	prepare_the_table(t_philo **head, t_opt opts, sem_t *print_s)
+int	prep_the_table(t_philo **head, t_opt opts, sem_t *print_s, sem_t *forks_s)
 {
-	sem_unlink("print_s");
-	print_s = sem_open("print_s", O_CREAT, S_IRUSR | S_IWUSR, 1);
-	*head = philo_new(opts, NULL, -1);
-	if (!(*head) || !init_philo_profile(*head, opts, print_s))
+	sem_unlink("forks");
+	forks_s = sem_open("forks", O_CREAT, S_IRUSR | S_IWUSR, opts.n_philo);
+	sem_unlink("print");
+	print_s = sem_open("print", O_CREAT, S_IRUSR | S_IWUSR, 1);
+	*head = philo_new(opts, NULL, -1, NULL);
+	if (!(*head) || !init_philo_profile(*head, opts, print_s, forks_s))
 	{
 		ft_putendl_fd("Error : malloc failed", STDERR_FILENO);
-		free_alloc(*head, print_s);
+		free_alloc(*head, print_s, forks_s);
 		return (0);
 	}
 	return (1);

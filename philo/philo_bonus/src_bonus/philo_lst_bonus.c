@@ -6,16 +6,15 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:25:00 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:49:24 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 00:42:14 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx)
+t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx, sem_t *forks_s)
 {
 	t_philo	*elem;
-	char	*sem_name;
 
 	elem = (t_philo *)ft_calloc(1, sizeof(t_philo));
 	if (!elem)
@@ -23,15 +22,7 @@ t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx)
 	elem->idx = idx;
 	elem->opts = opts;
 	elem->print_s = print_s;
-	if (idx >= 0)
-	{
-		sem_name = ft_pos_itoa(idx);
-		if (!sem_name)
-			return (NULL);
-		sem_unlink(sem_name);
-		elem->fork = sem_open(sem_name, O_CREAT, S_IRUSR | S_IWUSR, 1);
-		free(sem_name);
-	}
+	elem->forks = forks_s;
 	return (elem);
 }
 
@@ -54,17 +45,17 @@ static int	philo_addback(t_philo *head, t_philo *new)
 	return (1);
 }
 
-int	init_philo_profile(t_philo *head, t_opt opts, sem_t *print_s)
+int	init_philo_profile(t_philo *hd, t_opt opts, sem_t *print_s, sem_t *forks_s)
 {
 	int	i;
 
-	if (!head)
+	if (!hd)
 		return (0);
-	head->next = NULL;
+	hd->next = NULL;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (!philo_addback(head, philo_new(opts, print_s, i)))
+		if (!philo_addback(hd, philo_new(opts, print_s, i, forks_s)))
 			return (0);
 	}
 	return (1);

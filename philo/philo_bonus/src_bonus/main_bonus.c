@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 11:11:47 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:50:22 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 00:57:54 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@ int	main(int argc, char *argv[])
 	t_opt		opts;
 	t_philo		*head;
 	sem_t		*print_s;
+	sem_t		*forks_s;
 
 	print_s = NULL;
+	forks_s = NULL;
 	if (!check_fill_opts(argc, argv, &opts)
-		|| !prepare_the_table(&head, opts, print_s))
+		|| !prep_the_table(&head, opts, print_s, forks_s))
 		return (EXIT_FAILURE);
 	dine_with_fork(head->next, opts);
-	free_alloc(head, print_s);
+	free_alloc(head, print_s, forks_s);
 	return (EXIT_SUCCESS);
 }

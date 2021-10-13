@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:53:06 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:53:15 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 00:57:22 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,14 @@ char	*ft_pos_itoa(int n)
 	return (ret);
 }
 
-void	free_alloc(t_philo *philo, sem_t *print_s)
+void	free_alloc(t_philo *philo, sem_t *print_s, sem_t *forks_s)
 {
 	t_philo	*cur;
 
 	sem_close(print_s);
+	sem_unlink("print");
+	sem_close(forks_s);
+	sem_unlink("forks");
 	cur = philo->next;
 	free(philo);
 	philo = cur;
@@ -70,7 +73,6 @@ void	free_alloc(t_philo *philo, sem_t *print_s)
 	{
 		philo = cur;
 		cur = philo->next;
-		sem_close(philo->fork);
 		free(philo);
 		philo = NULL;
 	}
