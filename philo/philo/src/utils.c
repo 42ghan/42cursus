@@ -6,11 +6,11 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/23 14:59:47 by ghan              #+#    #+#             */
-/*   Updated: 2021/08/23 14:59:47 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 21:48:44 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "philo.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -20,6 +20,14 @@ size_t	ft_strlen(const char *s)
 	while (s[len])
 		len++;
 	return (len);
+}
+
+void	ft_putendl_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
+	write(fd, "\n", 1);
 }
 
 void	*ft_calloc(size_t count, size_t size)

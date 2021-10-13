@@ -6,7 +6,7 @@
 #    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 11:22:46 by ghan              #+#    #+#              #
-#    Updated: 2021/10/13 15:10:10 by ghan             ###   ########.fr        #
+#    Updated: 2021/10/13 21:59:50 by ghan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,13 @@ RM				=	rm -f
 SRCS_MAN_DIR	=	./src/
 
 SRCS_MAN		=	$(addprefix $(SRCS_MAN_DIR), \
-						philo.c\
+						main.c\
+						prep.c\
 						utils.c\
 						routine.c\
-						init_lst.c\
+						philo_lst.c\
+						dinner_time.c\
+						time.c\
 						)
 
 INC_DIR_MAN		=	./include/

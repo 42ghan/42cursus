@@ -6,11 +6,11 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:39:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/08/31 19:39:25 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 21:48:38 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "philo.h"
 
 t_philo	*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *print_m)
 {
