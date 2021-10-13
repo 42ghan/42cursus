@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:02:40 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 23:00:15 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	monitor_end(t_philo **cur, t_opt opts)
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if ((*cur)->last_eat_t + opts.time_die * 1000 <= get_now())
+		if ((*cur)->last_eat_t + opts.time_die <= get_now())
 			return (ADIOS_PHILO);
 		if (*((*cur)->n_eat) >= opts.n_must_eat * opts.n_philo
 			&& opts.n_must_eat > 0)

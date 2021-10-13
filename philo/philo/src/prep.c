@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:49:02 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 21:51:22 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/13 23:00:37 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	fill_opts(t_opt *opts, char **av)
 {
 	opts->n_philo = ft_pos_atoi(av[1]);
-	opts->time_die = ft_pos_atoi(av[2]);
-	opts->time_eat = ft_pos_atoi(av[3]);
-	opts->time_slp = ft_pos_atoi(av[4]);
+	opts->time_die = ft_pos_atoi(av[2]) * 1000;
+	opts->time_eat = ft_pos_atoi(av[3]) * 1000;
+	opts->time_slp = ft_pos_atoi(av[4]) * 1000;
 }
 
 int	check_fill_opts(int ac, char **av, t_opt *opts)
