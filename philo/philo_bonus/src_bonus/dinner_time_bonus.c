@@ -6,11 +6,26 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:44:54 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 22:58:40 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 17:51:53 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+
+static void	dinner_is_over(t_philo *cur, int n_philo)
+{
+	ft_putendl_fd("Error : no show...", STDERR_FILENO);
+	while (--n_philo >= 0)
+	{
+		kill(cur->pid, SIGINT);
+		cur = cur->next;
+	}
+	sem_close(cur->forks);
+	sem_unlink("forks");
+	sem_close(cur->print_s);
+	sem_unlink("print");
+	exit(EXIT_FAILURE);
+}
 
 static void	create_philos(t_philo **cur, t_opt opts)
 {
@@ -26,8 +41,12 @@ static void	create_philos(t_philo **cur, t_opt opts)
 		(*cur)->pid = fork();
 		if (!((*cur)->pid))
 			return ;
+		else if ((*cur)->pid < 0)
+			break ;
 		*cur = (*cur)->next;
 	}
+	if ((*cur)->pid < 0)
+		dinner_is_over(*cur, (*cur)->opts.n_philo);
 }
 
 static void	*monitor_end(void *arg)
@@ -49,7 +68,12 @@ void	dine_with_fork(t_philo *cur, t_opt opts)
 	create_philos(&cur, opts);
 	if (!(cur->pid))
 	{
-		pthread_create(&(cur->monitor), NULL, monitor_end, cur);
+		if (pthread_create(&(cur->monitor), NULL, monitor_end, cur))
+		{
+			ft_putendl_fd("Error : philo failed to create a monitor thread",
+				STDERR_FILENO);
+			exit(EXIT_FAILURE);
+		}
 		have_dinner(cur);
 		pthread_join(cur->monitor, NULL);
 	}

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:53:06 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 00:57:22 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 12:57:03 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,20 @@
 
 int	ft_pos_atoi(const char *str)
 {
-	int	ret;
-	int	i;
+	int		ret;
+	size_t	i;
 
 	ret = 0;
 	i = 0;
 	if (ft_strlen(str) > 10
-		|| (ft_strlen(str) == 10 && str[0] != 2))
+		|| (ft_strlen(str) == 10 && str[0] > '2'))
 		return (-1);
 	if (str[i] < '0' || str[i] > '9')
 		return (-1);
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
 		ret = ret * 10 + str[i++] - '0';
+	if (i != ft_strlen(str))
+		return (-1);
 	return (ret);
 }
 
