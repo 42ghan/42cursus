@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:29:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 13:48:04 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 15:53:21 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	print_stat(char *status, t_philo *philo, int eat_flag)
 {
 	if (eat_flag)
-		*(philo->n_eat) += 1;
+		philo->n_eat++;
 	if (*philo->vital)
 		return ;
 	pthread_mutex_lock(philo->print_m);
@@ -30,7 +30,7 @@ static void	print_stat(char *status, t_philo *philo, int eat_flag)
 	{
 		if (philo->opts.n_must_eat < 0)
 			pthread_mutex_unlock(philo->print_m);
-		else if (*(philo->n_eat) < philo->opts.n_philo * philo->opts.n_must_eat)
+		else if (philo->n_eat <= philo->opts.n_must_eat)
 			pthread_mutex_unlock(philo->print_m);
 	}
 }

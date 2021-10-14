@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 14:40:53 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 15:25:59 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static void	monitor_end(t_philo *cur, t_opt opts, int *vital)
 			*vital = ADIOS_PHILO;
 			break ;
 		}
-		if (*(cur->n_eat) >= opts.n_must_eat * opts.n_philo
-			&& opts.n_must_eat > 0)
+		if (opts.n_must_eat > 0 && cur->n_eat > opts.n_must_eat)
 		{
 			*vital = FULL_STOMACH;
 			break ;

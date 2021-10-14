@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/23 12:14:17 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 12:44:04 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 15:25:46 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_philo
 {
 	pthread_t		tid;
 	int				idx;
-	int				*n_eat;
+	int				n_eat;
 	int				*vital;
 	long			last_eat_t;
 	long			start_t;
@@ -62,11 +62,11 @@ void		free_alloc(t_philo *philo);
 /* Preparation */
 
 int			check_fill_opts(int ac, char **av, t_opt *opts);
-int			prepare_the_table(t_philo **head, t_opt opts, int *n_eat,
+int			prepare_the_table(t_philo **head, t_opt opts,
 				pthread_mutex_t *print_m);
-int			init_philo_profile(t_philo *head, t_opt opts, int *n_eat,
+int			init_philo_profile(t_philo *head, t_opt opts,
 				pthread_mutex_t *print_m);
-t_philo		*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *print_m);
+t_philo		*philo_new(t_opt opts, pthread_mutex_t *print_m);
 
 /* Dinner Time */
 

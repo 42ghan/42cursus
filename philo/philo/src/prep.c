@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:49:02 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 13:03:40 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 15:26:04 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,15 @@ static int	init_fork_mutexes(t_philo *cur)
 	return (1);
 }
 
-int	prepare_the_table(t_philo **head, t_opt opts, int *n_eat,
-		pthread_mutex_t *print_m)
+int	prepare_the_table(t_philo **head, t_opt opts, pthread_mutex_t *print_m)
 {
-	*n_eat = 0;
 	if (pthread_mutex_init(print_m, NULL))
 	{
 		ft_putendl_fd("Error : print mutex init failed", STDERR_FILENO);
 		return (0);
 	}
-	*head = philo_new(opts, NULL, NULL);
-	if (!(*head) || !init_philo_profile(*head, opts, n_eat, print_m))
+	*head = philo_new(opts, NULL);
+	if (!(*head) || !init_philo_profile(*head, opts, print_m))
 	{
 		ft_putendl_fd("Error : malloc failed", STDERR_FILENO);
 		free_alloc(*head);
