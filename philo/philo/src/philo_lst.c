@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_lst.c                                         :+:      :+:    :+:   */
+/*   philo_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:39:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 21:48:38 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 12:07:07 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_philo	*philo_new(t_opt opts, int *n_eat, pthread_mutex_t *print_m)
 	elem->n_eat = n_eat;
 	elem->print_m = print_m;
 	elem->opts = opts;
-	pthread_mutex_init(&(elem->fork), NULL);
 	return (elem);
 }
 

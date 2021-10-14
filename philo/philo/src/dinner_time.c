@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 23:00:15 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 12:24:25 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,11 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		cur->start_t = start_t;
 		cur->last_eat_t = start_t;
 		cur->vital = vital;
-		pthread_create(&(cur->tid), NULL, philo_action, cur);
+		if (pthread_create(&(cur->tid), NULL, philo_action, cur))
+		{
+			*vital = NO_SHOW;
+			break ;
+		}	
 		cur = cur->next;
 		if (cur->idx % 2 == 1)
 			ft_usleep(50);

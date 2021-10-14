@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:49:02 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 23:00:37 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 13:03:40 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	fill_opts(t_opt *opts, char **av)
 {
 	opts->n_philo = ft_pos_atoi(av[1]);
-	opts->time_die = ft_pos_atoi(av[2]) * 1000;
-	opts->time_eat = ft_pos_atoi(av[3]) * 1000;
-	opts->time_slp = ft_pos_atoi(av[4]) * 1000;
+	opts->time_die = (long)ft_pos_atoi(av[2]) * 1000;
+	opts->time_eat = (long)ft_pos_atoi(av[3]) * 1000;
+	opts->time_slp = (long)ft_pos_atoi(av[4]) * 1000;
 }
 
 int	check_fill_opts(int ac, char **av, t_opt *opts)
@@ -47,16 +47,42 @@ int	check_fill_opts(int ac, char **av, t_opt *opts)
 	return (1);
 }
 
+static int	init_fork_mutexes(t_philo *cur)
+{
+	int	i;
+
+	i = -1;
+	while (++i < cur->opts.n_philo)
+	{
+		if (pthread_mutex_init(&(cur->fork), NULL))
+			return (0);
+		cur = cur->next;
+	}
+	return (1);
+}
+
 int	prepare_the_table(t_philo **head, t_opt opts, int *n_eat,
 		pthread_mutex_t *print_m)
 {
 	*n_eat = 0;
-	pthread_mutex_init(print_m, NULL);
+	if (pthread_mutex_init(print_m, NULL))
+	{
+		ft_putendl_fd("Error : print mutex init failed", STDERR_FILENO);
+		return (0);
+	}
 	*head = philo_new(opts, NULL, NULL);
 	if (!(*head) || !init_philo_profile(*head, opts, n_eat, print_m))
 	{
 		ft_putendl_fd("Error : malloc failed", STDERR_FILENO);
 		free_alloc(*head);
+		pthread_mutex_destroy(print_m);
+		return (0);
+	}
+	if (!init_fork_mutexes((*head)->next))
+	{
+		ft_putendl_fd("Error : fork mutex init failed", STDERR_FILENO);
+		free_alloc(*head);
+		pthread_mutex_destroy(print_m);
 		return (0);
 	}
 	return (1);
