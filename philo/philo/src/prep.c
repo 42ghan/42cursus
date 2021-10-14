@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:49:02 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 15:26:04 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 17:21:55 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	check_fill_opts(int ac, char **av, t_opt *opts)
 		return (0);
 	}
 	fill_opts(opts, av);
-	if (opts->n_philo < 1 || opts->time_die < 0
+	if (opts->n_philo < 1 || opts->n_philo > 199 || opts->time_die < 0
 		|| opts->time_eat < 0 || opts->time_slp < 0)
 	{
 		ft_putendl_fd("Error : Wrong ARGV", STDERR_FILENO);
