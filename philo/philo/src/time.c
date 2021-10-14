@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:59:35 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/13 21:59:42 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 14:36:52 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,14 @@
 long	get_now(void)
 {
 	struct timeval	now;
-	long			ret;
 
 	gettimeofday(&now, NULL);
-	ret = (long)now.tv_sec * 1000000 + (long)now.tv_usec;
-	return (ret);
+	return ((long)now.tv_sec * 1000000 + (long)now.tv_usec);
 }
 
 long	time_cal(long start_t)
 {
-	long	ret;
-
-	ret = (get_now() - start_t) / 1000;
-	return (ret);
+	return ((get_now() - start_t) / 1000);
 }
 
 int	ft_usleep(long interval)
@@ -36,6 +31,6 @@ int	ft_usleep(long interval)
 
 	end = interval + get_now();
 	while (end > get_now())
-		usleep(50);
+		usleep(interval / 4);
 	return (1);
 }

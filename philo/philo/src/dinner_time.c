@@ -6,45 +6,38 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 12:24:25 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 14:40:53 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	monitor_end(t_philo **cur, t_opt opts)
+static void	monitor_end(t_philo *cur, t_opt opts, int *vital)
 {
-	int	i;
-
-	i = -1;
-	while (++i < opts.n_philo)
+	while (1)
 	{
-		if ((*cur)->last_eat_t + opts.time_die <= get_now())
-			return (ADIOS_PHILO);
-		if (*((*cur)->n_eat) >= opts.n_must_eat * opts.n_philo
+		if (cur->last_eat_t + opts.time_die <= get_now())
+		{
+			pthread_mutex_lock(cur->print_m);
+			printf("\033[31;1m%ld\033[0mms %d died\n",
+				time_cal(cur->start_t), cur->idx);
+			*vital = ADIOS_PHILO;
+			break ;
+		}
+		if (*(cur->n_eat) >= opts.n_must_eat * opts.n_philo
 			&& opts.n_must_eat > 0)
-			return (FULL_STOMACH);
-		*cur = (*cur)->next;
+		{
+			*vital = FULL_STOMACH;
+			break ;
+		}
+		cur = cur->next;
 	}
-	return (0);
 }
 
 void	monitor_death(t_philo *cur, t_opt opts,
 				pthread_mutex_t *print_m, int *vital)
 {
-	while (*vital == ENJOY_WHILE_ALIVE)
-	{
-		*vital = monitor_end(&cur, opts);
-		if (*vital)
-		{
-			if (*vital == 1)
-			{
-				pthread_mutex_lock(print_m);
-				printf("\033[31;1m%ld\033[0mms %d died\n",
-					time_cal(cur->start_t), cur->idx);
-			}
-		}
-	}
+	monitor_end(cur, opts, vital);
 	while (--opts.n_philo >= 0)
 	{
 		pthread_join(cur->tid, NULL);
@@ -71,6 +64,6 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		}	
 		cur = cur->next;
 		if (cur->idx % 2 == 1)
-			ft_usleep(50);
+			usleep(50);
 	}
 }

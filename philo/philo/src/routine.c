@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:29:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 12:30:04 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/14 13:48:04 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	*philo_action(void *arg)
 		pthread_mutex_lock(&(philo->next->fork));
 		print_stat("has taken a fork", philo, 0);
 		print_stat("has taken a fork", philo, 0);
-		print_stat("is eating", philo, 1);
 		philo->last_eat_t = get_now();
+		print_stat("is eating", philo, 1);
 		ft_usleep(philo->opts.time_eat);
 		pthread_mutex_unlock(&(philo->fork));
 		pthread_mutex_unlock(&(philo->next->fork));
