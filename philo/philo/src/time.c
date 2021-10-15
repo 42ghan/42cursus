@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:59:35 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 15:36:37 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/15 22:05:50 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int	ft_usleep(long interval)
 
 	end = interval + get_now();
 	while (end > get_now())
-		usleep(50);
+		usleep(100);
 	return (1);
 }

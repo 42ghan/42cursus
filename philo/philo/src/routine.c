@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:29:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/15 20:51:22 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/15 22:06:38 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ static void	print_eat(char *status, t_philo *philo)
 {
 	if (*philo->vital)
 		return ;
-	philo->n_eat++;
 	pthread_mutex_lock(philo->print_m);
 	if (*philo->vital == ENJOY_WHILE_ALIVE)
 	{
+		philo->n_eat++;
+		philo->last_eat_t = get_now();
 		printf("\033[31;1m%ld\033[0mms ", time_cal(philo->start_t));
 		printf("%d %s\n", philo->idx, status);
 	}
@@ -40,7 +41,6 @@ static void	print_eat(char *status, t_philo *philo)
 		pthread_mutex_unlock(philo->print_m);
 	else if (philo->n_eat <= philo->opts.n_must_eat)
 		pthread_mutex_unlock(philo->print_m);
-	philo->last_eat_t = get_now();
 	ft_usleep(philo->opts.time_eat);
 }
 
