@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 15:25:59 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/15 15:49:38 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,25 @@ void	monitor_death(t_philo *cur, t_opt opts,
 	pthread_mutex_destroy(print_m);
 }
 
+static void	odd_philos_start(t_philo *cur, t_opt opts, int *vital)
+{
+	int	i;
+
+	i = -1;
+	while (++i < opts.n_philo)
+	{
+		if (cur->idx % 2)
+		{
+			if (pthread_create(&(cur->tid), NULL, philo_action, cur))
+			{
+				*vital = NO_SHOW;
+				break ;
+			}
+		}	
+		cur = cur->next;
+	}
+}
+
 void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 {
 	int	i;
@@ -56,13 +75,15 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		cur->start_t = start_t;
 		cur->last_eat_t = start_t;
 		cur->vital = vital;
-		if (pthread_create(&(cur->tid), NULL, philo_action, cur))
+		if (!(cur->idx % 2))
 		{
-			*vital = NO_SHOW;
-			break ;
-		}	
+			if (pthread_create(&(cur->tid), NULL, philo_action, cur))
+			{
+				*vital = NO_SHOW;
+				break ;
+			}
+		}
 		cur = cur->next;
-		if (cur->idx % 2 == 1)
-			usleep(50);
 	}
+	odd_philos_start(cur, opts, vital);	
 }
