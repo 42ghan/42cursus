@@ -6,7 +6,7 @@
 #    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 11:22:46 by ghan              #+#    #+#              #
-#    Updated: 2021/10/13 22:54:57 by ghan             ###   ########.fr        #
+#    Updated: 2021/10/16 15:55:30 by ghan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS_BONUS		=	$(addprefix $(SRCS_BONUS_DIR), \
 						dinner_time_bonus.c\
 						prep_bonus.c\
 						time_bonus.c\
+						check_full_bonus.c\
 						)
 
 INC_DIR_BONUS	=	./incl_bonus/

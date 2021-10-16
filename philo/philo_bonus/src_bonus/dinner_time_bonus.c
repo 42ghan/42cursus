@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:44:54 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 17:51:53 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/16 15:59:20 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,26 @@ static void	dinner_is_over(t_philo *cur, int n_philo)
 	sem_unlink("forks");
 	sem_close(cur->print_s);
 	sem_unlink("print");
+	if (cur->opts.n_must_eat > 0)
+	{
+		sem_close(cur->full_s);
+		sem_unlink("full");
+	}
 	exit(EXIT_FAILURE);
+}
+
+static void	*monitor_end(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	while (philo->last_eat_t + philo->opts.time_die > get_now())
+		usleep(10);
+	sem_wait(philo->print_s);
+	printf("\033[31;1m%ld\033[0mms %d died\n",
+		time_cal(philo->start_t), philo->idx);
+	exit(EXIT_FAILURE);
+	return (NULL);
 }
 
 static void	create_philos(t_philo **cur, t_opt opts)
@@ -49,28 +68,17 @@ static void	create_philos(t_philo **cur, t_opt opts)
 		dinner_is_over(*cur, (*cur)->opts.n_philo);
 }
 
-static void	*monitor_end(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	while (philo->last_eat_t + philo->opts.time_die > get_now())
-		usleep(10);
-	sem_wait(philo->print_s);
-	printf("\033[31;1m%ld\033[0mms %d died\n",
-		time_cal(philo->start_t), philo->idx);
-	exit(EXIT_FAILURE);
-	return (NULL);
-}
-
 void	dine_with_fork(t_philo *cur, t_opt opts)
 {
+	pthread_t	full_thrd;
+
+	full_thrd = NULL;
 	create_philos(&cur, opts);
 	if (!(cur->pid))
 	{
 		if (pthread_create(&(cur->monitor), NULL, monitor_end, cur))
 		{
-			ft_putendl_fd("Error : philo failed to create a monitor thread",
+			ft_putendl_fd("Error : failed to create a monitoring thread",
 				STDERR_FILENO);
 			exit(EXIT_FAILURE);
 		}
@@ -79,11 +87,11 @@ void	dine_with_fork(t_philo *cur, t_opt opts)
 	}
 	else
 	{
+		if (opts.n_must_eat > 0)
+			if (!check_full(cur, &full_thrd))
+				return ;
 		waitpid(-1, NULL, 0);
-		while (--opts.n_philo >= 0)
-		{
-			kill(cur->pid, SIGINT);
-			cur = cur->next;
-		}
+		kill_philos(cur, opts.n_philo);
+		pthread_join(full_thrd, NULL);
 	}
 }

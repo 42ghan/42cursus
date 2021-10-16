@@ -19,10 +19,11 @@ t_philo	*philo_new(t_opt opts, sem_t *print_s, int idx, sem_t *forks_s)
 	elem = (t_philo *)ft_calloc(1, sizeof(t_philo));
 	if (!elem)
 		return (NULL);
-	elem->idx = idx;
+	elem->idx = idx + 1;
 	elem->opts = opts;
 	elem->print_s = print_s;
 	elem->forks = forks_s;
+	elem->full_s = NULL;
 	return (elem);
 }
 

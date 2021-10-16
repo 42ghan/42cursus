@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 16:27:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 01:00:11 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/16 16:04:53 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ static void	print_stat(char *status, t_philo *philo)
 
 void	have_dinner(t_philo *philo)
 {
+	int	eat_cnt;
+
+	eat_cnt = 0;
 	while (1)
 	{
 		sem_wait(philo->forks);
@@ -29,10 +32,11 @@ void	have_dinner(t_philo *philo)
 		sem_wait(philo->forks);
 		print_stat("has taken a fork", philo);
 		print_stat("is eating", philo);
-		if (--philo->opts.n_must_eat >= -1)
+		if (philo->opts.n_must_eat > 0)
 		{
-			if (philo->opts.n_must_eat == -1)
-				exit(EXIT_SUCCESS);
+			eat_cnt++;
+			if (eat_cnt == philo->opts.n_must_eat)
+				sem_post(philo->full_s);
 		}
 		philo->last_eat_t = get_now();
 		ft_usleep(philo->opts.time_eat);

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:46:58 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 17:26:26 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/16 15:59:30 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,32 @@ int	prep_the_table(t_philo **head, t_opt opts, sem_t *print_s, sem_t *forks_s)
 	if (!(*head) || !init_philo_profile(*head, opts, print_s, forks_s))
 	{
 		ft_putendl_fd("Error : malloc failed", STDERR_FILENO);
-		free_alloc(*head, print_s, forks_s);
+		free_alloc(*head, print_s, forks_s, NULL);
 		return (0);
+	}
+	return (1);
+}
+
+int	exercise_self_control(t_philo *head, sem_t *full_s,
+				sem_t *print_s, sem_t *forks_s)
+{
+	t_philo	*cur;
+	int		i;
+
+	sem_unlink("full");
+	full_s = sem_open("forks", O_CREAT, S_IRUSR | S_IWUSR,
+			head->next->opts.n_philo);
+	if (full_s == SEM_FAILED)
+	{
+		free_alloc(head, print_s, forks_s, NULL);
+		return (0);
+	}
+	cur = head->next;
+	i = -1;
+	while (++i < cur->opts.n_philo)
+	{
+		cur->full_s = full_s;
+		cur = cur->next;
 	}
 	return (1);
 }

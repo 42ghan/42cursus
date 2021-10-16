@@ -1,36 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_bonus.c                                       :+:      :+:    :+:   */
+/*   check_full_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/13 22:26:42 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 16:30:57 by ghan             ###   ########.fr       */
+/*   Created: 2021/10/16 15:40:10 by ghan              #+#    #+#             */
+/*   Updated: 2021/10/16 16:00:06 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-long	get_now(void)
+static void	*cnt_eat(void *arg)
 {
-	struct timeval	now;
+	t_philo	*philo;
+	int		i;
 
-	gettimeofday(&now, NULL);
-	return ((long)now.tv_sec * 1000000 + (long)now.tv_usec);
+	philo = (t_philo *)arg;
+	i = -1;
+	while (++i < philo->opts.n_philo)
+		sem_wait(philo->full_s);
+	return (NULL);
 }
 
-long	time_cal(long start_t)
+int	check_full(t_philo *philo, pthread_t *full_thrd)
 {
-	return ((get_now() - start_t) / 1000);
-}
-
-int	ft_usleep(long interval)
-{
-	long	end;
-
-	end = interval + get_now();
-	while (end > get_now())
-		usleep(100);
+	if (pthread_create(full_thrd, NULL, cnt_eat, philo))
+	{
+		kill_philos(philo, philo->opts.n_philo);
+		ft_putendl_fd("Error : failed to create a full check thread",
+			STDERR_FILENO);
+		return (0);
+	}
 	return (1);
 }

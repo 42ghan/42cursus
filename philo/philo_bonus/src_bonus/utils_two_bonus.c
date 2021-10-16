@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_two_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: ghan <ghan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:53:06 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 12:57:03 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/16 15:48:14 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*ft_pos_itoa(int n)
 	return (ret);
 }
 
-void	free_alloc(t_philo *philo, sem_t *print_s, sem_t *forks_s)
+void	free_alloc(t_philo *ph, sem_t *print_s, sem_t *forks_s, sem_t *full_s)
 {
 	t_philo	*cur;
 
@@ -64,18 +64,29 @@ void	free_alloc(t_philo *philo, sem_t *print_s, sem_t *forks_s)
 	sem_unlink("print");
 	sem_close(forks_s);
 	sem_unlink("forks");
-	cur = philo->next;
-	free(philo);
-	philo = cur;
-	while (philo->next != cur)
-		philo = philo->next;
-	philo->next = NULL;
-	philo = cur;
+	sem_close(full_s);
+	sem_unlink("full");
+	cur = ph->next;
+	free(ph);
+	ph = cur;
+	while (ph->next != cur)
+		ph = ph->next;
+	ph->next = NULL;
+	ph = cur;
 	while (cur)
 	{
-		philo = cur;
-		cur = philo->next;
-		free(philo);
-		philo = NULL;
+		ph = cur;
+		cur = ph->next;
+		free(ph);
+		ph = NULL;
+	}
+}
+
+void	kill_philos(t_philo *philo, int n)
+{
+	while (--n >= 0)
+	{
+		kill(philo->pid, SIGINT);
+		philo = philo->next;
 	}
 }
