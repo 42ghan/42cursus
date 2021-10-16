@@ -71,6 +71,7 @@ t_philo		*philo_new(t_opt opts, pthread_mutex_t *print_m);
 /* Dinner Time */
 
 void		*philo_action(void *arg);
+void		*mr_lonely(void *arg);
 void		start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital);
 void		monitor_death(t_philo *cur, t_opt opts,
 				pthread_mutex_t *print_m, int *vital);

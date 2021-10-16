@@ -68,3 +68,17 @@ void	*philo_action(void *arg)
 	pthread_mutex_unlock(philo->print_m);
 	return (NULL);
 }
+
+void	*mr_lonely(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(&(philo->fork));
+	print_stat("has taken a fork", philo);
+	while (*philo->vital == ENJOY_WHILE_ALIVE)
+		usleep(100);
+	pthread_mutex_unlock(&(philo->fork));
+	pthread_mutex_unlock(philo->print_m);
+	return (NULL);
+}

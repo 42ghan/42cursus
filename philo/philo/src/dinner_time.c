@@ -59,7 +59,7 @@ static void	odd_philos_start(t_philo *cur, t_opt opts, int *vital)
 				*vital = NO_SHOW;
 				break ;
 			}
-		}	
+		}
 		cur = cur->next;
 	}
 }
@@ -68,7 +68,6 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 {
 	int	i;
 
-	*vital = ENJOY_WHILE_ALIVE;
 	i = -1;
 	while (++i < opts.n_philo)
 	{
@@ -77,7 +76,13 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		cur->vital = vital;
 		if (!(cur->idx % 2))
 		{
-			if (pthread_create(&(cur->tid), NULL, philo_action, cur))
+			if (opts.n_philo == 1)
+			{
+				if (pthread_create(&(cur->tid), NULL, mr_lonely, cur))
+					*vital = NO_SHOW;
+				break ;
+			}
+			else if (pthread_create(&(cur->tid), NULL, philo_action, cur))
 			{
 				*vital = NO_SHOW;
 				break ;
@@ -85,5 +90,5 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		}
 		cur = cur->next;
 	}
-	odd_philos_start(cur, opts, vital);	
+	odd_philos_start(cur, opts, vital);
 }
