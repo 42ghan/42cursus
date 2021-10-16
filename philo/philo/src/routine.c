@@ -49,7 +49,7 @@ void	*philo_action(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->idx % 2)
+	if (!(philo->idx % 2))
 		ft_usleep(philo->opts.time_eat / 2);
 	while (*philo->vital == ENJOY_WHILE_ALIVE)
 	{

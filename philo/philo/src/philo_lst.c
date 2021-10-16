@@ -41,7 +41,7 @@ static int	philo_addback(t_philo *head, t_philo *new, int idx)
 		cur = cur->next;
 	cur->next = new;
 	new->next = head->next;
-	new->idx = idx;
+	new->idx = idx + 1;
 	return (1);
 }
 

@@ -52,7 +52,7 @@ static void	odd_philos_start(t_philo *cur, t_opt opts, int *vital)
 	i = -1;
 	while (++i < opts.n_philo)
 	{
-		if (cur->idx % 2)
+		if (!(cur->idx % 2))
 		{
 			if (pthread_create(&(cur->tid), NULL, philo_action, cur))
 			{
@@ -74,7 +74,7 @@ void	start_dinner(t_philo *cur, t_opt opts, long start_t, int *vital)
 		cur->start_t = start_t;
 		cur->last_eat_t = start_t;
 		cur->vital = vital;
-		if (!(cur->idx % 2))
+		if (cur->idx % 2)
 		{
 			if (opts.n_philo == 1)
 			{
