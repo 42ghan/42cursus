@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:46:58 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/16 15:59:30 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 18:36:48 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ int	exercise_self_control(t_philo *head, sem_t *full_s,
 	int		i;
 
 	sem_unlink("full");
-	full_s = sem_open("forks", O_CREAT, S_IRUSR | S_IWUSR,
-			head->next->opts.n_philo);
+	full_s = sem_open("full", O_CREAT, S_IRUSR | S_IWUSR, 0);
 	if (full_s == SEM_FAILED)
 	{
 		free_alloc(head, print_s, forks_s, NULL);

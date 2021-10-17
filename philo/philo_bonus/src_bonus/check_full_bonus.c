@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 15:40:10 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/16 16:00:06 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 18:52:04 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	*cnt_eat(void *arg)
 	i = -1;
 	while (++i < philo->opts.n_philo)
 		sem_wait(philo->full_s);
+	kill_philos(philo, philo->opts.n_philo);
 	return (NULL);
 }
 
