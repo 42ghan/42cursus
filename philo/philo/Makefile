@@ -6,7 +6,7 @@
 #    By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 11:22:46 by ghan              #+#    #+#              #
-#    Updated: 2021/10/13 21:59:50 by ghan             ###   ########.fr        #
+#    Updated: 2021/10/17 23:01:34 by ghan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS_MAN		=	$(addprefix $(SRCS_MAN_DIR), \
 						philo_lst.c\
 						dinner_time.c\
 						time.c\
+						monitor.c\
 						)
 
 INC_DIR_MAN		=	./include/

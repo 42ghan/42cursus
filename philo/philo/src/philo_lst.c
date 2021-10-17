@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:39:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 15:24:35 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 22:51:43 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_philo	*philo_new(t_opt opts, pthread_mutex_t *print_m)
 	if (!elem)
 		return (NULL);
 	elem->n_eat = 0;
+	elem->check_eat = NOT_YET;
 	elem->print_m = print_m;
 	elem->opts = opts;
 	return (elem);

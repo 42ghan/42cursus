@@ -6,49 +6,18 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 21:52:44 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/15 21:06:23 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 22:58:00 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	monitor_end(t_philo *cur, t_opt opts, int *vital)
-{
-	while (1)
-	{
-		if (cur->last_eat_t + opts.time_die <= get_now())
-		{
-			pthread_mutex_lock(cur->print_m);
-			printf("\033[31;1m%ld\033[0mms %d died\n",
-				time_cal(cur->start_t), cur->idx);
-			*vital = ADIOS_PHILO;
-			break ;
-		}
-		if (opts.n_must_eat > 0 && cur->n_eat > opts.n_must_eat)
-		{
-			*vital = FULL_STOMACH;
-			break ;
-		}
-		cur = cur->next;
-	}
-}
-
-void	monitor_death(t_philo *cur, t_opt opts,
-				pthread_mutex_t *print_m, int *vital)
-{
-	monitor_end(cur, opts, vital);
-	while (--opts.n_philo >= 0)
-	{
-		pthread_join(cur->tid, NULL);
-		cur = cur->next;
-	}
-	pthread_mutex_destroy(print_m);
-}
-
 static void	odd_philos_start(t_philo *cur, t_opt opts, int *vital)
 {
 	int	i;
 
+	if (*vital == NO_SHOW || opts.n_philo == 1)
+		return ;
 	i = -1;
 	while (++i < opts.n_philo)
 	{

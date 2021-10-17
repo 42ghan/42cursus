@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:29:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/15 22:06:38 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 23:23:44 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ static void	print_stat(char *status, t_philo *philo)
 		return ;
 	pthread_mutex_lock(philo->print_m);
 	if (*philo->vital == ENJOY_WHILE_ALIVE)
-	{
-		printf("\033[31;1m%ld\033[0mms ", time_cal(philo->start_t));
-		printf("%d %s\n", philo->idx, status);
-	}
+		printf("\033[31;1m%ld\033[0mms %d %s\n",
+			time_cal(philo->start_t), philo->idx, status);
 	pthread_mutex_unlock(philo->print_m);
 }
 
@@ -31,17 +29,12 @@ static void	print_eat(char *status, t_philo *philo)
 		return ;
 	pthread_mutex_lock(philo->print_m);
 	if (*philo->vital == ENJOY_WHILE_ALIVE)
-	{
-		philo->n_eat++;
-		philo->last_eat_t = get_now();
-		printf("\033[31;1m%ld\033[0mms ", time_cal(philo->start_t));
-		printf("%d %s\n", philo->idx, status);
-	}
-	if (philo->opts.n_must_eat < 0)
-		pthread_mutex_unlock(philo->print_m);
-	else if (philo->n_eat <= philo->opts.n_must_eat)
-		pthread_mutex_unlock(philo->print_m);
+		printf("\033[31;1m%ld\033[0mms %d %s\n",
+			time_cal(philo->start_t), philo->idx, status);
+	philo->last_eat_t = get_now();
+	pthread_mutex_unlock(philo->print_m);
 	ft_usleep(philo->opts.time_eat);
+	philo->n_eat++;
 }
 
 void	*philo_action(void *arg)

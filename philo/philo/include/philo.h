@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/23 12:14:17 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/14 15:25:46 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 23:18:33 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define FULL_STOMACH 2
 # define NO_SHOW 3
 
+# define NOT_YET 0
+# define CHECKED 1
+
 typedef struct s_opt
 {
 	int		n_philo;
@@ -40,6 +43,7 @@ typedef struct s_philo
 	pthread_t		tid;
 	int				idx;
 	int				n_eat;
+	int				check_eat;
 	int				*vital;
 	long			last_eat_t;
 	long			start_t;
