@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:46:58 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/17 18:36:48 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 22:28:10 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_fill_opts(int ac, char **av, t_opt *opts)
 	if (ac == 6)
 	{
 		opts->n_must_eat = ft_pos_atoi(av[5]);
-		if (opts->n_must_eat < 0)
+		if (opts->n_must_eat < 1)
 		{
 			ft_putendl_fd("Error : Wrong ARGV", STDERR_FILENO);
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:44:54 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/16 15:59:20 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/18 00:10:52 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,24 @@ static void	*monitor_end(void *arg)
 
 	philo = (t_philo *)arg;
 	while (philo->last_eat_t + philo->opts.time_die > get_now())
-		usleep(10);
+		usleep(100);
 	sem_wait(philo->print_s);
 	printf("\033[31;1m%ld\033[0mms %d died\n",
 		time_cal(philo->start_t), philo->idx);
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 	return (NULL);
+}
+
+static void	eat_for_life(t_philo *philo)
+{
+	if (pthread_create(&(philo->monitor), NULL, monitor_end, philo))
+	{
+		ft_putendl_fd("Error : failed to create a monitoring thread",
+			STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	pthread_detach(philo->monitor);
+	have_dinner(philo);
 }
 
 static void	create_philos(t_philo **cur, t_opt opts)
@@ -71,26 +83,21 @@ static void	create_philos(t_philo **cur, t_opt opts)
 void	dine_with_fork(t_philo *cur, t_opt opts)
 {
 	pthread_t	full_thrd;
+	int			i;
 
 	full_thrd = NULL;
 	create_philos(&cur, opts);
 	if (!(cur->pid))
-	{
-		if (pthread_create(&(cur->monitor), NULL, monitor_end, cur))
-		{
-			ft_putendl_fd("Error : failed to create a monitoring thread",
-				STDERR_FILENO);
-			exit(EXIT_FAILURE);
-		}
-		have_dinner(cur);
-		pthread_join(cur->monitor, NULL);
-	}
+		eat_for_life(cur);
 	else
 	{
 		if (opts.n_must_eat > 0)
 			if (!check_full(cur, &full_thrd))
 				return ;
 		waitpid(-1, NULL, 0);
+		i = -1;
+		while (opts.n_must_eat > 0 && ++i < opts.n_philo)
+			sem_post(cur->full_s);
 		kill_philos(cur, opts.n_philo);
 		pthread_join(full_thrd, NULL);
 	}
