@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 22:58:12 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/17 23:37:52 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/17 23:40:25 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	monitor_end(t_philo *cur, t_opt opts, int *vital, int cnt_eat)
 		if (*vital)
 			break ;
 		cur = cur->next;
-		usleep(50);
+		usleep(100);
 	}
 }
 
