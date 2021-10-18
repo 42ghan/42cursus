@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 22:46:58 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/17 22:28:10 by ghan             ###   ########.fr       */
+/*   Updated: 2021/10/18 15:50:19 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	prep_the_table(t_philo **head, t_opt opts, sem_t *print_s, sem_t *forks_s)
 	if (print_s == SEM_FAILED)
 	{
 		ft_putendl_fd("Error : print semaphore open failure", STDERR_FILENO);
+		sem_close(forks_s);
 		sem_unlink("forks");
 		return (0);
 	}
