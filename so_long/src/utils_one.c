@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:34:09 by ghan              #+#    #+#             */
-/*   Updated: 2021/06/23 17:34:10 by ghan             ###   ########.fr       */
+/*   Updated: 2021/11/21 01:19:14 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_strndup(const char *s1, size_t n)
 	if (len > n)
 		len = n;
 	if (!(ret = (char*)malloc(len + 1)))
-		return (0);
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{
