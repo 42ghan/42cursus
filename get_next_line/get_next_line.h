@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 09:46:25 by ghan              #+#    #+#             */
-/*   Updated: 2021/05/17 09:46:26 by ghan             ###   ########.fr       */
+/*   Updated: 2021/11/21 01:07:35 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+
+# define HEAD_ELEM -2
 
 typedef struct	s_lst
 {
