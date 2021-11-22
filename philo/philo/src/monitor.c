@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 22:58:12 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/17 23:40:25 by ghan             ###   ########.fr       */
+/*   Updated: 2021/11/22 11:24:00 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ static void	monitor_end(t_philo *cur, t_opt opts, int *vital, int cnt_eat)
 	{
 		if (cur->last_eat_t + opts.time_die <= get_now())
 		{
-			pthread_mutex_lock(cur->print_m);
+			*vital = ADIOS_PHILO;
 			printf("\033[31;1m%ld\033[0mms %d died\n",
 				time_cal(cur->start_t), cur->idx);
-			*vital = ADIOS_PHILO;
 		}
 		if (opts.n_must_eat > 0 && cur->n_eat >= opts.n_must_eat)
 		{

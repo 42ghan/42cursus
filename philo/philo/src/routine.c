@@ -6,7 +6,7 @@
 /*   By: ghan <ghan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/31 19:29:24 by ghan              #+#    #+#             */
-/*   Updated: 2021/10/17 23:23:44 by ghan             ###   ########.fr       */
+/*   Updated: 2021/11/22 11:34:27 by ghan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	*philo_action(void *arg)
 		ft_usleep(philo->opts.time_slp);
 		print_stat("is_thinking", philo);
 	}
-	pthread_mutex_unlock(&(philo->fork));
-	pthread_mutex_unlock(philo->print_m);
 	return (NULL);
 }
 
@@ -72,6 +70,5 @@ void	*mr_lonely(void *arg)
 	while (*philo->vital == ENJOY_WHILE_ALIVE)
 		usleep(100);
 	pthread_mutex_unlock(&(philo->fork));
-	pthread_mutex_unlock(philo->print_m);
 	return (NULL);
 }
