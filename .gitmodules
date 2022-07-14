@@ -7,3 +7,6 @@
 [submodule "ft_cpp"]
 	path = ft_cpp
 	url = https://github.com/42ghan/ft_cpp.git
+[submodule "ft_containers"]
+	path = ft_containers
+	url = https://github.com/42ghan/ft_containers.git
